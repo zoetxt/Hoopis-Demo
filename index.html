@@ -102,24 +102,6 @@ body{background:var(--navy);color:var(--white);font-family:'Helvetica Neue',Aria
 }
 .hero-bottom{position:absolute;bottom:0;left:0;right:0;height:160px;background:linear-gradient(180deg,transparent,var(--navy))}
 
-/* Hero center play button */
-.hero-play-center{
-  position:absolute;top:50%;left:50%;transform:translate(-50%,-50%);
-  width:72px;height:72px;border-radius:50%;
-  background:rgba(0,200,212,0.92);
-  display:flex;align-items:center;justify-content:center;
-  cursor:pointer;z-index:5;
-  box-shadow:0 0 0 0 rgba(0,200,212,0.5);
-  animation:pulseBeat 2.6s ease-in-out infinite;
-  transition:transform 0.2s,background 0.2s;
-  border:none;
-}
-.hero-play-center:hover{transform:translate(-50%,-50%) scale(1.12);background:var(--teal)}
-.hero-play-center svg{margin-left:4px}
-@keyframes pulseBeat{
-  0%,100%{box-shadow:0 0 0 0 rgba(0,200,212,0.45)}
-  50%{box-shadow:0 0 0 22px rgba(0,200,212,0)}
-}
 
 /* Content inside each slide */
 .hero-content{
@@ -194,12 +176,6 @@ body{background:var(--navy);color:var(--white);font-family:'Helvetica Neue',Aria
 }
 @keyframes heroProgress{from{width:0}to{width:100%}}
 
-.pillars-strip{display:flex;gap:0;border-top:1px solid var(--border);border-bottom:1px solid var(--border);margin-bottom:36px;background:rgba(10,22,40,0.8)}
-.pillar{flex:1;display:flex;align-items:center;gap:10px;padding:14px 18px;border-right:1px solid var(--border);cursor:default}
-.pillar:last-child{border-right:none}
-.pillar-icon{width:32px;height:32px;border-radius:50%;background:rgba(0,200,212,0.12);border:1px solid var(--teal3);display:flex;align-items:center;justify-content:center;font-size:14px;flex-shrink:0}
-.pillar-text{font-size:11px;color:var(--muted);line-height:1.3}
-.pillar-text strong{display:block;font-size:12px;color:var(--teal);font-weight:600;margin-bottom:1px}
 
 .resume-banner{background:linear-gradient(90deg,rgba(0,200,212,0.08),rgba(0,120,136,0.05));border:1px solid var(--border2);border-left:3px solid var(--teal);border-radius:10px;margin:0 36px 32px;padding:16px 22px;display:flex;align-items:center;gap:20px;cursor:pointer;transition:border-color 0.2s,background 0.2s}
 .resume-banner:hover{border-color:var(--teal);background:rgba(0,200,212,0.1)}
@@ -391,9 +367,6 @@ body{background:var(--navy);color:var(--white);font-family:'Helvetica Neue',Aria
 
 <div class="hero" id="heroCarousel">
   <div class="hero-slides" id="heroSlides"></div>
-  <button class="hero-play-center" id="heroCenterPlay" aria-label="Play">
-    <svg width="26" height="26" viewBox="0 0 24 24" fill="var(--navy)"><polygon points="5,3 19,12 5,21"/></svg>
-  </button>
   <div class="hero-counter" id="heroCounter">1 / 5</div>
   <button class="hero-arrow prev" id="heroPrev" aria-label="Previous">&#8592;</button>
   <button class="hero-arrow next" id="heroNext" aria-label="Next">&#8594;</button>
@@ -401,24 +374,6 @@ body{background:var(--navy);color:var(--white);font-family:'Helvetica Neue',Aria
   <div class="hero-progress" id="heroProgress" style="--slide-duration:6s"></div>
 </div>
 
-<div class="pillars-strip">
-  <div class="pillar">
-    <div class="pillar-icon">✦</div>
-    <div class="pillar-text"><strong>HPN AI Lab</strong>AI-grounded practitioner expertise</div>
-  </div>
-  <div class="pillar">
-    <div class="pillar-icon">◎</div>
-    <div class="pillar-text"><strong>Assessment-Guided</strong>Personalised to your gaps</div>
-  </div>
-  <div class="pillar">
-    <div class="pillar-icon">↑</div>
-    <div class="pillar-text"><strong>Adaptive Growth</strong>Sequenced by capability</div>
-  </div>
-  <div class="pillar">
-    <div class="pillar-icon">□</div>
-    <div class="pillar-text"><strong>Experiential Practice</strong>Applied mastery environment</div>
-  </div>
-</div>
 
 <div class="resume-banner" onclick="openCourse(2,true)">
   <div class="resume-thumb">
@@ -875,12 +830,6 @@ renderRail('insuranceSeries',[6,7,2,4]);
   const prevBtn    = document.getElementById('heroPrev');
   const nextBtn    = document.getElementById('heroNext');
   const counterEl  = document.getElementById('heroCounter');
-  const centerPlay = document.getElementById('heroCenterPlay');
-
-  centerPlay.addEventListener('click', () => {
-    const cid = HERO_IDS[current];
-    openCourse(cid);
-  });
 
   // Build slides
   HERO_IDS.forEach((cid, i) => {
