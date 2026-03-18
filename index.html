@@ -1,0 +1,636 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Hoopis Performance Network</title>
+</head>
+<body>
+<style>
+*{box-sizing:border-box;margin:0;padding:0}
+:root{
+  --navy:#060d1f;
+  --navy2:#0a1628;
+  --navy3:#0e1f3a;
+  --navy4:#142444;
+  --teal:#00c8d4;
+  --teal2:#00a8b8;
+  --teal3:#007a88;
+  --teal-glow:rgba(0,200,212,0.18);
+  --teal-glow2:rgba(0,200,212,0.08);
+  --gold:#f5c518;
+  --red:#e8004d;
+  --white:#ffffff;
+  --muted:#8a9ec0;
+  --border:#1a2d4a;
+  --border2:#1e3560;
+}
+body{background:var(--navy);color:var(--white);font-family:'Helvetica Neue',Arial,sans-serif;min-height:100vh}
+
+.topbar{
+  background:linear-gradient(180deg,rgba(6,13,31,0.98) 0%,rgba(6,13,31,0.0) 100%);
+  padding:14px 36px;display:flex;align-items:center;justify-content:space-between;
+  position:sticky;top:0;z-index:20;
+}
+.logo-wrap{display:flex;align-items:center;gap:0}
+.logo-svg{height:36px;width:auto}
+.topbar-nav{display:flex;align-items:center;gap:24px;margin-left:40px}
+.topbar-nav span{font-size:13px;color:var(--muted);cursor:pointer;transition:color 0.2s}
+.topbar-nav span:hover{color:var(--white)}
+.topbar-nav span.active{color:var(--white);font-weight:600}
+.topbar-right{display:flex;align-items:center;gap:16px}
+.search-bar{background:rgba(255,255,255,0.07);border:1px solid var(--border2);border-radius:4px;padding:7px 14px;color:var(--white);font-size:13px;width:220px;outline:none}
+.search-bar::placeholder{color:var(--muted)}
+.search-bar:focus{border-color:var(--teal);background:rgba(0,200,212,0.05)}
+.avatar{width:34px;height:34px;border-radius:6px;background:linear-gradient(135deg,var(--teal3),var(--teal));display:flex;align-items:center;justify-content:center;font-size:12px;font-weight:700;cursor:pointer;border:1px solid var(--teal3)}
+
+.hero{position:relative;height:480px;overflow:hidden;margin-bottom:0}
+.hero-canvas{width:100%;height:480px;display:block}
+.hero-overlay{position:absolute;inset:0;background:linear-gradient(90deg,rgba(6,13,31,0.95) 0%,rgba(6,13,31,0.65) 55%,rgba(6,13,31,0.1) 100%)}
+.hero-bottom{position:absolute;bottom:0;left:0;right:0;height:120px;background:linear-gradient(180deg,transparent,var(--navy))}
+.hero-content{position:absolute;bottom:60px;left:40px;max-width:500px}
+.hero-pill{display:inline-flex;align-items:center;gap:6px;background:rgba(0,200,212,0.15);border:1px solid var(--teal3);color:var(--teal);font-size:10px;font-weight:700;letter-spacing:1.5px;padding:4px 12px;border-radius:20px;margin-bottom:16px;text-transform:uppercase}
+.hero-title{font-size:38px;font-weight:800;line-height:1.1;margin-bottom:12px;text-shadow:0 2px 20px rgba(0,0,0,0.8)}
+.hero-meta{font-size:13px;color:#b0c4de;margin-bottom:16px;display:flex;gap:14px;align-items:center;flex-wrap:wrap}
+.hero-match{color:var(--teal);font-weight:700}
+.hero-level{border:1px solid #5a7a9a;padding:2px 8px;border-radius:3px;font-size:11px;color:#b0c4de}
+.hero-desc{font-size:14px;color:#c8d8ec;line-height:1.65;margin-bottom:22px}
+.hero-btns{display:flex;gap:12px}
+.btn-play{background:var(--teal);color:var(--navy);border:none;border-radius:5px;padding:12px 28px;font-size:14px;font-weight:700;cursor:pointer;display:flex;align-items:center;gap:8px;transition:background 0.2s}
+.btn-play:hover{background:var(--teal2)}
+.btn-more{background:rgba(255,255,255,0.1);color:var(--white);border:1px solid rgba(255,255,255,0.2);border-radius:5px;padding:12px 24px;font-size:14px;font-weight:600;cursor:pointer;display:flex;align-items:center;gap:8px;backdrop-filter:blur(4px)}
+.btn-more:hover{background:rgba(255,255,255,0.15)}
+
+.pillars-strip{display:flex;gap:0;border-top:1px solid var(--border);border-bottom:1px solid var(--border);margin-bottom:36px;background:rgba(10,22,40,0.8)}
+.pillar{flex:1;display:flex;align-items:center;gap:10px;padding:14px 18px;border-right:1px solid var(--border);cursor:default}
+.pillar:last-child{border-right:none}
+.pillar-icon{width:32px;height:32px;border-radius:50%;background:rgba(0,200,212,0.12);border:1px solid var(--teal3);display:flex;align-items:center;justify-content:center;font-size:14px;flex-shrink:0}
+.pillar-text{font-size:11px;color:var(--muted);line-height:1.3}
+.pillar-text strong{display:block;font-size:12px;color:var(--teal);font-weight:600;margin-bottom:1px}
+
+.resume-banner{background:linear-gradient(90deg,rgba(0,200,212,0.08),rgba(0,120,136,0.05));border:1px solid var(--border2);border-left:3px solid var(--teal);border-radius:10px;margin:0 36px 32px;padding:16px 22px;display:flex;align-items:center;gap:20px;cursor:pointer;transition:border-color 0.2s,background 0.2s}
+.resume-banner:hover{border-color:var(--teal);background:rgba(0,200,212,0.1)}
+.resume-thumb{width:72px;height:46px;border-radius:5px;overflow:hidden;flex-shrink:0;position:relative}
+.resume-thumb canvas{width:72px;height:46px;display:block}
+.prog-bar{height:3px;background:rgba(255,255,255,0.1);border-radius:2px;margin-top:4px}
+.prog-fill{height:100%;background:var(--teal);border-radius:2px}
+.resume-info{flex:1}
+.resume-label{font-size:10px;color:var(--teal);font-weight:700;letter-spacing:1.2px;text-transform:uppercase;margin-bottom:3px;display:flex;align-items:center;gap:5px}
+.resume-title{font-size:15px;font-weight:600;margin-bottom:3px}
+.resume-sub{font-size:12px;color:var(--muted)}
+.btn-resume{background:var(--teal);color:var(--navy);border:none;border-radius:5px;padding:10px 22px;font-size:13px;font-weight:700;cursor:pointer;flex-shrink:0;white-space:nowrap;transition:background 0.2s}
+.btn-resume:hover{background:var(--teal2)}
+
+.section{margin-bottom:40px;padding:0 36px}
+.section-title{font-size:16px;font-weight:700;margin-bottom:16px;color:var(--white);display:flex;align-items:center;gap:10px}
+.section-title .see-all{font-size:12px;color:var(--teal);font-weight:600;cursor:pointer;margin-left:auto}
+.section-title .teal-line{width:3px;height:16px;background:var(--teal);border-radius:2px}
+.rails{display:grid;gap:14px;grid-template-columns:repeat(auto-fill,minmax(175px,1fr))}
+
+.course-card{border-radius:8px;overflow:hidden;cursor:pointer;position:relative;aspect-ratio:2/3;transition:transform 0.2s,box-shadow 0.2s;background:var(--navy3);border:1px solid var(--border)}
+.course-card:hover{transform:scale(1.05);box-shadow:0 12px 40px rgba(0,0,0,0.7),0 0 0 1px var(--teal3);z-index:2}
+.course-card canvas{width:100%;height:100%;display:block}
+.card-overlay{position:absolute;inset:0;background:linear-gradient(180deg,transparent 45%,rgba(6,13,31,0.98) 100%)}
+.card-info{position:absolute;bottom:0;left:0;right:0;padding:12px 12px 14px}
+.card-title{font-size:12px;font-weight:700;line-height:1.3;margin-bottom:5px}
+.card-meta{font-size:10px;color:var(--muted);display:flex;gap:6px;align-items:center;flex-wrap:wrap}
+.card-tag{background:rgba(0,200,212,0.2);color:var(--teal);font-size:9px;font-weight:700;padding:2px 6px;border-radius:3px;letter-spacing:0.5px;border:1px solid rgba(0,200,212,0.3)}
+.card-prog{position:absolute;bottom:0;left:0;right:0;height:3px;background:rgba(255,255,255,0.1)}
+.card-prog-fill{height:100%;background:var(--teal)}
+.card-new{position:absolute;top:10px;left:10px;background:var(--teal);color:var(--navy);font-size:9px;font-weight:700;padding:3px 7px;border-radius:3px;letter-spacing:0.5px}
+
+.overlay-bg{position:fixed;inset:0;background:rgba(0,0,0,0.88);z-index:100;display:flex;align-items:flex-start;justify-content:center;overflow-y:auto;padding:32px 20px}
+.overlay-box{background:var(--navy2);border-radius:12px;width:100%;max-width:880px;overflow:hidden;position:relative;margin:auto;border:1px solid var(--border2)}
+.overlay-hero{position:relative;height:340px;overflow:hidden}
+.overlay-hero canvas{width:100%;height:340px;display:block}
+.overlay-hero-grad{position:absolute;inset:0;background:linear-gradient(180deg,transparent 20%,var(--navy2) 100%)}
+.overlay-hero-left{position:absolute;inset:0;background:linear-gradient(90deg,rgba(6,13,31,0.7) 0%,transparent 50%)}
+.overlay-close{position:absolute;top:14px;right:14px;width:34px;height:34px;border-radius:50%;background:rgba(6,13,31,0.8);border:1px solid var(--border2);color:var(--white);font-size:16px;cursor:pointer;display:flex;align-items:center;justify-content:center;z-index:5;transition:border-color 0.2s}
+.overlay-close:hover{border-color:var(--teal)}
+.overlay-hero-badge{position:absolute;top:20px;left:24px;background:rgba(0,200,212,0.15);border:1px solid var(--teal3);color:var(--teal);font-size:10px;font-weight:700;letter-spacing:1.2px;padding:4px 12px;border-radius:20px;text-transform:uppercase}
+.overlay-content{padding:20px 32px 36px}
+.ov-title{font-size:28px;font-weight:800;margin-bottom:10px;line-height:1.15}
+.ov-badges{display:flex;gap:7px;flex-wrap:wrap;margin-bottom:14px;align-items:center}
+.badge{background:rgba(255,255,255,0.06);border:1px solid var(--border2);color:#b0c4de;font-size:11px;padding:3px 10px;border-radius:20px}
+.badge-teal{border-color:var(--teal3);color:var(--teal);background:rgba(0,200,212,0.08)}
+.badge-gold{border-color:#7a6200;color:var(--gold);background:rgba(245,197,24,0.08)}
+.ov-desc{font-size:14px;color:#b0c4de;line-height:1.65;margin-bottom:20px}
+.ov-expert{display:flex;align-items:center;gap:14px;background:rgba(255,255,255,0.04);border:1px solid var(--border);border-radius:8px;padding:14px 18px;margin-bottom:22px}
+.exp-avatar{width:50px;height:50px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:18px;font-weight:700;flex-shrink:0;border:2px solid var(--teal3)}
+.exp-name{font-size:15px;font-weight:700;margin-bottom:2px}
+.exp-creds{font-size:12px;color:var(--muted)}
+.ov-btns{display:flex;gap:10px;margin-bottom:28px;flex-wrap:wrap}
+.btn-ov-play{background:var(--teal);color:var(--navy);border:none;border-radius:6px;padding:12px 28px;font-size:14px;font-weight:700;cursor:pointer;display:flex;align-items:center;gap:8px;transition:background 0.2s}
+.btn-ov-play:hover{background:var(--teal2)}
+.btn-ov-resume{background:rgba(0,200,212,0.15);color:var(--teal);border:1.5px solid var(--teal3);border-radius:6px;padding:12px 24px;font-size:14px;font-weight:700;cursor:pointer;display:flex;align-items:center;gap:8px;transition:all 0.2s}
+.btn-ov-resume:hover{background:rgba(0,200,212,0.25)}
+.btn-ov-save{background:transparent;color:var(--white);border:1px solid var(--border2);border-radius:6px;padding:12px 20px;font-size:14px;cursor:pointer;transition:border-color 0.2s}
+.btn-ov-save:hover{border-color:var(--teal)}
+.ov-prog-section{background:rgba(0,200,212,0.05);border:1px solid var(--teal3);border-radius:8px;padding:16px 18px;margin-bottom:26px}
+.ov-prog-label{font-size:10px;color:var(--teal);font-weight:700;letter-spacing:1px;text-transform:uppercase;margin-bottom:5px}
+.ov-prog-chapter{font-size:13px;font-weight:600;margin-bottom:8px}
+.ov-prog-bar-outer{background:rgba(255,255,255,0.08);border-radius:4px;height:5px;margin-bottom:6px}
+.ov-prog-bar-inner{background:var(--teal);border-radius:4px;height:5px}
+.ov-prog-pct{font-size:11px;color:var(--muted)}
+.ov-section-title{font-size:15px;font-weight:700;margin-bottom:14px;padding-bottom:8px;border-bottom:1px solid var(--border);display:flex;align-items:center;gap:8px}
+.ov-section-title .teal-dot{width:6px;height:6px;border-radius:50%;background:var(--teal);flex-shrink:0}
+.chapter-list{display:flex;flex-direction:column;gap:5px;margin-bottom:26px}
+.chapter-item{display:flex;align-items:center;gap:14px;padding:11px 14px;border-radius:7px;background:rgba(255,255,255,0.03);cursor:pointer;border:1px solid transparent;transition:all 0.15s}
+.chapter-item:hover{border-color:var(--border2);background:rgba(255,255,255,0.05)}
+.chapter-item.cur{border-color:var(--teal3);background:rgba(0,200,212,0.07)}
+.ch-num{font-size:12px;color:var(--muted);min-width:20px;font-weight:600;font-family:monospace}
+.ch-info{flex:1}
+.ch-name{font-size:13px;font-weight:600;margin-bottom:2px}
+.ch-dur{font-size:11px;color:var(--muted)}
+.ch-done{font-size:14px;color:var(--teal)}
+.ch-cur{font-size:10px;color:var(--teal);font-weight:700;letter-spacing:0.5px;border:1px solid var(--teal3);padding:2px 7px;border-radius:10px}
+.ch-lock{font-size:12px;color:var(--border2)}
+.rev-overall{display:flex;align-items:center;gap:16px;background:rgba(255,255,255,0.03);border-radius:8px;padding:16px;margin-bottom:14px;border:1px solid var(--border)}
+.big-num{font-size:44px;font-weight:800;color:var(--gold);line-height:1}
+.stars{color:var(--gold);font-size:14px;letter-spacing:1px}
+.rev-cnt{font-size:12px;color:var(--muted);margin-top:2px}
+.reviews-list{display:flex;flex-direction:column;gap:10px}
+.rev-item{background:rgba(255,255,255,0.03);border-radius:8px;padding:14px 16px;border:1px solid var(--border)}
+.rev-top{display:flex;align-items:center;gap:10px;margin-bottom:8px}
+.rev-av{width:32px;height:32px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:11px;font-weight:700;flex-shrink:0;border:1px solid var(--border2)}
+.rev-name{font-size:13px;font-weight:600}
+.rev-role{font-size:11px;color:var(--muted)}
+.rev-text{font-size:13px;color:#b0c4de;line-height:1.6}
+.rev-date{font-size:11px;color:var(--border2);margin-top:5px}
+</style>
+
+<div style="background:var(--navy);min-height:100vh">
+
+<div class="topbar">
+  <div style="display:flex;align-items:center">
+    <svg class="logo-svg" viewBox="0 0 260 60" fill="none" xmlns="http://www.w3.org/2000/svg">
+      <path d="M8 52 L22 8 L28 28" stroke="white" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"/>
+      <path d="M15 38 L30 8" stroke="white" stroke-width="1.4" stroke-linecap="round" opacity="0.6"/>
+      <text x="38" y="38" font-family="Georgia,serif" font-size="28" font-weight="700" fill="white" letter-spacing="2">HOOPIS</text>
+      <text x="38" y="52" font-family="Arial,sans-serif" font-size="9" fill="#8a9ec0" letter-spacing="3">PERFORMANCE NETWORK</text>
+    </svg>
+    <div class="topbar-nav">
+      <span class="active">Home</span>
+      <span>Browse</span>
+      <span>My Learning</span>
+      <span>Experts</span>
+    </div>
+  </div>
+  <div class="topbar-right">
+    <input class="search-bar" placeholder="Search 5,000+ expert videos..." />
+    <div class="avatar">JW</div>
+  </div>
+</div>
+
+<div class="hero">
+  <canvas id="heroCanvas" width="1200" height="480" class="hero-canvas"></canvas>
+  <div class="hero-overlay"></div>
+  <div class="hero-bottom"></div>
+  <div class="hero-content">
+    <div class="hero-pill">
+      <span style="width:6px;height:6px;border-radius:50%;background:var(--teal);display:inline-block"></span>
+      Featured Expert · HPN AI Lab Pick
+    </div>
+    <div class="hero-title">Mastering High-Stakes<br>Client Conversations</div>
+    <div class="hero-meta">
+      <span class="hero-match">98% Match</span>
+      <span>2024</span>
+      <span class="hero-level">Advanced</span>
+      <span>7 chapters · 1h 24m</span>
+      <span style="color:var(--gold)">★ 4.9</span>
+    </div>
+    <div class="hero-desc">Award-winning negotiation expert Brian Ahearn reveals the psychological frameworks top financial advisors use to turn difficult conversations into closed deals.</div>
+    <div class="hero-btns">
+      <button class="btn-play" onclick="openCourse(0)">&#9654; Play Now</button>
+      <button class="btn-more" onclick="openCourse(0)">&#9432; More Info</button>
+    </div>
+  </div>
+</div>
+
+<div class="pillars-strip">
+  <div class="pillar">
+    <div class="pillar-icon">✦</div>
+    <div class="pillar-text"><strong>HPN AI Lab</strong>AI-grounded practitioner expertise</div>
+  </div>
+  <div class="pillar">
+    <div class="pillar-icon">◎</div>
+    <div class="pillar-text"><strong>Assessment-Guided</strong>Personalised to your gaps</div>
+  </div>
+  <div class="pillar">
+    <div class="pillar-icon">↑</div>
+    <div class="pillar-text"><strong>Adaptive Growth</strong>Sequenced by capability</div>
+  </div>
+  <div class="pillar">
+    <div class="pillar-icon">□</div>
+    <div class="pillar-text"><strong>Experiential Practice</strong>Applied mastery environment</div>
+  </div>
+</div>
+
+<div class="resume-banner" onclick="openCourse(2,true)">
+  <div class="resume-thumb">
+    <canvas id="resumeThumb" width="144" height="92"></canvas>
+    <div class="prog-bar"><div class="prog-fill" style="width:64%"></div></div>
+  </div>
+  <div class="resume-info">
+    <div class="resume-label"><span style="width:6px;height:6px;border-radius:50%;background:var(--teal);display:inline-block"></span> Continue Watching</div>
+    <div class="resume-title">The Trust Formula: Building Client Relationships That Last</div>
+    <div class="resume-sub">Chapter 4 of 7 · 64% complete · 26 min remaining</div>
+  </div>
+  <button class="btn-resume">▶ Resume Learning</button>
+</div>
+
+<div class="section">
+  <div class="section-title"><span class="teal-line"></span>Top Picks for You <span class="see-all">See all →</span></div>
+  <div class="rails" id="topPicks"></div>
+</div>
+<div class="section">
+  <div class="section-title"><span class="teal-line"></span>Expert Sales Series <span class="see-all">See all →</span></div>
+  <div class="rails" id="salesSeries"></div>
+</div>
+<div class="section">
+  <div class="section-title"><span class="teal-line"></span>Insurance Professionals <span class="see-all">See all →</span></div>
+  <div class="rails" id="insuranceSeries"></div>
+</div>
+<div style="height:48px"></div>
+</div>
+
+<div class="overlay-bg" id="overlay" style="display:none" onclick="handleOvClick(event)">
+  <div class="overlay-box" id="overlayBox">
+    <div class="overlay-hero">
+      <canvas id="ovCanvas" width="880" height="340"></canvas>
+      <div class="overlay-hero-grad"></div>
+      <div class="overlay-hero-left"></div>
+      <div class="overlay-hero-badge" id="ov-badge-top"></div>
+      <button class="overlay-close" onclick="closeOverlay()">✕</button>
+    </div>
+    <div class="overlay-content">
+      <div class="ov-title" id="ov-title"></div>
+      <div class="ov-badges" id="ov-badges"></div>
+      <div class="ov-desc" id="ov-desc"></div>
+      <div class="ov-expert" id="ov-expert"></div>
+      <div class="ov-btns" id="ov-btns"></div>
+      <div id="ov-prog"></div>
+      <div class="ov-section-title"><span class="teal-dot"></span>Course Chapters</div>
+      <div class="chapter-list" id="ov-chapters"></div>
+      <div class="ov-section-title"><span class="teal-dot"></span>Learner Reviews</div>
+      <div class="rev-overall" id="ov-rating"></div>
+      <div class="reviews-list" id="ov-reviews"></div>
+    </div>
+  </div>
+</div>
+
+<script>
+const C=[
+  {id:0,title:'Mastering High-Stakes Client Conversations',
+   expert:'Brian Ahearn',xrole:'Chief Influence Officer · Influence PEOPLE',xinit:'BA',xcol:'#0e3060',
+   tags:['Advanced','Sales','Negotiation'],match:98,yr:2024,dur:'1h 24m',nc:7,
+   desc:'Award-winning negotiation expert Brian Ahearn reveals the psychological frameworks top financial advisors use to turn difficult conversations into closed deals. Real case studies from $1M+ client engagements.',
+   rating:4.9,nrev:1847,
+   p1:'#060d1f',p2:'#0e2040',p3:'#00c8d4',p4:'#00e8ff',accent:'#f5c518',
+   chapters:[
+     {n:'The psychology of persuasion in finance',d:'11m'},
+     {n:'Reading client resistance signals',d:'9m'},
+     {n:'Reframing objections in real-time',d:'13m'},
+     {n:'The commitment & consistency principle',d:'10m'},
+     {n:'Closing without pressure',d:'14m'},
+     {n:'Handling "I need to think about it"',d:'16m'},
+     {n:'Post-meeting follow-up mastery',d:'11m'},
+   ],
+   reviews:[
+     {name:'Sarah K.',role:'Senior Financial Advisor',init:'SK',bg:'#0e2a3a',stars:5,text:'The commitment principle section alone was worth the entire course. Applied it in a meeting the next day.',date:'2 weeks ago'},
+     {name:'Marcus T.',role:'Insurance Agent · 8 yrs',init:'MT',bg:'#1a0e3a',stars:5,text:'Brian is the real deal. Not theoretical — every technique is grounded in real client scenarios. Watched it twice.',date:'1 month ago'},
+     {name:'Linda R.',role:'Wealth Management Associate',init:'LR',bg:'#2a1a00',stars:4,text:'Chapter 6 on handling "I need to think about it" is something I\'ve never seen covered this directly anywhere else.',date:'6 weeks ago'},
+   ]},
+  {id:1,title:'Prospecting in the Digital Age',
+   expert:'Jeb Blount',xrole:'CEO · Sales Gravy · Author of Fanatical Prospecting',xinit:'JB',xcol:'#3a2000',
+   tags:['Intermediate','Sales','Prospecting'],match:95,yr:2024,dur:'58m',nc:6,
+   desc:'Jeb Blount, author of Fanatical Prospecting, breaks down how modern sales professionals blend traditional outreach with LinkedIn, email, and video to build a consistent pipeline.',
+   rating:4.8,nrev:2103,
+   p1:'#0d0a00',p2:'#1a1400',p3:'#e8a020',p4:'#ffd060',accent:'#fff',
+   chapters:[
+     {n:'Why most prospecting fails before it starts',d:'8m'},
+     {n:'Building your ideal client profile',d:'11m'},
+     {n:'LinkedIn as a research and outreach tool',d:'10m'},
+     {n:'The 3-touch email sequence that works',d:'9m'},
+     {n:'Video prospecting — standing out in the inbox',d:'12m'},
+     {n:'Building prospecting habits that stick',d:'8m'},
+   ],
+   reviews:[
+     {name:'David C.',role:'Sales Manager',init:'DC',bg:'#0e1a2a',stars:5,text:'The 3-touch email framework is now standard across my whole team.',date:'3 weeks ago'},
+     {name:'Priya M.',role:'Financial Advisor',init:'PM',bg:'#0e2a1a',stars:5,text:'Best prospecting content I\'ve found on any platform.',date:'1 month ago'},
+     {name:'Tom B.',role:'Account Executive',init:'TB',bg:'#1a0e2a',stars:4,text:'Very actionable. Would love a chapter specifically on phone prospecting.',date:'2 months ago'},
+   ]},
+  {id:2,title:'The Trust Formula: Building Client Relationships That Last',
+   expert:'Colleen Stanley',xrole:'President · SalesLeadership Inc.',xinit:'CS',xcol:'#003a20',
+   tags:['All Levels','Relationships','EQ'],match:96,yr:2024,dur:'1h 12m',nc:7,started:true,progress:64,curChap:3,
+   desc:'Emotional intelligence pioneer Colleen Stanley shows how top performers build the kind of trust that makes clients loyal for decades. Covers EQ frameworks, body language, and the neuroscience of rapport.',
+   rating:4.9,nrev:3241,
+   p1:'#00100a',p2:'#001e10',p3:'#00c8a0',p4:'#00ffd0',accent:'#f5c518',
+   chapters:[
+     {n:'Why logic alone never closes a deal',d:'9m',done:true},
+     {n:'The EQ framework for sales professionals',d:'11m',done:true},
+     {n:'Active listening — the lost skill',d:'10m',done:true},
+     {n:'Reading the room — body language signals',d:'12m',cur:true},
+     {n:'Building trust through vulnerability',d:'9m'},
+     {n:'Maintaining trust through difficult periods',d:'11m'},
+     {n:'Turning clients into advocates',d:'10m'},
+   ],
+   reviews:[
+     {name:'Jennifer A.',role:'VP Sales · Healthcare',init:'JA',bg:'#2a0e00',stars:5,text:'This course shifted how I coach my entire team. The EQ frameworks are immediately usable.',date:'1 week ago'},
+     {name:'Robert L.',role:'Senior Financial Advisor',init:'RL',bg:'#0e1a2a',stars:5,text:'I\'ve been in financial services for 22 years. This is the first training that addresses the emotional side of client relationships with real depth.',date:'3 weeks ago'},
+     {name:'Amara O.',role:'Insurance Agent',init:'AO',bg:'#1a0e2a',stars:5,text:'Chapter 3 on active listening alone changed three client meetings this week.',date:'1 month ago'},
+   ]},
+  {id:3,title:'Closing Techniques for Complex Sales',
+   expert:'Anthony Iannarino',xrole:'Author · The Lost Art of Closing',xinit:'AI',xcol:'#200030',
+   tags:['Advanced','Closing','B2B'],match:91,yr:2023,dur:'1h 8m',nc:6,
+   desc:'Anthony Iannarino dismantles outdated closing tactics and replaces them with a commitment-based framework that works in complex, multi-stakeholder financial and insurance sales.',
+   rating:4.7,nrev:1204,
+   p1:'#0d0018',p2:'#1a0028',p3:'#7b2fbe',p4:'#c080ff',accent:'#f5c518',
+   chapters:[
+     {n:'Why traditional closing is dead',d:'10m'},{n:'The nine commitments that lead to a close',d:'13m'},
+     {n:'Multi-stakeholder navigation',d:'11m'},{n:'Handling procurement gatekeepers',d:'9m'},
+     {n:'The final commitment conversation',d:'14m'},{n:'Post-close relationship acceleration',d:'11m'},
+   ],
+   reviews:[
+     {name:'Chris M.',role:'Enterprise Sales Director',init:'CM',bg:'#0e1a2a',stars:5,text:'Anthony\'s commitment framework is the most practical closing methodology I\'ve encountered in 15 years of selling.',date:'2 months ago'},
+     {name:'Nina P.',role:'Wealth Advisor',init:'NP',bg:'#0e2a1a',stars:4,text:'Dense with insight. Requires a second watch to absorb everything. Worth it.',date:'3 months ago'},
+   ]},
+  {id:4,title:'Referral Mastery: The Systematic Approach',
+   expert:'Michael Goldberg',xrole:'Networking Expert · Author of Knock-Out Networking',xinit:'MG',xcol:'#002040',
+   tags:['All Levels','Referrals','Networking'],match:88,yr:2024,dur:'44m',nc:5,
+   desc:'Michael Goldberg lays out a repeatable, low-pressure system for generating a steady stream of warm referrals from your existing client base.',
+   rating:4.6,nrev:876,
+   p1:'#000d1a',p2:'#001428',p3:'#0088cc',p4:'#40c0ff',accent:'#f5c518',
+   chapters:[
+     {n:'The referral mindset shift',d:'7m'},{n:'When and how to ask for referrals',d:'10m'},
+     {n:'Creating a referral network by design',d:'9m'},{n:'The referral conversation script',d:'10m'},
+     {n:'Tracking and nurturing your referral sources',d:'8m'},
+   ],
+   reviews:[
+     {name:'Diane T.',role:'Financial Planner',init:'DT',bg:'#2a1a00',stars:5,text:'Finally a referral system that doesn\'t feel slimy. Natural and genuinely effective.',date:'3 weeks ago'},
+     {name:'Kevin S.',role:'Insurance Broker',init:'KS',bg:'#1a0e2a',stars:4,text:'Practical and actionable. Would benefit from more role-playing examples.',date:'2 months ago'},
+   ]},
+  {id:5,title:'Time Blocking for Peak Producers',
+   expert:'Darren Hardy',xrole:'Publisher · SUCCESS Magazine',xinit:'DH',xcol:'#1a1000',
+   tags:['All Levels','Productivity','Habits'],match:85,yr:2023,dur:'52m',nc:5,
+   desc:'Darren Hardy shares the exact time-blocking and habit systems that separate the top 1% of financial and insurance producers from everyone else.',
+   rating:4.8,nrev:2891,
+   p1:'#100800',p2:'#1e1200',p3:'#e8a020',p4:'#ffd060',accent:'#fff',
+   chapters:[
+     {n:'The compound effect applied to your calendar',d:'9m'},{n:'Designing your ideal week',d:'12m'},
+     {n:'Protecting your prime selling time',d:'11m'},{n:'Eliminating the time thieves',d:'10m'},
+     {n:'Accountability systems that actually work',d:'10m'},
+   ],
+   reviews:[
+     {name:'Mark A.',role:'Top Producer · 15 yrs',init:'MA',bg:'#0e1a2a',stars:5,text:'Darren\'s Compound Effect philosophy applied to daily scheduling. Shared with every advisor I mentor.',date:'1 month ago'},
+     {name:'Sarah F.',role:'New Agent',init:'SF',bg:'#0e2a1a',stars:5,text:'Game-changing for someone early in their career. The ideal week template alone was worth it.',date:'6 weeks ago'},
+   ]},
+  {id:6,title:'Underwriting Relationships: Working With Carriers',
+   expert:'Elizabeth Scheithe',xrole:'VP Underwriting · 28 years experience',xinit:'ES',xcol:'#00202a',
+   tags:['Advanced','Insurance','Underwriting'],match:93,yr:2024,dur:'1h 4m',nc:6,
+   desc:'Veteran underwriter Elizabeth Scheithe gives agents a rare behind-the-scenes view of how underwriting decisions are made — and how to position cases for the best possible outcomes.',
+   rating:4.8,nrev:641,
+   p1:'#000c10',p2:'#001520',p3:'#00c8d4',p4:'#60ffff',accent:'#f5c518',
+   chapters:[
+     {n:'How underwriters think — the inside view',d:'11m'},{n:'Submitting cases that get prioritised',d:'10m'},
+     {n:'Navigating complex medical histories',d:'13m'},{n:'Building strong carrier relationships',d:'9m'},
+     {n:'When to escalate and how to do it',d:'11m'},{n:'Rating disputes — the professional approach',d:'10m'},
+   ],
+   reviews:[
+     {name:'Paul D.',role:'Independent Insurance Broker',init:'PD',bg:'#2a1a00',stars:5,text:'I\'ve been doing this for 14 years and learned things I genuinely didn\'t know.',date:'2 weeks ago'},
+     {name:'Maya R.',role:'Life Insurance Specialist',init:'MR',bg:'#1a0e2a',stars:5,text:'Elizabeth can explain complex processes simply without dumbing them down.',date:'1 month ago'},
+   ]},
+  {id:7,title:'Long-Term Care Planning Conversations',
+   expert:'Harley Gordon',xrole:'Founder · CLTC · National LTC Authority',xinit:'HG',xcol:'#0d001a',
+   tags:['Advanced','Insurance','LTC'],match:87,yr:2024,dur:'48m',nc:5,
+   desc:'Harley Gordon, founder of the Certified in Long-Term Care designation, shows agents how to initiate and navigate the emotionally charged LTC planning conversation with families.',
+   rating:4.9,nrev:528,
+   p1:'#08000f',p2:'#100018',p3:'#8a30d0',p4:'#cc80ff',accent:'#f5c518',
+   chapters:[
+     {n:'Why clients avoid LTC conversations',d:'8m'},{n:'Introducing LTC without triggering resistance',d:'10m'},
+     {n:'Working with families — multi-generational dynamics',d:'11m'},
+     {n:'Product vs. planning — the right framing',d:'10m'},
+     {n:'Closing the LTC conversation with dignity',d:'9m'},
+   ],
+   reviews:[
+     {name:'Carol B.',role:'LTC Specialist · 20 yrs',init:'CB',bg:'#0e1a2a',stars:5,text:'Harley\'s approach is unmatched. He understands the emotional complexity no other trainer addresses.',date:'3 weeks ago'},
+     {name:'James W.',role:'Financial Planner',init:'JW',bg:'#0e2a1a',stars:5,text:'This is the content I\'ve been looking for for 5 years.',date:'1 month ago'},
+   ]},
+];
+
+function rrect(ctx,x,y,w,h,r){
+  ctx.beginPath();ctx.moveTo(x+r,y);ctx.lineTo(x+w-r,y);ctx.arcTo(x+w,y,x+w,y+r,r);
+  ctx.lineTo(x+w,y+h-r);ctx.arcTo(x+w,y+h,x+w-r,y+h,r);ctx.lineTo(x+r,y+h);
+  ctx.arcTo(x,y+h,x,y+h-r,r);ctx.lineTo(x,y+r);ctx.arcTo(x,y,x+r,y,r);ctx.closePath();
+}
+
+function drawCover(ctx,w,h,c){
+  // Base gradient
+  const bg=ctx.createLinearGradient(0,0,0,h);
+  bg.addColorStop(0,c.p1);bg.addColorStop(0.6,c.p2);bg.addColorStop(1,'#000');
+  ctx.fillStyle=bg;ctx.fillRect(0,0,w,h);
+
+  // Teal glow orb top-right
+  const orb=ctx.createRadialGradient(w*0.78,h*0.25,0,w*0.78,h*0.25,w*0.45);
+  orb.addColorStop(0,c.p3+'55');orb.addColorStop(0.5,c.p3+'18');orb.addColorStop(1,'transparent');
+  ctx.fillStyle=orb;ctx.fillRect(0,0,w,h);
+
+  // Star field
+  ctx.save();
+  const seed=c.title.charCodeAt(0)*31;
+  for(let i=0;i<60;i++){
+    const sx=((seed*i*7919+i*31)%1000)/1000*w;
+    const sy=((seed*i*6271+i*17)%1000)/1000*h*0.7;
+    const ss=((i%4===0)?1.5:0.8);
+    ctx.globalAlpha=0.3+((i%5)/10);
+    ctx.fillStyle='#fff';
+    ctx.beginPath();ctx.arc(sx,sy,ss,0,Math.PI*2);ctx.fill();
+  }
+  ctx.restore();
+
+  // Circular arc (brand element)
+  ctx.save();
+  ctx.globalAlpha=0.2;
+  ctx.strokeStyle=c.p3;ctx.lineWidth=1.2;
+  ctx.beginPath();ctx.arc(w*0.6,h*0.3,h*0.55,0,Math.PI*2);ctx.stroke();
+  ctx.globalAlpha=0.08;
+  ctx.beginPath();ctx.arc(w*0.6,h*0.3,h*0.38,0,Math.PI*2);ctx.stroke();
+  ctx.restore();
+
+  // Bottom fog
+  const fog=ctx.createLinearGradient(0,h*0.65,0,h);
+  fog.addColorStop(0,'transparent');fog.addColorStop(1,c.p3+'22');
+  ctx.fillStyle=fog;ctx.fillRect(0,0,w,h);
+
+  // Left gradient overlay for text legibility
+  const lg=ctx.createLinearGradient(0,0,w*0.6,0);
+  lg.addColorStop(0,'rgba(0,0,0,0.6)');lg.addColorStop(1,'transparent');
+  ctx.fillStyle=lg;ctx.fillRect(0,0,w,h);
+
+  // HOOPIS logo watermark top-left
+  ctx.save();
+  ctx.globalAlpha=0.35;
+  ctx.fillStyle=c.p4||c.p3;
+  ctx.font=`bold ${Math.max(10,w*0.028)}px Georgia,serif`;
+  ctx.textAlign='left';
+  ctx.letterSpacing='2px';
+  ctx.fillText('HOOPIS',w*0.05,h*0.1);
+  ctx.font=`${Math.max(7,w*0.016)}px Arial,sans-serif`;
+  ctx.fillStyle='#fff';
+  ctx.globalAlpha=0.2;
+  ctx.fillText('PERFORMANCE NETWORK',w*0.05,h*0.16);
+  ctx.restore();
+
+  // Expert name badge
+  ctx.save();
+  ctx.globalAlpha=0.9;
+  const bw=Math.min(w*0.7,280);const bh=22;const bx=w*0.05;const by=h*0.22;
+  ctx.fillStyle=c.p3+'33';
+  rrect(ctx,bx,by,bw,bh,11);ctx.fill();
+  ctx.strokeStyle=c.p3+'88';ctx.lineWidth=0.8;
+  rrect(ctx,bx,by,bw,bh,11);ctx.stroke();
+  ctx.fillStyle=c.p4||c.p3;
+  ctx.font=`bold ${Math.max(9,w*0.022)}px Helvetica Neue,Arial,sans-serif`;
+  ctx.textAlign='left';
+  ctx.fillText(c.expert,bx+10,by+15);
+  ctx.restore();
+
+  // Title
+  ctx.save();
+  ctx.globalAlpha=0.95;
+  ctx.fillStyle='#ffffff';
+  ctx.textAlign='center';
+  const fs=Math.floor(h*0.052);
+  ctx.font=`800 ${fs}px Helvetica Neue,Arial,sans-serif`;
+  const words=c.title.split(' ');
+  let lines=[],cur='';
+  const maxW=w*0.85;
+  words.forEach(wd=>{
+    const test=cur?cur+' '+wd:wd;
+    if(ctx.measureText(test).width>maxW){lines.push(cur);cur=wd;}else cur=test;
+  });
+  if(cur)lines.push(cur);
+  const lh=fs*1.2;const sy=h*0.5-((lines.length-1)*lh/2);
+  lines.forEach((l,i)=>ctx.fillText(l,w/2,sy+i*lh));
+  ctx.restore();
+
+  // Tags bottom
+  ctx.save();
+  ctx.font=`700 ${Math.max(8,w*0.022)}px Arial,sans-serif`;
+  ctx.textAlign='center';
+  let tx=w*0.5-(c.tags.slice(0,2).reduce((a,t)=>a+ctx.measureText(t).width+20,0)/2);
+  c.tags.slice(0,2).forEach((tag,i)=>{
+    const tw=ctx.measureText(tag).width+16;
+    ctx.globalAlpha=0.25;ctx.fillStyle=c.p3;
+    rrect(ctx,tx,h*0.82,tw,h*0.06,4);ctx.fill();
+    ctx.globalAlpha=0.9;ctx.fillStyle='#fff';
+    ctx.fillText(tag,tx+tw/2,h*0.86);
+    tx+=tw+8;
+  });
+  ctx.restore();
+}
+
+function drawHero(c){
+  const cv=document.getElementById('heroCanvas');
+  drawCover(cv.getContext('2d'),cv.width,cv.height,c);
+}
+function drawResume(c){
+  const cv=document.getElementById('resumeThumb');
+  drawCover(cv.getContext('2d'),cv.width,cv.height,c);
+}
+
+function renderRail(id,ids){
+  const el=document.getElementById(id);el.innerHTML='';
+  ids.forEach(cid=>{
+    const c=C[cid];
+    const card=document.createElement('div');
+    card.className='course-card';
+    card.innerHTML=`<canvas width="360" height="540"></canvas><div class="card-overlay"></div>
+    <div class="card-info">
+      <div class="card-title">${c.title}</div>
+      <div class="card-meta"><span class="card-tag">${c.tags[0]}</span><span>${c.dur}</span><span style="color:var(--gold)">★${c.rating}</span></div>
+    </div>
+    ${c.started?`<div class="card-prog"><div class="card-prog-fill" style="width:${c.progress}%"></div></div>`:''}
+    ${cid===1?'<div class="card-new">NEW</div>':''}`;
+    const cv2=card.querySelector('canvas');
+    drawCover(cv2.getContext('2d'),360,540,c);
+    card.addEventListener('click',()=>openCourse(cid));
+    el.appendChild(card);
+  });
+}
+
+function openCourse(id,resume=false){
+  const c=C[id];
+  document.getElementById('overlay').style.display='flex';
+  document.body.style.overflow='hidden';
+  const ocv=document.getElementById('ovCanvas');
+  drawCover(ocv.getContext('2d'),880,340,c);
+  document.getElementById('ov-badge-top').textContent=`${c.tags[0]} · ${c.nc} chapters · ${c.dur}`;
+  document.getElementById('ov-title').textContent=c.title;
+  document.getElementById('ov-badges').innerHTML=
+    c.tags.map(t=>`<span class="badge badge-teal">${t}</span>`).join('')+
+    `<span class="badge badge-gold">★ ${c.rating}</span>`+
+    `<span class="badge">${c.nrev.toLocaleString()} reviews</span>`+
+    `<span class="badge">${c.dur}</span>`+
+    `<span class="badge">${c.yr}</span>`;
+  document.getElementById('ov-desc').textContent=c.desc;
+  document.getElementById('ov-expert').innerHTML=
+    `<div class="exp-avatar" style="background:linear-gradient(135deg,${c.xcol},${c.p3})">${c.xinit}</div>
+     <div><div class="exp-name">${c.expert}</div><div class="exp-creds">${c.xrole}</div></div>`;
+  const btns=document.getElementById('ov-btns');
+  if(c.started){
+    btns.innerHTML=
+      `<button class="btn-ov-resume" onclick="alert('Resuming Chapter ${c.curChap+1}: ${c.chapters[c.curChap].n}...')">▶ Resume — Chapter ${c.curChap+1}</button>
+       <button class="btn-ov-play" onclick="alert('Starting from beginning...')">↺ Start Over</button>
+       <button class="btn-ov-save">+ My List</button>`;
+  } else {
+    btns.innerHTML=
+      `<button class="btn-ov-play" onclick="alert('Starting course...')">▶ Start Learning</button>
+       <button class="btn-ov-save">+ My List</button>`;
+  }
+  const prog=document.getElementById('ov-prog');
+  if(c.started){
+    const rem=Math.round((100-c.progress)/100*parseInt(c.dur));
+    prog.innerHTML=`<div class="ov-prog-section">
+      <div class="ov-prog-label">Your progress</div>
+      <div class="ov-prog-chapter">Currently on: Chapter ${c.curChap+1} — ${c.chapters[c.curChap].n}</div>
+      <div class="ov-prog-bar-outer"><div class="ov-prog-bar-inner" style="width:${c.progress}%"></div></div>
+      <div class="ov-prog-pct">${c.progress}% complete · ${rem} min remaining</div>
+    </div>`;
+  } else prog.innerHTML='';
+  document.getElementById('ov-chapters').innerHTML=c.chapters.map((ch,i)=>`
+    <div class="chapter-item${ch.cur?' cur':''}">
+      <div class="ch-num">${String(i+1).padStart(2,'0')}</div>
+      <div class="ch-info"><div class="ch-name">${ch.n}</div><div class="ch-dur">${ch.d}</div></div>
+      <div>${ch.done?'<span class="ch-done">✓</span>':ch.cur?'<span class="ch-cur">CURRENT</span>':'<span class="ch-lock">▷</span>'}</div>
+    </div>`).join('');
+  const fs=Math.round(c.rating);
+  document.getElementById('ov-rating').innerHTML=
+    `<div class="big-num">${c.rating.toFixed(1)}</div>
+     <div><div class="stars">${'★'.repeat(fs)}${'☆'.repeat(5-fs)}</div><div class="rev-cnt">${c.nrev.toLocaleString()} learner reviews</div></div>`;
+  document.getElementById('ov-reviews').innerHTML=c.reviews.map(r=>`
+    <div class="rev-item">
+      <div class="rev-top">
+        <div class="rev-av" style="background:${r.bg}">${r.init}</div>
+        <div><div class="rev-name">${r.name}</div><div class="rev-role">${r.role}</div></div>
+        <div class="stars" style="margin-left:auto;font-size:12px">${'★'.repeat(r.stars)}</div>
+      </div>
+      <div class="rev-text">${r.text}</div>
+      <div class="rev-date">${r.date}</div>
+    </div>`).join('');
+  document.getElementById('overlay').scrollTop=0;
+}
+function closeOverlay(){
+  document.getElementById('overlay').style.display='none';
+  document.body.style.overflow='';
+}
+function handleOvClick(e){if(e.target.id==='overlay')closeOverlay();}
+
+drawHero(C[0]);
+drawResume(C[2]);
+renderRail('topPicks',[0,1,2,3,4,5]);
+renderRail('salesSeries',[1,3,0,4,5]);
+renderRail('insuranceSeries',[6,7,2,4]);
+</script>
+</body>
+</html>
