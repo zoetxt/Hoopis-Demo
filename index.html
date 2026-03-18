@@ -25,12 +25,18 @@
   --border:#1a2d4a;
   --border2:#1e3560;
 }
-body{background:var(--navy);color:var(--white);font-family:'Helvetica Neue',Arial,sans-serif;min-height:100vh}
+body{background:var(--navy);color:var(--white);font-family:'Helvetica Neue',Arial,sans-serif;min-height:100vh;padding-top:64px}
 
 .topbar{
   background:linear-gradient(180deg,rgba(6,13,31,0.98) 0%,rgba(6,13,31,0.0) 100%);
   padding:14px 36px;display:flex;align-items:center;justify-content:space-between;
-  position:sticky;top:0;z-index:20;
+  position:fixed;top:0;left:0;right:0;z-index:20;
+  transition:transform 0.4s cubic-bezier(0.4,0,0.2,1), opacity 0.4s ease;
+}
+.topbar.hide{
+  transform:translateY(-100%);
+  opacity:0;
+  pointer-events:none;
 }
 .logo-wrap{display:flex;align-items:center;gap:0}
 .logo-svg{height:36px;width:auto}
@@ -907,6 +913,29 @@ renderRail('insuranceSeries',[6,7,2,4]);
   // Kick off
   startTimer();
   resetProgress();
+})();
+
+/* ── Smart header: hide on scroll down, reveal on scroll up ── */
+(function(){
+  const bar = document.querySelector('.topbar');
+  let lastY = 0;
+  let ticking = false;
+
+  window.addEventListener('scroll', () => {
+    if (!ticking) {
+      requestAnimationFrame(() => {
+        const y = window.scrollY;
+        if (y > lastY && y > 80) {
+          bar.classList.add('hide');
+        } else {
+          bar.classList.remove('hide');
+        }
+        lastY = y;
+        ticking = false;
+      });
+      ticking = true;
+    }
+  }, { passive: true });
 })();
 </script>
 </body>
