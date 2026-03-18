@@ -328,18 +328,7 @@ body{background:var(--navy);color:var(--white);font-family:'Helvetica Neue',Aria
 .ch-done{font-size:14px;color:var(--teal)}
 .ch-cur{font-size:10px;color:var(--teal);font-weight:700;letter-spacing:0.5px;border:1px solid var(--teal3);padding:2px 7px;border-radius:10px}
 .ch-lock{font-size:12px;color:var(--border2)}
-.rev-overall{display:flex;align-items:center;gap:16px;background:rgba(255,255,255,0.03);border-radius:8px;padding:16px;margin-bottom:14px;border:1px solid var(--border)}
-.big-num{font-size:44px;font-weight:800;color:var(--gold);line-height:1}
 .stars{color:var(--gold);font-size:14px;letter-spacing:1px}
-.rev-cnt{font-size:12px;color:var(--muted);margin-top:2px}
-.reviews-list{display:flex;flex-direction:column;gap:10px}
-.rev-item{background:rgba(255,255,255,0.03);border-radius:8px;padding:14px 16px;border:1px solid var(--border)}
-.rev-top{display:flex;align-items:center;gap:10px;margin-bottom:8px}
-.rev-av{width:32px;height:32px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:11px;font-weight:700;flex-shrink:0;border:1px solid var(--border2)}
-.rev-name{font-size:13px;font-weight:600}
-.rev-role{font-size:11px;color:var(--muted)}
-.rev-text{font-size:13px;color:#b0c4de;line-height:1.6}
-.rev-date{font-size:11px;color:var(--border2);margin-top:5px}
 </style>
 
 <div style="background:var(--navy);min-height:100vh">
@@ -421,9 +410,6 @@ body{background:var(--navy);color:var(--white);font-family:'Helvetica Neue',Aria
       <div id="ov-prog"></div>
       <div class="ov-section-title"><span class="teal-dot"></span>Course Chapters</div>
       <div class="chapter-list" id="ov-chapters"></div>
-      <div class="ov-section-title"><span class="teal-dot"></span>Learner Reviews</div>
-      <div class="rev-overall" id="ov-rating"></div>
-      <div class="reviews-list" id="ov-reviews"></div>
     </div>
   </div>
 </div>
@@ -785,20 +771,6 @@ function openCourse(id,resume=false){
       <div class="ch-num">${String(i+1).padStart(2,'0')}</div>
       <div class="ch-info"><div class="ch-name">${ch.n}</div><div class="ch-dur">${ch.d}</div></div>
       <div>${ch.done?'<span class="ch-done">✓</span>':ch.cur?'<span class="ch-cur">CURRENT</span>':'<span class="ch-lock">▷</span>'}</div>
-    </div>`).join('');
-  const fs=Math.round(c.rating);
-  document.getElementById('ov-rating').innerHTML=
-    `<div class="big-num">${c.rating.toFixed(1)}</div>
-     <div><div class="stars">${'★'.repeat(fs)}${'☆'.repeat(5-fs)}</div><div class="rev-cnt">${c.nrev.toLocaleString()} learner reviews</div></div>`;
-  document.getElementById('ov-reviews').innerHTML=c.reviews.map(r=>`
-    <div class="rev-item">
-      <div class="rev-top">
-        <div class="rev-av" style="background:${r.bg}">${r.init}</div>
-        <div><div class="rev-name">${r.name}</div><div class="rev-role">${r.role}</div></div>
-        <div class="stars" style="margin-left:auto;font-size:12px">${'★'.repeat(r.stars)}</div>
-      </div>
-      <div class="rev-text">${r.text}</div>
-      <div class="rev-date">${r.date}</div>
     </div>`).join('');
   document.getElementById('overlay').scrollTop=0;
 }
