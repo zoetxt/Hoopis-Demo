@@ -324,6 +324,36 @@ body{background:var(--navy);color:var(--white);font-family:'Helvetica Neue',Aria
 .ch-cur{font-size:10px;color:var(--teal);font-weight:700;letter-spacing:0.5px;border:1px solid var(--teal3);padding:2px 7px;border-radius:10px}
 .ch-lock{font-size:12px;color:var(--border2)}
 .stars{color:var(--gold);font-size:14px;letter-spacing:1px}
+
+/* ============ BROWSE BY TOPIC ============ */
+.topic-grid{
+  display:grid;
+  grid-template-columns:repeat(4,1fr);
+  gap:14px;
+}
+.topic-card{
+  background:linear-gradient(135deg,#0a2a2a 0%,#071e1e 60%,#050e14 100%);
+  border:1px solid var(--border);
+  border-radius:12px;
+  padding:22px 20px 20px;
+  cursor:pointer;
+  transition:border-color 0.2s,background 0.2s,transform 0.18s;
+  position:relative;
+  overflow:hidden;
+}
+.topic-card::before{
+  content:'';
+  position:absolute;inset:0;
+  background:radial-gradient(ellipse at top left,rgba(0,200,212,0.09) 0%,transparent 65%);
+  pointer-events:none;
+}
+.topic-card:hover{
+  border-color:var(--teal3);
+  transform:translateY(-3px);
+  background:linear-gradient(135deg,#0e3434 0%,#092828 60%,#061318 100%);
+}
+.topic-card-name{font-size:16px;font-weight:700;color:var(--white);line-height:1.25;margin-bottom:8px}
+.topic-card-count{font-size:13px;color:var(--muted)}
 </style>
 
 <div style="background:var(--navy);min-height:100vh">
@@ -380,6 +410,20 @@ body{background:var(--navy);color:var(--white);font-family:'Helvetica Neue',Aria
   <div class="section-title"><span class="teal-line"></span>Expert Sales Series <span class="see-all">See all →</span></div>
   <div class="rails" id="salesSeries"></div>
 </div>
+<div class="section">
+  <div class="section-title"><span class="teal-line"></span>Browse by Topic <span class="see-all">View all →</span></div>
+  <div class="topic-grid">
+    <div class="topic-card"><div class="topic-card-name">Wealth Management</div><div class="topic-card-count">24 courses</div></div>
+    <div class="topic-card"><div class="topic-card-name">Tax Planning</div><div class="topic-card-count">18 courses</div></div>
+    <div class="topic-card"><div class="topic-card-name">Insurance</div><div class="topic-card-count">15 courses</div></div>
+    <div class="topic-card"><div class="topic-card-name">Retirement</div><div class="topic-card-count">21 courses</div></div>
+    <div class="topic-card"><div class="topic-card-name">Estate Planning</div><div class="topic-card-count">12 courses</div></div>
+    <div class="topic-card"><div class="topic-card-name">Communication</div><div class="topic-card-count">16 courses</div></div>
+    <div class="topic-card"><div class="topic-card-name">Compliance</div><div class="topic-card-count">9 courses</div></div>
+    <div class="topic-card"><div class="topic-card-name">Sales</div><div class="topic-card-count">14 courses</div></div>
+  </div>
+</div>
+
 <div class="section">
   <div class="section-title"><span class="teal-line"></span>Insurance Professionals <span class="see-all">See all →</span></div>
   <div class="rails" id="insuranceSeries"></div>
