@@ -44,22 +44,107 @@ body{background:var(--navy);color:var(--white);font-family:'Helvetica Neue',Aria
 .search-bar:focus{border-color:var(--teal);background:rgba(0,200,212,0.05)}
 .avatar{width:34px;height:34px;border-radius:6px;background:linear-gradient(135deg,var(--teal3),var(--teal));display:flex;align-items:center;justify-content:center;font-size:12px;font-weight:700;cursor:pointer;border:1px solid var(--teal3)}
 
+/* ============ HERO CAROUSEL ============ */
 .hero{position:relative;height:480px;overflow:hidden;margin-bottom:0}
-.hero-canvas{width:100%;height:480px;display:block}
+
+/* Slides container */
+.hero-slides{position:absolute;inset:0}
+
+/* Individual slide */
+.hero-slide{
+  position:absolute;inset:0;
+  opacity:0;
+  transition:opacity 0s;
+  pointer-events:none;
+}
+.hero-slide.active{
+  opacity:1;
+  pointer-events:auto;
+  z-index:1;
+}
+.hero-slide.fade-in{
+  animation:heroFadeIn 0.9s cubic-bezier(0.4,0,0.2,1) forwards;
+}
+.hero-slide.fade-out{
+  animation:heroFadeOut 0.9s cubic-bezier(0.4,0,0.2,1) forwards;
+}
+@keyframes heroFadeIn{
+  from{opacity:0;transform:scale(1.04)}
+  to{opacity:1;transform:scale(1)}
+}
+@keyframes heroFadeOut{
+  from{opacity:1;transform:scale(1)}
+  to{opacity:0;transform:scale(0.97)}
+}
+
+.hero-slide img{width:100%;height:480px;display:block;object-fit:cover}
 .hero-overlay{position:absolute;inset:0;background:linear-gradient(90deg,rgba(6,13,31,0.95) 0%,rgba(6,13,31,0.65) 55%,rgba(6,13,31,0.1) 100%)}
 .hero-bottom{position:absolute;bottom:0;left:0;right:0;height:120px;background:linear-gradient(180deg,transparent,var(--navy))}
-.hero-content{position:absolute;bottom:60px;left:40px;max-width:500px}
-.hero-pill{display:inline-flex;align-items:center;gap:6px;background:rgba(0,200,212,0.15);border:1px solid var(--teal3);color:var(--teal);font-size:10px;font-weight:700;letter-spacing:1.5px;padding:4px 12px;border-radius:20px;margin-bottom:16px;text-transform:uppercase}
-.hero-title{font-size:38px;font-weight:800;line-height:1.1;margin-bottom:12px;text-shadow:0 2px 20px rgba(0,0,0,0.8)}
-.hero-meta{font-size:13px;color:#b0c4de;margin-bottom:16px;display:flex;gap:14px;align-items:center;flex-wrap:wrap}
+
+/* Content inside each slide */
+.hero-content{
+  position:absolute;bottom:68px;left:40px;max-width:520px;
+}
+.hero-content-inner{
+  opacity:0;transform:translateY(18px);
+  transition:opacity 0.55s ease 0.35s,transform 0.55s ease 0.35s;
+}
+.hero-slide.active .hero-content-inner{
+  opacity:1;transform:translateY(0);
+}
+
+.hero-pill{display:inline-flex;align-items:center;gap:6px;background:rgba(0,200,212,0.15);border:1px solid var(--teal3);color:var(--teal);font-size:10px;font-weight:700;letter-spacing:1.5px;padding:4px 12px;border-radius:20px;margin-bottom:14px;text-transform:uppercase}
+.hero-title{font-size:38px;font-weight:800;line-height:1.1;margin-bottom:11px;text-shadow:0 2px 20px rgba(0,0,0,0.8)}
+.hero-meta{font-size:13px;color:#b0c4de;margin-bottom:14px;display:flex;gap:14px;align-items:center;flex-wrap:wrap}
 .hero-match{color:var(--teal);font-weight:700}
 .hero-level{border:1px solid #5a7a9a;padding:2px 8px;border-radius:3px;font-size:11px;color:#b0c4de}
-.hero-desc{font-size:14px;color:#c8d8ec;line-height:1.65;margin-bottom:22px}
+.hero-desc{font-size:14px;color:#c8d8ec;line-height:1.65;margin-bottom:20px}
 .hero-btns{display:flex;gap:12px}
-.btn-play{background:var(--teal);color:var(--navy);border:none;border-radius:5px;padding:12px 28px;font-size:14px;font-weight:700;cursor:pointer;display:flex;align-items:center;gap:8px;transition:background 0.2s}
-.btn-play:hover{background:var(--teal2)}
-.btn-more{background:rgba(255,255,255,0.1);color:var(--white);border:1px solid rgba(255,255,255,0.2);border-radius:5px;padding:12px 24px;font-size:14px;font-weight:600;cursor:pointer;display:flex;align-items:center;gap:8px;backdrop-filter:blur(4px)}
+.btn-play{background:var(--teal);color:var(--navy);border:none;border-radius:5px;padding:12px 28px;font-size:14px;font-weight:700;cursor:pointer;display:flex;align-items:center;gap:8px;transition:background 0.2s,transform 0.15s}
+.btn-play:hover{background:var(--teal2);transform:scale(1.03)}
+.btn-more{background:rgba(255,255,255,0.1);color:var(--white);border:1px solid rgba(255,255,255,0.2);border-radius:5px;padding:12px 24px;font-size:14px;font-weight:600;cursor:pointer;display:flex;align-items:center;gap:8px;backdrop-filter:blur(4px);transition:background 0.2s}
 .btn-more:hover{background:rgba(255,255,255,0.15)}
+
+/* Nav arrows */
+.hero-arrow{
+  position:absolute;top:50%;transform:translateY(-50%);
+  width:44px;height:44px;border-radius:50%;
+  background:rgba(6,13,31,0.6);border:1px solid rgba(255,255,255,0.18);
+  color:#fff;font-size:18px;cursor:pointer;
+  display:flex;align-items:center;justify-content:center;
+  z-index:10;transition:background 0.2s,border-color 0.2s,transform 0.15s;
+  backdrop-filter:blur(6px);
+  opacity:0.7;
+}
+.hero-arrow:hover{background:rgba(0,200,212,0.25);border-color:var(--teal);opacity:1;transform:translateY(-50%) scale(1.08)}
+.hero-arrow.prev{left:20px}
+.hero-arrow.next{right:20px}
+
+/* Dot indicators */
+.hero-dots{
+  position:absolute;bottom:18px;left:50%;transform:translateX(-50%);
+  display:flex;gap:8px;z-index:10;
+}
+.hero-dot{
+  width:6px;height:6px;border-radius:50%;
+  background:rgba(255,255,255,0.35);
+  cursor:pointer;transition:all 0.3s ease;
+  border:none;padding:0;
+}
+.hero-dot.active{
+  background:var(--teal);
+  width:24px;border-radius:3px;
+  box-shadow:0 0 8px rgba(0,200,212,0.6);
+}
+
+/* Progress bar under dots */
+.hero-progress{
+  position:absolute;bottom:0;left:0;height:2px;
+  background:var(--teal);opacity:0.6;
+  animation:heroProgress var(--slide-duration,6s) linear forwards;
+  z-index:10;
+}
+@keyframes heroProgress{from{width:0}to{width:100%}}
 
 .pillars-strip{display:flex;gap:0;border-top:1px solid var(--border);border-bottom:1px solid var(--border);margin-bottom:36px;background:rgba(10,22,40,0.8)}
 .pillar{flex:1;display:flex;align-items:center;gap:10px;padding:14px 18px;border-right:1px solid var(--border);cursor:default}
@@ -182,29 +267,12 @@ body{background:var(--navy);color:var(--white);font-family:'Helvetica Neue',Aria
   </div>
 </div>
 
-<div class="hero">
-  <img id="heroCanvas" width="1200" height="480" class="hero-canvas" src="https://images.unsplash.com/photo-1475721027785-f74eccf877e2?w=1200&h=480&q=80&fit=crop" style="object-fit:cover;">
-  <div class="hero-overlay"></div>
-  <div class="hero-bottom"></div>
-  <div class="hero-content">
-    <div class="hero-pill">
-      <span style="width:6px;height:6px;border-radius:50%;background:var(--teal);display:inline-block"></span>
-      Featured Expert · HPN AI Lab Pick
-    </div>
-    <div class="hero-title">Mastering High-Stakes<br>Client Conversations</div>
-    <div class="hero-meta">
-      <span class="hero-match">98% Match</span>
-      <span>2024</span>
-      <span class="hero-level">Advanced</span>
-      <span>7 chapters · 1h 24m</span>
-      <span style="color:var(--gold)">★ 4.9</span>
-    </div>
-    <div class="hero-desc">Award-winning negotiation expert Brian Ahearn reveals the psychological frameworks top financial advisors use to turn difficult conversations into closed deals.</div>
-    <div class="hero-btns">
-      <button class="btn-play" onclick="openCourse(0)">&#9654; Play Now</button>
-      <button class="btn-more" onclick="openCourse(0)">&#9432; More Info</button>
-    </div>
-  </div>
+<div class="hero" id="heroCarousel">
+  <div class="hero-slides" id="heroSlides"></div>
+  <button class="hero-arrow prev" id="heroPrev" aria-label="Previous">&#8592;</button>
+  <button class="hero-arrow next" id="heroNext" aria-label="Next">&#8594;</button>
+  <div class="hero-dots" id="heroDots"></div>
+  <div class="hero-progress" id="heroProgress" style="--slide-duration:6s"></div>
 </div>
 
 <div class="pillars-strip">
@@ -639,6 +707,152 @@ function handleOvClick(e){if(e.target.id==='overlay')closeOverlay();}
 renderRail('topPicks',[0,1,2,3,4,5]);
 renderRail('salesSeries',[1,3,0,4,5]);
 renderRail('insuranceSeries',[6,7,2,4]);
+
+/* ============================================================
+   HERO CAROUSEL
+   5 featured courses — auto-advances every 6 s
+   ============================================================ */
+(function(){
+  const SLIDE_DURATION = 6000; // ms per slide
+  const HERO_IDS = [0, 2, 1, 3, 5]; // courses to feature in the hero
+
+  let current = 0;
+  let timer = null;
+  let isPaused = false;
+
+  const slidesEl  = document.getElementById('heroSlides');
+  const dotsEl    = document.getElementById('heroDots');
+  const progressEl= document.getElementById('heroProgress');
+  const prevBtn   = document.getElementById('heroPrev');
+  const nextBtn   = document.getElementById('heroNext');
+
+  // Build slides
+  HERO_IDS.forEach((cid, i) => {
+    const c = C[cid];
+    const slide = document.createElement('div');
+    slide.className = 'hero-slide' + (i === 0 ? ' active fade-in' : '');
+    slide.dataset.id = cid;
+
+    const stars = '★'.repeat(Math.round(c.rating)) + '☆'.repeat(5 - Math.round(c.rating));
+
+    slide.innerHTML = `
+      <img src="${imgUrl(cid,1200,480)}" alt="${c.title}" loading="${i===0?'eager':'lazy'}">
+      <div class="hero-overlay"></div>
+      <div class="hero-bottom"></div>
+      <div class="hero-content">
+        <div class="hero-content-inner">
+          <div class="hero-pill">
+            <span style="width:6px;height:6px;border-radius:50%;background:var(--teal);display:inline-block"></span>
+            Featured Expert &middot; HPN AI Lab Pick
+          </div>
+          <div class="hero-title">${c.title}</div>
+          <div class="hero-meta">
+            <span class="hero-match">${c.match}% Match</span>
+            <span>${c.yr}</span>
+            <span class="hero-level">${c.tags[0]}</span>
+            <span>${c.nc} chapters &middot; ${c.dur}</span>
+            <span style="color:var(--gold)">${stars} ${c.rating}</span>
+          </div>
+          <div class="hero-desc">${c.desc}</div>
+          <div class="hero-btns">
+            <button class="btn-play" onclick="openCourse(${cid})">&#9654; Play Now</button>
+            <button class="btn-more" onclick="openCourse(${cid})">&#9432; More Info</button>
+          </div>
+        </div>
+      </div>`;
+    slidesEl.appendChild(slide);
+  });
+
+  // Build dots
+  HERO_IDS.forEach((_, i) => {
+    const dot = document.createElement('button');
+    dot.className = 'hero-dot' + (i === 0 ? ' active' : '');
+    dot.setAttribute('aria-label', `Go to slide ${i+1}`);
+    dot.addEventListener('click', () => goTo(i, true));
+    dotsEl.appendChild(dot);
+  });
+
+  const slides = slidesEl.querySelectorAll('.hero-slide');
+  const dots   = dotsEl.querySelectorAll('.hero-dot');
+
+  function goTo(index, userTriggered = false) {
+    if (index === current) return;
+    const prev = current;
+    current = (index + HERO_IDS.length) % HERO_IDS.length;
+
+    // Outgoing slide
+    slides[prev].classList.remove('active','fade-in');
+    slides[prev].classList.add('fade-out');
+    slides[prev].addEventListener('animationend', () => {
+      slides[prev].classList.remove('fade-out');
+    }, { once: true });
+
+    // Incoming slide
+    slides[current].classList.add('active','fade-in');
+    slides[current].addEventListener('animationend', () => {
+      slides[current].classList.remove('fade-in');
+    }, { once: true });
+
+    // Dots
+    dots.forEach((d,i) => d.classList.toggle('active', i === current));
+
+    // Progress bar restart
+    resetProgress();
+
+    // Restart timer
+    if (!userTriggered || !isPaused) startTimer();
+  }
+
+  function next() { goTo(current + 1); }
+  function prev() { goTo(current - 1); }
+
+  function startTimer() {
+    clearTimeout(timer);
+    if (!isPaused) timer = setTimeout(next, SLIDE_DURATION);
+  }
+
+  function resetProgress() {
+    progressEl.style.animation = 'none';
+    // Force reflow
+    void progressEl.offsetWidth;
+    progressEl.style.animation = `heroProgress ${SLIDE_DURATION/1000}s linear forwards`;
+  }
+
+  // Arrow buttons
+  prevBtn.addEventListener('click', () => { goTo(current - 1, true); });
+  nextBtn.addEventListener('click', () => { goTo(current + 1, true); });
+
+  // Pause on hover
+  document.getElementById('heroCarousel').addEventListener('mouseenter', () => {
+    isPaused = true;
+    clearTimeout(timer);
+    progressEl.style.animationPlayState = 'paused';
+  });
+  document.getElementById('heroCarousel').addEventListener('mouseleave', () => {
+    isPaused = false;
+    progressEl.style.animationPlayState = 'running';
+    startTimer();
+  });
+
+  // Keyboard navigation
+  document.addEventListener('keydown', e => {
+    if (e.key === 'ArrowLeft')  goTo(current - 1, true);
+    if (e.key === 'ArrowRight') goTo(current + 1, true);
+  });
+
+  // Touch/swipe support
+  let touchStartX = 0;
+  const carousel = document.getElementById('heroCarousel');
+  carousel.addEventListener('touchstart', e => { touchStartX = e.touches[0].clientX; }, {passive:true});
+  carousel.addEventListener('touchend', e => {
+    const dx = e.changedTouches[0].clientX - touchStartX;
+    if (Math.abs(dx) > 50) dx < 0 ? next() : prev();
+  }, {passive:true});
+
+  // Kick off
+  startTimer();
+  resetProgress();
+})();
 </script>
 </body>
 </html>
