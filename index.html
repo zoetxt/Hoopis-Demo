@@ -166,18 +166,18 @@ body{background:var(--navy);color:var(--white);font-family:'Helvetica Neue',Aria
   box-shadow:0 0 10px rgba(0,200,212,0.7);
 }
 
-/* Progress bar — sits just above the very bottom edge, no visible seam */
+/* Progress bar — flush at bottom of hero */
 .hero-progress{
-  position:absolute;bottom:3px;left:0;height:2px;
-  background:linear-gradient(90deg,var(--teal),rgba(0,200,212,0.5));
-  opacity:0.5;
+  position:absolute;bottom:0;left:0;height:3px;
+  background:linear-gradient(90deg,var(--teal),rgba(0,200,212,0.6));
+  opacity:0.7;
   animation:heroProgress var(--slide-duration,6s) linear forwards;
   z-index:10;
 }
 @keyframes heroProgress{from{width:0}to{width:100%}}
 
 
-.resume-banner{background:linear-gradient(90deg,rgba(0,200,212,0.08),rgba(0,120,136,0.05));border:1px solid var(--border2);border-top:none;border-left:3px solid var(--teal);border-radius:0 0 10px 10px;margin:0 36px 32px;padding:16px 22px;display:flex;align-items:center;gap:20px;cursor:pointer;transition:border-color 0.2s,background 0.2s}
+.resume-banner{background:linear-gradient(90deg,rgba(0,200,212,0.08),rgba(0,120,136,0.05));border:1px solid var(--border2);border-left:3px solid var(--teal);border-radius:10px;margin:20px 36px 32px;padding:16px 22px;display:flex;align-items:center;gap:20px;cursor:pointer;transition:border-color 0.2s,background 0.2s}
 .resume-banner:hover{border-color:var(--teal);background:rgba(0,200,212,0.1)}
 .resume-thumb{width:72px;height:46px;border-radius:5px;overflow:hidden;flex-shrink:0;position:relative}
 .resume-thumb canvas{width:72px;height:46px;display:block}
