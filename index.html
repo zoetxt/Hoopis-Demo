@@ -700,7 +700,7 @@ function renderRail(id,ids){
       <div class="card-overlay"></div>
       <div class="card-info">
         <div class="card-title">${c.title}</div>
-        <div class="card-meta"><span class="card-tag">${c.tags[0]}</span><span>${c.dur}</span><span style="color:var(--gold)">★${c.rating}</span></div>
+        <div class="card-meta"><span class="card-tag">${c.tags[0]}</span><span>${c.dur}</span></div>
       </div>
       ${c.started?`<div class="card-prog"><div class="card-prog-fill" style="width:${c.progress}%"></div></div>`:''}
       ${cid===1?'<div class="card-new">NEW</div>':''}
@@ -717,7 +717,6 @@ function renderRail(id,ids){
         <span class="card-exp-match">${c.match}% Match</span>
         <span style="color:rgba(255,255,255,0.5);font-size:10px">${c.yr}</span>
         <span style="border:1px solid rgba(255,255,255,0.3);padding:1px 5px;border-radius:2px;font-size:9px;color:rgba(255,255,255,0.6)">${c.tags[0]}</span>
-        <span style="color:var(--gold);letter-spacing:0.5px">${starsHtml}</span>
       </div>
       <div class="card-exp-desc">${c.desc}</div>
       <div class="card-exp-tags">${c.tags.map(t=>`<span class="card-exp-tag">${t}</span>`).join('')}<span class="card-exp-tag">${c.dur}</span><span class="card-exp-tag">${c.nc} chapters</span></div>
@@ -737,8 +736,6 @@ function openCourse(id,resume=false){
   document.getElementById('ov-title').textContent=c.title;
   document.getElementById('ov-badges').innerHTML=
     c.tags.map(t=>`<span class="badge badge-teal">${t}</span>`).join('')+
-    `<span class="badge badge-gold">★ ${c.rating}</span>`+
-    `<span class="badge">${c.nrev.toLocaleString()} reviews</span>`+
     `<span class="badge">${c.dur}</span>`+
     `<span class="badge">${c.yr}</span>`;
   document.getElementById('ov-desc').textContent=c.desc;
@@ -828,7 +825,6 @@ renderRail('insuranceSeries',[6,7,2,4]);
             <span>${c.yr}</span>
             <span class="hero-level">${c.tags[0]}</span>
             <span>${c.nc} chapters &middot; ${c.dur}</span>
-            <span style="color:var(--gold)">${stars} ${c.rating}</span>
           </div>
           <div class="hero-desc">${c.desc}</div>
           <div class="hero-btns">
