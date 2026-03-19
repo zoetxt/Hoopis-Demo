@@ -199,7 +199,6 @@ html,body{height:100%;background:var(--bg);color:var(--white);font-family:'Inter
 .ci-stats{display:flex;align-items:center;gap:16px;margin-bottom:12px}
 .ci-stat{font-size:12px;color:var(--muted);display:flex;align-items:center;gap:4px}
 .ci-stat-val{color:var(--white);font-weight:600}
-.ci-star{color:var(--gold)}
 .ci-prog-wrap{margin-bottom:14px}
 .ci-prog-label{display:flex;justify-content:space-between;font-size:12px;color:var(--muted);margin-bottom:5px}
 .ci-prog-label span:last-child{color:var(--green);font-weight:700}
@@ -421,8 +420,6 @@ body{animation:fadeInPage .4s ease both}
             </div>
           </div>
           <div class="ci-stats">
-            <div class="ci-stat"><span class="ci-star">★</span><span class="ci-stat-val" id="ciRating"></span></div>
-            <div class="ci-stat"><span class="ci-stat-val" id="ciEnrolled"></span> enrolled</div>
             <div class="ci-stat"><span class="ci-stat-val" id="ciLessons"></span> lessons</div>
           </div>
           <div class="ci-prog-wrap">
@@ -613,8 +610,6 @@ function renderPage(){
   document.getElementById('ciAvatar').style.background = 'linear-gradient(135deg,'+course.xcol+',#00c8d4)';
   document.getElementById('ciExpertName').textContent = course.expert;
   document.getElementById('ciExpertRole').textContent = course.xrole;
-  document.getElementById('ciRating').textContent = course.rating;
-  document.getElementById('ciEnrolled').textContent = (course.enrolled).toLocaleString();
   document.getElementById('ciLessons').textContent = course.lessons.length;
 
   var prog = course.progress || 0;
