@@ -391,8 +391,40 @@ body{background:var(--navy);color:var(--white);font-family:'Helvetica Neue',Aria
 .topic-card-count{font-size:13px;color:var(--muted)}
 
 /* ============ AI CHAT WIDGET ============ */
+/* ── FAB ── */
+.chat-fab{
+  position:fixed;bottom:24px;right:24px;width:56px;height:56px;border-radius:50%;
+  background:var(--navy);border:2px solid var(--teal);cursor:pointer;
+  display:flex;align-items:center;justify-content:center;
+  z-index:2001;overflow:visible;
+  box-shadow:0 8px 32px rgba(0,200,212,0.28),0 4px 16px rgba(0,0,0,0.45);
+  transition:transform 0.25s cubic-bezier(0.34,1.56,0.64,1),box-shadow 0.2s,background 0.2s,border-color 0.2s;
+}
+.chat-fab:hover{transform:scale(1.1);box-shadow:0 14px 44px rgba(0,200,212,0.42),0 4px 20px rgba(0,0,0,0.5)}
+.chat-fab.is-open{background:var(--border);border-color:var(--muted)}
+.fab-badge{
+  position:absolute;top:-1px;right:-1px;width:13px;height:13px;
+  border-radius:50%;background:#22c55e;border:2.5px solid var(--navy);
+  transform:scale(0);transition:transform 0.35s cubic-bezier(0.34,1.56,0.64,1);
+  pointer-events:none;
+}
+.fab-badge.show{transform:scale(1)}
+/* pulse ring on badge */
+.fab-badge.show::after{
+  content:'';position:absolute;inset:-4px;border-radius:50%;
+  border:2px solid #22c55e;opacity:0;
+  animation:fabPulse 2s ease-out infinite;
+}
+@keyframes fabPulse{0%{opacity:0.7;transform:scale(0.8)}100%{opacity:0;transform:scale(2)}}
+.fab-ico{position:absolute;transition:opacity 0.2s ease,transform 0.28s ease}
+.fab-ico-close{opacity:0;transform:rotate(-45deg) scale(0.8)}
+.chat-fab.is-open .fab-ico-chat{opacity:0;transform:rotate(45deg) scale(0.8)}
+.chat-fab.is-open .fab-ico-close{opacity:1;transform:rotate(0deg) scale(1)}
+@media(max-width:480px){.chat-fab.is-open{display:none}}
+
+/* ── Panel ── */
 .chat-panel{
-  position:fixed;bottom:24px;right:24px;width:min(380px,calc(100vw - 48px));height:520px;
+  position:fixed;bottom:88px;right:24px;width:min(380px,calc(100vw - 48px));height:520px;
   background:var(--navy);border:1px solid var(--border);border-radius:16px;
   display:flex;flex-direction:column;z-index:2000;
   box-shadow:0 24px 60px rgba(0,0,0,0.65);
@@ -435,7 +467,7 @@ body{background:var(--navy);color:var(--white);font-family:'Helvetica Neue',Aria
 .chat-inp::placeholder{color:var(--muted)}
 .chat-send{width:36px;height:36px;border-radius:10px;background:var(--teal);color:var(--navy);border:none;cursor:pointer;display:flex;align-items:center;justify-content:center;transition:transform 0.1s,opacity 0.15s;flex-shrink:0}
 .chat-send:hover{transform:scale(1.08)}.chat-send:disabled{opacity:0.4;cursor:not-allowed;transform:none}
-@media(max-width:480px){.chat-panel{bottom:0;right:0;left:0;width:100%;border-radius:16px 16px 0 0;height:85vh}}
+@media(max-width:480px){.chat-panel{bottom:0;right:0;left:0;width:100%;border-radius:16px 16px 0 0;height:90vh}}
 </style>
 
 <div style="background:var(--navy);min-height:100vh">
@@ -1112,6 +1144,17 @@ renderRail('insuranceSeries',[6,7,2,4]);
 <!-- ══════════════════════════════════════════
      AI CHAT WIDGET
 ════════════════════════════════════════════ -->
+<button class="chat-fab" id="chatFab" aria-label="Chat with HPN Advisor">
+  <span class="fab-badge" id="fabBadge"></span>
+  <svg class="fab-ico fab-ico-chat" width="24" height="24" viewBox="0 0 24 24" fill="none">
+    <path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z" fill="#00c8d4"/>
+    <circle cx="8" cy="10" r="1" fill="#060d1f"/><circle cx="12" cy="10" r="1" fill="#060d1f"/><circle cx="16" cy="10" r="1" fill="#060d1f"/>
+  </svg>
+  <svg class="fab-ico fab-ico-close" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#8a9ec0" stroke-width="2.5" stroke-linecap="round">
+    <line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/>
+  </svg>
+</button>
+
 <div class="chat-panel" id="chatPanel">
   <div class="chat-hd">
     <div class="chat-hd-left">
@@ -1216,18 +1259,38 @@ renderRail('insuranceSeries',[6,7,2,4]);
   var trigger  = document.getElementById('chatTrigger');
   var closeBtn = document.getElementById('chatClose');
   var resetBtn = document.getElementById('chatReset');
+  var fab      = document.getElementById('chatFab');
+  var badge    = document.getElementById('fabBadge');
+
+  /* ── Badge helpers ── */
+  function showBadge(){ badge.classList.add('show'); }
+  function hideBadge(){ badge.classList.remove('show'); }
 
   /* ── Open / close ── */
   function openChat() {
     panel.classList.add('open');
+    fab.classList.add('is-open');
+    hideBadge();
     setTimeout(function(){ inp.focus(); }, 350);
     if(msgs.children.length === 0) startConversation();
   }
-  function closeChat() { panel.classList.remove('open'); }
+  function closeChat() {
+    panel.classList.remove('open');
+    fab.classList.remove('is-open');
+  }
+
+  /* FAB toggles the panel */
+  fab.addEventListener('click', function(){
+    if(panel.classList.contains('open')) closeChat();
+    else openChat();
+  });
 
   trigger.addEventListener('click', openChat);
   trigger.addEventListener('focus', openChat);
   closeBtn.addEventListener('click', closeChat);
+
+  /* Show badge after 3 s on load to invite the user */
+  setTimeout(showBadge, 3000);
   resetBtn.addEventListener('click', function(){
     msgs.innerHTML = '';
     state = { step: 0, role: '', challenge: '' };
@@ -1286,6 +1349,8 @@ renderRail('insuranceSeries',[6,7,2,4]);
         removeTyping();
         appendMsg('bot', html, chips);
         busy = false;
+        /* Re-show badge if user has closed the panel */
+        if(!panel.classList.contains('open')) showBadge();
         resolve();
       }, delay);
     });
