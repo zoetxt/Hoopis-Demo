@@ -882,7 +882,7 @@ function renderRail(id,ids){
     </div>
     <div class="card-expand">
       <div class="card-exp-btns">
-        <button class="btn-exp-play" onclick="event.stopPropagation();openCourse(${cid})">▶</button>
+        <button class="btn-exp-play" onclick="event.stopPropagation();window.location.href='course-player.html?id=${cid}&lesson=0'">▶</button>
         <button class="btn-exp-icon" title="Add to My List" onclick="event.stopPropagation()">+</button>
       </div>
       <div class="card-exp-desc">${c.desc}</div>
