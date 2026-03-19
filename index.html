@@ -456,6 +456,23 @@ body{background:var(--navy);color:var(--white);font-family:'Helvetica Neue',Aria
 .chip{padding:5px 12px;border:1px solid var(--teal);border-radius:20px;background:transparent;color:var(--teal);font-size:12px;font-weight:500;cursor:pointer;transition:background 0.15s,color 0.15s,transform 0.1s;font-family:inherit}
 .chip:hover{background:var(--teal);color:var(--navy);transform:scale(1.04)}
 .chip:disabled{opacity:0.4;cursor:not-allowed;transform:none}
+/* Course cards inside chat */
+.chat-course-cards{display:flex;flex-direction:column;gap:8px;width:100%}
+.chat-course-card{
+  display:flex;flex-direction:column;
+  background:rgba(255,255,255,0.03);border:1px solid var(--border);
+  border-radius:10px;overflow:hidden;cursor:pointer;text-align:left;width:100%;
+  transition:border-color 0.18s,transform 0.18s,box-shadow 0.18s;
+}
+.chat-course-card:hover{border-color:var(--teal);transform:translateY(-2px);box-shadow:0 6px 24px rgba(0,200,212,0.18)}
+.chat-course-card img{width:100%;height:110px;object-fit:cover;display:block;flex-shrink:0}
+.chat-course-card-body{padding:10px 12px;display:flex;flex-direction:column;gap:3px}
+.chat-course-card-title{font-size:12.5px;font-weight:700;color:var(--white);line-height:1.3}
+.chat-course-card-expert{font-size:11px;color:var(--muted);margin-top:1px}
+.chat-course-card-meta{display:flex;align-items:center;gap:6px;margin-top:5px;flex-wrap:wrap}
+.chat-course-card-badge{padding:2px 7px;border-radius:4px;font-size:10px;font-weight:600;background:rgba(0,200,212,0.12);color:var(--teal);border:1px solid rgba(0,200,212,0.25)}
+.chat-course-card-dur{font-size:11px;color:var(--muted)}
+.chat-course-card-cta{font-size:11px;color:var(--teal);font-weight:600;margin-top:6px;display:flex;align-items:center;gap:3px}
 .typing-row{display:flex;gap:8px;align-items:flex-start;animation:cFade 0.22s ease forwards}
 .typing-bub{background:var(--border);border-radius:4px 14px 14px 14px;padding:12px 16px;display:flex;gap:4px;align-items:center}
 .tdot{width:7px;height:7px;border-radius:50%;background:var(--muted);animation:tBounce 0.55s ease-in-out infinite}
@@ -1189,15 +1206,16 @@ renderRail('insuranceSeries',[6,7,2,4]);
   var busy = false;
 
   /* ── Course catalog ── */
+  /* cid maps to the global C[] course array (id 0–7) */
   var courses = {
-    prospecting: { title:'Prospecting in the Digital Age', instructor:'Jeb Blount', level:'Intermediate', duration:'58m', why:'Perfect for building a consistent pipeline with modern outreach strategies.' },
-    closing:     { title:'Closing Techniques for Complex Sales', instructor:'Anthony Iannarino', level:'Advanced', duration:'1h 8m', why:'Exactly what you need to confidently move deals across the finish line.' },
-    highstakes:  { title:'Mastering High-Stakes Client Conversations', instructor:'Brian Ahearn', level:'Advanced', duration:'1h 24m', why:'Teaches the influence and persuasion skills top advisors use in critical moments.' },
-    trust:       { title:'The Trust Formula: Building Client Relationships That Last', instructor:'Colleen Stanley', level:'All Levels', duration:'1h 12m', why:'A proven framework for deepening client loyalty and earning more referrals naturally.' },
-    referrals:   { title:'Referral Mastery: The Systematic Approach', instructor:'Michael Goldberg', level:'All Levels', duration:'44m', why:'The most practical, repeatable system for generating warm referrals consistently.' },
-    productivity:{ title:'Time Blocking for Peak Producers', instructor:'Darren Hardy', level:'All Levels', duration:'52m', why:'Habit-based scheduling that top producers use to do more in less time.' },
-    ltc:         { title:'Long-Term Care Planning Conversations', instructor:'Harley Gordon', level:'Advanced', duration:'48m', why:'The go-to guide for navigating these sensitive, high-stakes client discussions.' },
-    underwriting:{ title:'Underwriting Relationships: Working With Carriers', instructor:'Elizabeth Scheithe', level:'Advanced', duration:'1h 4m', why:'Build the carrier relationships that help you place difficult cases faster.' }
+    highstakes:  { cid:0 },
+    prospecting: { cid:1 },
+    trust:       { cid:2 },
+    closing:     { cid:3 },
+    referrals:   { cid:4 },
+    productivity:{ cid:5 },
+    underwriting:{ cid:6 },
+    ltc:         { cid:7 }
   };
 
   /* ── Conversation flow ── */
@@ -1236,16 +1254,14 @@ renderRail('insuranceSeries',[6,7,2,4]);
       else if(c.includes('long-term') || c.includes('ltc') || c.includes('care')) key = 'ltc';
       else if(c.includes('underwr') || c.includes('carrier')) key = 'underwriting';
       else {
-        // fallback by role
         var map = {'Financial Advisor':'closing','Insurance Agent':'ltc','Agency Owner':'referrals','New to the industry':'prospecting'};
         key = map[role] || 'prospecting';
       }
-      var course = courses[key];
-      // also pick a second complementary recommendation
-      var secondKey = (key === 'prospecting') ? 'highstakes' : (key === 'closing') ? 'trust' : (key === 'trust') ? 'referrals' : (key === 'referrals') ? 'prospecting' : (key === 'ltc') ? 'highstakes' : (key === 'underwriting') ? 'ltc' : (key === 'highstakes') ? 'closing' : 'productivity';
-      var course2 = courses[secondKey];
+      var pairMap = {prospecting:'highstakes',closing:'trust',trust:'referrals',referrals:'prospecting',ltc:'highstakes',underwriting:'ltc',highstakes:'closing',productivity:'trust'};
+      var secondKey = pairMap[key] || 'productivity';
       return {
-        text: "Based on what you've shared, here are my top picks for you:\n\n<strong>" + course.title + "</strong>\nwith " + course.instructor + " · " + course.level + " · " + course.duration + "\n" + course.why + "\n<span class='cta'>Want to start? [" + course.title + " →]</span>\n\nYou might also enjoy:\n\n<strong>" + course2.title + "</strong> with " + course2.instructor + " · " + course2.duration + "\n<span class='cta'>Explore [" + course2.title + " →]</span>",
+        text: "Great — based on what you've shared, here are my top picks for you:",
+        cards: [ courses[key].cid, courses[secondKey].cid ],
         chips: ['Show me more courses','Start over']
       };
     }
@@ -1314,10 +1330,34 @@ renderRail('insuranceSeries',[6,7,2,4]);
     if(t) t.remove();
   }
 
-  function appendMsg(role, html, chips) {
+  function appendMsg(role, html, chips, cards) {
     var row = document.createElement('div');
     row.className = 'chat-row ' + (role === 'bot' ? 'b' : 'u');
     var bodyHTML = '<div class="msg-body"><div class="msg-bub">' + html + '</div>';
+
+    /* Visual course cards */
+    if(role === 'bot' && cards && cards.length) {
+      bodyHTML += '<div class="chat-course-cards">';
+      cards.forEach(function(cid){
+        var course = C[cid];
+        var thumb = imgUrl(cid, 320, 180);
+        bodyHTML +=
+          '<div class="chat-course-card" onclick="openCourse(' + cid + ')">' +
+            '<img src="' + thumb + '" alt="' + course.title + '" loading="lazy" />' +
+            '<div class="chat-course-card-body">' +
+              '<div class="chat-course-card-title">' + course.title + '</div>' +
+              '<div class="chat-course-card-expert">' + course.expert + '</div>' +
+              '<div class="chat-course-card-meta">' +
+                '<span class="chat-course-card-badge">' + course.tags[0] + '</span>' +
+                '<span class="chat-course-card-dur">' + course.dur + '</span>' +
+              '</div>' +
+              '<div class="chat-course-card-cta">Open course <svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><line x1="5" y1="12" x2="19" y2="12"/><polyline points="12 5 19 12 12 19"/></svg></div>' +
+            '</div>' +
+          '</div>';
+      });
+      bodyHTML += '</div>';
+    }
+
     if(role === 'bot' && chips && chips.length) {
       bodyHTML += '<div class="chat-chips">';
       chips.forEach(function(c){
@@ -1330,26 +1370,23 @@ renderRail('insuranceSeries',[6,7,2,4]);
     msgs.appendChild(row);
     msgs.scrollTop = msgs.scrollHeight;
 
-    // Wire up chip clicks
     row.querySelectorAll('.chip').forEach(function(btn){
       btn.addEventListener('click', function(){
-        // Disable all chips in previous messages
         msgs.querySelectorAll('.chip').forEach(function(b){ b.disabled = true; });
         handleUserInput(btn.dataset.chip);
       });
     });
   }
 
-  function botSay(html, chips, delay) {
+  function botSay(html, chips, delay, cards) {
     busy = true;
     delay = delay || 800;
     var t = appendTyping();
     return new Promise(function(resolve){
       setTimeout(function(){
         removeTyping();
-        appendMsg('bot', html, chips);
+        appendMsg('bot', html, chips, cards || []);
         busy = false;
-        /* Re-show badge if user has closed the panel */
         if(!panel.classList.contains('open')) showBadge();
         resolve();
       }, delay);
@@ -1391,7 +1428,7 @@ renderRail('insuranceSeries',[6,7,2,4]);
       state.challenge = text;
       state.step = 3;
       var rec = flow.recommend(state.role, state.challenge);
-      botSay(rec.text, rec.chips, 1200);
+      botSay(rec.text, rec.chips, 1200, rec.cards);
     }
     else if(state.step === 3) {
       // Post-recommendation
