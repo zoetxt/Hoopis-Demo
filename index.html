@@ -912,12 +912,12 @@ function openCourse(id,resume=false){
   const btns=document.getElementById('ov-btns');
   if(c.started){
     btns.innerHTML=
-      `<button class="btn-ov-play" onclick="alert('Resuming Chapter ${c.curChap+1}: ${c.chapters[c.curChap].n}...')">▶ Resume — Chapter ${c.curChap+1}</button>
-       <button class="btn-ov-resume" onclick="alert('Starting from beginning...')">↺ Start Over</button>
+      `<button class="btn-ov-play" onclick="window.location.href='course-player.html?id=${id}&lesson=${c.curChap}'">▶ Resume — Chapter ${c.curChap+1}</button>
+       <button class="btn-ov-resume" onclick="window.location.href='course-player.html?id=${id}&lesson=0'">↺ Start Over</button>
        <button class="btn-ov-save">+ My List</button>`;
   } else {
     btns.innerHTML=
-      `<button class="btn-ov-play" onclick="alert('Starting course...')">▶ Start Learning</button>
+      `<button class="btn-ov-play" onclick="window.location.href='course-player.html?id=${id}&lesson=0'">▶ Start Learning</button>
        <button class="btn-ov-save">+ My List</button>`;
   }
   const prog=document.getElementById('ov-prog');
@@ -1031,7 +1031,7 @@ renderRail('insuranceSeries',[6,7,2,4]);
           </div>
           <div class="hero-desc">${c.desc}</div>
           <div class="hero-btns">
-            <button class="btn-play" onclick="openCourse(${cid})">&#9654; Play Now</button>
+            <button class="btn-play" onclick="window.location.href='course-player.html?id=${cid}&lesson=0'">&#9654; Play Now</button>
             <button class="btn-more" onclick="openCourse(${cid})">&#9432; More Info</button>
           </div>
         </div>

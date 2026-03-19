@@ -1,0 +1,1032 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Course Player · Hoopis Performance Network</title>
+<style>
+*{margin:0;padding:0;box-sizing:border-box}
+:root{
+  --bg:#060d1f;--surface:#0e1829;--surface2:#111d31;
+  --teal:#00c8d4;--teal2:rgba(0,200,212,.14);--teal3:rgba(0,200,212,.35);
+  --green:#22c55e;--white:#fff;--muted:#8a9ec0;--border:#1a2d4a;
+  --navy:#060d1f;--gold:#f5c518;
+}
+html,body{height:100%;background:var(--bg);color:var(--white);font-family:'Inter','Helvetica Neue',Arial,sans-serif;font-size:14px;overflow-x:hidden}
+
+/* ── TOP BAR ── */
+.topbar{
+  position:fixed;top:0;left:0;right:0;height:60px;z-index:200;
+  display:flex;align-items:center;justify-content:space-between;padding:0 20px;
+  background:linear-gradient(180deg,rgba(6,13,31,.98) 0%,rgba(6,13,31,.7) 100%);
+  backdrop-filter:blur(12px);border-bottom:1px solid var(--border);
+  transition:background .3s;
+}
+.topbar.solid{background:var(--navy)}
+.back-btn{
+  display:flex;align-items:center;gap:10px;text-decoration:none;color:var(--white);
+  font-weight:600;font-size:13px;flex-shrink:0;
+  opacity:.85;transition:opacity .2s;
+}
+.back-btn:hover{opacity:1}
+.back-btn svg{width:18px;height:18px;stroke:var(--white);fill:none;stroke-width:2.5;flex-shrink:0}
+.back-logo{height:22px;width:auto}
+.topbar-title{
+  position:absolute;left:50%;transform:translateX(-50%);
+  font-size:13px;font-weight:600;color:var(--white);opacity:.9;
+  max-width:400px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;
+  pointer-events:none;
+}
+.topbar-right{display:flex;align-items:center;gap:14px;flex-shrink:0}
+.prog-pill{
+  display:flex;align-items:center;gap:8px;background:var(--surface2);
+  border:1px solid var(--border);border-radius:20px;padding:5px 12px;font-size:12px;font-weight:600;
+}
+.prog-pill-bar{width:72px;height:4px;background:rgba(255,255,255,.12);border-radius:2px;overflow:hidden}
+.prog-pill-fill{height:4px;background:var(--teal);border-radius:2px;transition:width .4s}
+.prog-pill-pct{color:var(--teal)}
+
+/* ── LAYOUT ── */
+.layout{
+  display:grid;grid-template-columns:1fr 320px;
+  padding-top:60px;min-height:100vh;
+}
+@media(max-width:900px){
+  .layout{grid-template-columns:1fr;grid-template-rows:auto auto}
+  .sidebar{order:3;border-left:none;border-top:1px solid var(--border)}
+}
+
+/* ── PLAYER ── */
+.main-col{min-width:0}
+.player-wrap{position:relative;width:100%;background:#000}
+.player-container{
+  position:relative;padding-bottom:56.25%;background:#000;overflow:hidden;cursor:pointer;
+}
+.player-container iframe,.player-container #yt-iframe{
+  position:absolute;top:0;left:0;width:100%;height:100%;border:none;pointer-events:none;
+}
+.player-container.controls-visible iframe{pointer-events:none}
+
+/* Controls overlay */
+.controls-overlay{
+  position:absolute;inset:0;z-index:10;display:flex;flex-direction:column;justify-content:flex-end;
+  opacity:0;transition:opacity .25s;pointer-events:none;
+}
+.controls-overlay.visible{opacity:1;pointer-events:all}
+.ctrl-grad{
+  position:absolute;bottom:0;left:0;right:0;height:160px;pointer-events:none;
+  background:linear-gradient(transparent,rgba(6,13,31,.92));
+}
+.ctrl-content{position:relative;z-index:2;padding:0 16px 14px}
+
+/* Progress bar */
+.progress-row{padding:0 0 8px}
+.progress-track{
+  position:relative;height:4px;background:rgba(255,255,255,.18);border-radius:2px;cursor:pointer;
+  transition:height .15s;
+}
+.progress-track:hover{height:6px}
+.progress-buffered{position:absolute;left:0;top:0;height:100%;background:rgba(255,255,255,.28);border-radius:2px;pointer-events:none}
+.progress-fill{position:absolute;left:0;top:0;height:100%;background:var(--teal);border-radius:2px;pointer-events:none;transition:width .2s linear}
+.progress-thumb{
+  position:absolute;top:50%;width:14px;height:14px;background:var(--white);border-radius:50%;
+  transform:translate(-50%,-50%) scale(0);transition:transform .15s;pointer-events:none;
+}
+.progress-track:hover .progress-thumb{transform:translate(-50%,-50%) scale(1)}
+
+/* Controls bottom row */
+.ctrl-row{display:flex;align-items:center;gap:6px}
+.ctrl-left{display:flex;align-items:center;gap:8px;flex:1}
+.ctrl-center{flex:1;text-align:center;overflow:hidden}
+.ctrl-right{display:flex;align-items:center;gap:8px;justify-content:flex-end;flex:1}
+.ctrl-btn{
+  width:34px;height:34px;border:none;background:transparent;color:var(--white);
+  cursor:pointer;border-radius:6px;display:flex;align-items:center;justify-content:center;
+  transition:background .15s,transform .1s;flex-shrink:0;
+}
+.ctrl-btn:hover{background:rgba(255,255,255,.12);transform:scale(1.08)}
+.ctrl-btn svg{width:18px;height:18px;fill:currentColor;flex-shrink:0}
+.ctrl-btn.play-btn svg{width:20px;height:20px}
+.time-badge{font-size:12px;color:rgba(255,255,255,.85);font-weight:600;white-space:nowrap;font-variant-numeric:tabular-nums}
+.lesson-name-ctrl{font-size:12px;color:rgba(255,255,255,.7);white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+
+/* Volume */
+.vol-wrap{display:flex;align-items:center;gap:6px}
+.vol-slider{
+  -webkit-appearance:none;width:72px;height:3px;background:rgba(255,255,255,.25);
+  border-radius:2px;outline:none;cursor:pointer;
+}
+.vol-slider::-webkit-slider-thumb{-webkit-appearance:none;width:12px;height:12px;background:var(--white);border-radius:50%}
+
+/* Speed */
+.speed-btn{
+  font-size:11px;font-weight:700;color:var(--white);background:rgba(255,255,255,.1);
+  border:1px solid rgba(255,255,255,.2);border-radius:4px;padding:4px 8px;cursor:pointer;
+  transition:background .15s;
+}
+.speed-btn:hover{background:rgba(255,255,255,.2)}
+.speed-menu{
+  position:absolute;bottom:52px;right:60px;background:#1a2d4a;border:1px solid var(--border);
+  border-radius:8px;overflow:hidden;z-index:50;display:none;
+}
+.speed-menu.open{display:block}
+.speed-opt{padding:8px 20px;font-size:13px;cursor:pointer;transition:background .12s;font-weight:600}
+.speed-opt:hover{background:var(--teal2)}
+.speed-opt.active{color:var(--teal)}
+
+/* Buffering spinner */
+.spinner{
+  position:absolute;top:50%;left:50%;transform:translate(-50%,-50%);
+  width:52px;height:52px;display:none;z-index:8;pointer-events:none;
+}
+.spinner.show{display:block}
+.spinner circle{fill:none;stroke:var(--teal);stroke-width:3;stroke-linecap:round;
+  stroke-dasharray:110;animation:spin-dash 1.2s ease-in-out infinite}
+@keyframes spin-dash{0%{stroke-dashoffset:110;transform-origin:center;transform:rotate(0)}
+  100%{stroke-dashoffset:0;transform:rotate(360deg);transform-origin:center}}
+.spinner-wrap{animation:spin-rot 1.4s linear infinite}
+@keyframes spin-rot{to{transform:rotate(360deg)}}
+
+/* Big play overlay (initial state) */
+.big-play{
+  position:absolute;inset:0;z-index:9;display:flex;align-items:center;justify-content:center;
+  background:rgba(6,13,31,.4);cursor:pointer;transition:background .2s;
+}
+.big-play:hover{background:rgba(6,13,31,.2)}
+.big-play-circle{
+  width:72px;height:72px;border-radius:50%;background:rgba(0,200,212,.2);
+  border:2px solid var(--teal);display:flex;align-items:center;justify-content:center;
+  transition:transform .2s,background .2s;
+}
+.big-play:hover .big-play-circle{transform:scale(1.1);background:rgba(0,200,212,.35)}
+.big-play svg{width:28px;height:28px;fill:var(--white);margin-left:4px}
+.big-play.hidden{display:none}
+
+/* Up Next card */
+.upnext-card{
+  position:absolute;bottom:80px;right:16px;width:240px;
+  background:rgba(6,13,31,.95);border:1px solid var(--border);border-radius:10px;
+  overflow:hidden;z-index:20;transform:translateX(280px);transition:transform .35s cubic-bezier(.4,0,.2,1);
+  pointer-events:all;
+}
+.upnext-card.show{transform:translateX(0)}
+.upnext-hdr{padding:8px 12px;font-size:11px;color:var(--muted);font-weight:600;letter-spacing:.8px;text-transform:uppercase;display:flex;justify-content:space-between;align-items:center}
+.upnext-dismiss{background:none;border:none;color:var(--muted);cursor:pointer;font-size:14px;line-height:1}
+.upnext-dismiss:hover{color:var(--white)}
+.upnext-thumb{position:relative;width:100%;padding-bottom:56.25%;background:#0e1829;overflow:hidden}
+.upnext-thumb img{position:absolute;inset:0;width:100%;height:100%;object-fit:cover}
+.upnext-countdown{position:absolute;bottom:6px;right:6px;background:var(--teal);color:#fff;font-size:10px;font-weight:700;padding:2px 7px;border-radius:4px}
+.upnext-body{padding:10px 12px}
+.upnext-title{font-size:12px;font-weight:600;color:var(--white);line-height:1.4;margin-bottom:4px}
+.upnext-dur{font-size:11px;color:var(--muted)}
+.upnext-play{
+  margin-top:8px;width:100%;padding:7px;background:var(--teal);border:none;border-radius:6px;
+  color:#000;font-size:12px;font-weight:700;cursor:pointer;transition:background .15s;
+}
+.upnext-play:hover{background:#00e8ff}
+.upnext-bar{height:3px;background:rgba(255,255,255,.12);position:relative}
+.upnext-bar-fill{position:absolute;left:0;top:0;height:100%;background:var(--teal);transition:width .5s linear}
+
+/* ── COURSE INFO PANEL ── */
+.course-info{padding:24px 24px 0}
+.ci-row{display:flex;align-items:flex-start;gap:16px;margin-bottom:16px}
+.ci-main{flex:1;min-width:0}
+.ci-title{font-size:20px;font-weight:800;line-height:1.25;margin-bottom:6px}
+.ci-instructor{display:flex;align-items:center;gap:10px;margin-bottom:12px}
+.ci-avatar{width:36px;height:36px;border-radius:50%;object-fit:cover;background:var(--surface2);flex-shrink:0;display:flex;align-items:center;justify-content:center;font-weight:700;font-size:14px;color:var(--white)}
+.ci-expert-name{font-size:13px;font-weight:600}
+.ci-expert-role{font-size:11px;color:var(--muted);margin-top:1px}
+.ci-stats{display:flex;align-items:center;gap:16px;margin-bottom:12px}
+.ci-stat{font-size:12px;color:var(--muted);display:flex;align-items:center;gap:4px}
+.ci-stat-val{color:var(--white);font-weight:600}
+.ci-star{color:var(--gold)}
+.ci-prog-wrap{margin-bottom:14px}
+.ci-prog-label{display:flex;justify-content:space-between;font-size:12px;color:var(--muted);margin-bottom:5px}
+.ci-prog-label span:last-child{color:var(--teal);font-weight:700}
+.ci-prog-track{height:5px;background:rgba(255,255,255,.1);border-radius:3px;overflow:hidden}
+.ci-prog-fill{height:100%;background:var(--teal);border-radius:3px;transition:width .6s cubic-bezier(.4,0,.2,1)}
+.ci-desc{font-size:13px;color:var(--muted);line-height:1.6;margin-bottom:12px}
+.ci-desc-toggle{background:none;border:none;color:var(--teal);font-size:12px;font-weight:600;cursor:pointer;padding:0;margin-bottom:14px}
+.ci-tags{display:flex;gap:7px;flex-wrap:wrap;padding-bottom:20px;border-bottom:1px solid var(--border);margin-bottom:0}
+.ci-tag{padding:4px 12px;border-radius:20px;font-size:11px;font-weight:600;background:var(--teal2);color:var(--teal);border:1px solid var(--teal3)}
+
+/* ── RECOMMENDED ── */
+.rec-section{padding:24px}
+.rec-title{font-size:14px;font-weight:700;margin-bottom:14px;display:flex;align-items:center;gap:8px}
+.rec-title::before{content:'';display:block;width:3px;height:16px;background:var(--teal);border-radius:2px}
+.rec-rail{display:flex;gap:12px;overflow-x:auto;padding-bottom:12px;scrollbar-width:thin;scrollbar-color:var(--border) transparent}
+.rec-rail::-webkit-scrollbar{height:4px}
+.rec-rail::-webkit-scrollbar-track{background:transparent}
+.rec-rail::-webkit-scrollbar-thumb{background:var(--border);border-radius:2px}
+.rec-card{
+  flex-shrink:0;width:180px;background:var(--surface);border:1px solid var(--border);
+  border-radius:10px;overflow:hidden;cursor:pointer;
+  transition:transform .2s,border-color .2s,box-shadow .2s;
+}
+.rec-card:hover{transform:translateY(-4px) scale(1.03);border-color:var(--teal);box-shadow:0 10px 32px rgba(0,200,212,.15)}
+.rec-card-thumb{position:relative;width:100%;padding-bottom:65%;overflow:hidden;background:#0e1829}
+.rec-card-thumb img{position:absolute;inset:0;width:100%;height:100%;object-fit:cover;transition:transform .3s}
+.rec-card:hover .rec-card-thumb img{transform:scale(1.06)}
+.rec-card-body{padding:10px}
+.rec-card-title{font-size:12px;font-weight:700;line-height:1.35;margin-bottom:4px;display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical;overflow:hidden}
+.rec-card-meta{font-size:11px;color:var(--muted)}
+.rec-card-badge{display:inline-block;padding:2px 7px;border-radius:4px;font-size:10px;font-weight:600;margin-top:5px;background:var(--teal2);color:var(--teal);border:1px solid var(--teal3)}
+
+/* ── SIDEBAR ── */
+.sidebar{
+  border-left:1px solid var(--border);background:var(--surface);
+  display:flex;flex-direction:column;overflow:hidden;
+  position:sticky;top:60px;height:calc(100vh - 60px);
+}
+.sidebar-hdr{
+  padding:16px 18px;border-bottom:1px solid var(--border);flex-shrink:0;
+  display:flex;align-items:center;justify-content:space-between;
+}
+.sidebar-hdr-title{font-size:13px;font-weight:700}
+.sidebar-hdr-meta{font-size:11px;color:var(--muted);margin-top:1px}
+.lesson-list{flex:1;overflow-y:auto;scrollbar-width:thin;scrollbar-color:var(--border) transparent}
+.lesson-list::-webkit-scrollbar{width:4px}
+.lesson-list::-webkit-scrollbar-thumb{background:var(--border);border-radius:2px}
+.lesson-item{
+  display:flex;align-items:center;gap:12px;padding:12px 16px;
+  border-left:3px solid transparent;cursor:pointer;transition:background .15s,border-color .15s;
+}
+.lesson-item:hover{background:rgba(255,255,255,.04)}
+.lesson-item.active{background:var(--teal2);border-left-color:var(--teal)}
+.lesson-item.completed .lesson-num{background:var(--green);border-color:var(--green);color:#fff}
+.lesson-num{
+  width:28px;height:28px;border-radius:50%;border:2px solid var(--border);
+  display:flex;align-items:center;justify-content:center;font-size:11px;font-weight:700;
+  flex-shrink:0;transition:background .2s,border-color .2s;color:var(--muted);
+}
+.lesson-item.active .lesson-num{border-color:var(--teal);color:var(--teal)}
+.lesson-check{width:28px;height:28px;flex-shrink:0;display:flex;align-items:center;justify-content:center}
+.lesson-check svg{width:18px;height:18px;fill:var(--green)}
+.lesson-body{flex:1;min-width:0}
+.lesson-title{font-size:12.5px;font-weight:600;line-height:1.35;margin-bottom:2px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.lesson-item.active .lesson-title{color:var(--white)}
+.lesson-title:not(.lesson-item.active .lesson-title){color:rgba(255,255,255,.75)}
+.lesson-dur{font-size:11px;color:var(--muted)}
+.lesson-item.active .lesson-now{font-size:10px;color:var(--teal);font-weight:700;margin-top:1px;text-transform:uppercase;letter-spacing:.6px}
+
+/* ── FADE IN ── */
+@keyframes fadeInPage{from{opacity:0;transform:translateY(8px)}to{opacity:1;transform:none}}
+body{animation:fadeInPage .4s ease both}
+
+/* ── RESPONSIVE ── */
+@media(max-width:900px){
+  .sidebar{position:static;height:auto;max-height:400px;border-left:none;border-top:1px solid var(--border)}
+  .ctrl-center{display:none}
+  .vol-wrap{display:none}
+  .topbar-title{font-size:12px;max-width:180px}
+}
+</style>
+</head>
+<body>
+
+<!-- TOP BAR -->
+<header class="topbar" id="topbar">
+  <a class="back-btn" id="backBtn" href="index.html">
+    <svg viewBox="0 0 24 24"><polyline points="15 18 9 12 15 6"/></svg>
+    <img class="back-logo" src="hoopis-logo.svg" alt="Hoopis Performance Network">
+  </a>
+  <div class="topbar-title" id="topbarTitle">Loading…</div>
+  <div class="topbar-right">
+    <div class="prog-pill" id="progPill">
+      <div class="prog-pill-bar"><div class="prog-pill-fill" id="progPillFill"></div></div>
+      <span class="prog-pill-pct" id="progPillPct">0%</span>
+    </div>
+  </div>
+</header>
+
+<!-- MAIN LAYOUT -->
+<div class="layout">
+
+  <!-- ── LEFT: PLAYER + INFO ── -->
+  <main class="main-col">
+
+    <!-- PLAYER -->
+    <div class="player-wrap">
+      <div class="player-container" id="playerContainer">
+
+        <!-- YouTube target -->
+        <div id="yt-iframe"></div>
+
+        <!-- Buffering -->
+        <svg class="spinner" id="spinner" viewBox="0 0 52 52">
+          <g class="spinner-wrap"><circle cx="26" cy="26" r="22"/></g>
+        </svg>
+
+        <!-- Big play (pre-play state) -->
+        <div class="big-play" id="bigPlay">
+          <div class="big-play-circle">
+            <svg viewBox="0 0 24 24"><polygon points="5 3 19 12 5 21 5 3"/></svg>
+          </div>
+        </div>
+
+        <!-- Controls overlay -->
+        <div class="controls-overlay" id="controlsOverlay">
+          <div class="ctrl-grad"></div>
+          <div class="ctrl-content">
+            <!-- Progress -->
+            <div class="progress-row">
+              <div class="progress-track" id="progressTrack">
+                <div class="progress-buffered" id="progressBuffered"></div>
+                <div class="progress-fill" id="progressFill" style="width:0%"></div>
+                <div class="progress-thumb" id="progressThumb" style="left:0%"></div>
+              </div>
+            </div>
+            <!-- Controls row -->
+            <div class="ctrl-row">
+              <div class="ctrl-left">
+                <!-- Play/Pause -->
+                <button class="ctrl-btn play-btn" id="btnPlay" title="Play/Pause">
+                  <svg id="iconPlay" viewBox="0 0 24 24"><polygon points="5 3 19 12 5 21 5 3"/></svg>
+                </button>
+                <!-- Skip back 10s -->
+                <button class="ctrl-btn" id="btnBack10" title="Back 10s">
+                  <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round">
+                    <path d="M12 5V1L7 6l5 5V7a7 7 0 1 1-7 7h-2a9 9 0 1 0 9-9z"/><text x="9" y="16" font-size="5" fill="currentColor" stroke="none" font-weight="bold">10</text>
+                  </svg>
+                </button>
+                <!-- Skip forward 10s -->
+                <button class="ctrl-btn" id="btnFwd10" title="Forward 10s">
+                  <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round">
+                    <path d="M12 5V1l5 5-5 5V7a7 7 0 1 0 7 7h2a9 9 0 1 1-9-9z"/><text x="9" y="16" font-size="5" fill="currentColor" stroke="none" font-weight="bold">10</text>
+                  </svg>
+                </button>
+                <!-- Time -->
+                <div class="time-badge"><span id="timeCurrent">0:00</span> / <span id="timeDuration">0:00</span></div>
+                <!-- Volume -->
+                <div class="vol-wrap">
+                  <button class="ctrl-btn" id="btnMute" title="Mute">
+                    <svg id="iconVol" viewBox="0 0 24 24"><polygon points="11 5 6 9 2 9 2 15 6 15 11 19 11 5"/><path d="M19.07 4.93a10 10 0 0 1 0 14.14"/><path d="M15.54 8.46a5 5 0 0 1 0 7.07"/></svg>
+                  </button>
+                  <input type="range" class="vol-slider" id="volSlider" min="0" max="100" value="100">
+                </div>
+              </div>
+              <!-- Center: lesson title -->
+              <div class="ctrl-center">
+                <div class="lesson-name-ctrl" id="lessonNameCtrl"></div>
+              </div>
+              <!-- Right -->
+              <div class="ctrl-right" style="position:relative">
+                <button class="speed-btn" id="speedBtn">1×</button>
+                <div class="speed-menu" id="speedMenu">
+                  <div class="speed-opt" data-speed="0.75">0.75×</div>
+                  <div class="speed-opt active" data-speed="1">1×</div>
+                  <div class="speed-opt" data-speed="1.25">1.25×</div>
+                  <div class="speed-opt" data-speed="1.5">1.5×</div>
+                  <div class="speed-opt" data-speed="2">2×</div>
+                </div>
+                <button class="ctrl-btn" id="btnFullscreen" title="Fullscreen">
+                  <svg id="iconFs" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M8 3H5a2 2 0 0 0-2 2v3m18 0V5a2 2 0 0 0-2-2h-3m0 18h3a2 2 0 0 0 2-2v-3M3 16v3a2 2 0 0 0 2 2h3"/></svg>
+                </button>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Up Next card -->
+        <div class="upnext-card" id="upnextCard">
+          <div class="upnext-hdr">
+            <span>Up Next</span>
+            <button class="upnext-dismiss" id="upnextDismiss">✕</button>
+          </div>
+          <div class="upnext-bar"><div class="upnext-bar-fill" id="upnextFill" style="width:0%"></div></div>
+          <div class="upnext-thumb">
+            <img id="upnextThumb" src="" alt="">
+            <div class="upnext-countdown" id="upnextCountdown">15s</div>
+          </div>
+          <div class="upnext-body">
+            <div class="upnext-title" id="upnextTitle">Next Lesson</div>
+            <div class="upnext-dur" id="upnextDur"></div>
+            <button class="upnext-play" id="upnextPlay">Play Now →</button>
+          </div>
+        </div>
+
+      </div><!-- /player-container -->
+    </div><!-- /player-wrap -->
+
+    <!-- COURSE INFO -->
+    <div class="course-info" id="courseInfo">
+      <div class="ci-row">
+        <div class="ci-main">
+          <div class="ci-title" id="ciTitle"></div>
+          <div class="ci-instructor">
+            <div class="ci-avatar" id="ciAvatar"></div>
+            <div>
+              <div class="ci-expert-name" id="ciExpertName"></div>
+              <div class="ci-expert-role" id="ciExpertRole"></div>
+            </div>
+          </div>
+          <div class="ci-stats">
+            <div class="ci-stat"><span class="ci-star">★</span><span class="ci-stat-val" id="ciRating"></span></div>
+            <div class="ci-stat"><span class="ci-stat-val" id="ciEnrolled"></span> enrolled</div>
+            <div class="ci-stat"><span class="ci-stat-val" id="ciLessons"></span> lessons</div>
+          </div>
+          <div class="ci-prog-wrap">
+            <div class="ci-prog-label"><span>Course Progress</span><span id="ciProgPct"></span></div>
+            <div class="ci-prog-track"><div class="ci-prog-fill" id="ciProgFill"></div></div>
+          </div>
+          <div class="ci-desc" id="ciDesc"></div>
+          <button class="ci-desc-toggle" id="ciDescToggle">Show more ↓</button>
+          <div class="ci-tags" id="ciTags"></div>
+        </div>
+      </div>
+    </div>
+
+    <!-- RECOMMENDED -->
+    <div class="rec-section">
+      <div class="rec-title">You May Also Like</div>
+      <div class="rec-rail" id="recRail"></div>
+    </div>
+
+  </main><!-- /main-col -->
+
+  <!-- ── RIGHT: SIDEBAR ── -->
+  <aside class="sidebar">
+    <div class="sidebar-hdr">
+      <div>
+        <div class="sidebar-hdr-title">Course Content</div>
+        <div class="sidebar-hdr-meta" id="sidebarMeta"></div>
+      </div>
+    </div>
+    <div class="lesson-list" id="lessonList"></div>
+  </aside>
+
+</div><!-- /layout -->
+
+<!-- YouTube IFrame API -->
+<script src="https://www.youtube.com/iframe_api"></script>
+<script>
+/* ────────────────────────────────────────────────
+   COURSE DATA  (mirrors main catalog C[] + IMGS[])
+──────────────────────────────────────────────────*/
+var IMGS = [
+  'https://images.unsplash.com/photo-1543269865-cbf427effbad',
+  'https://images.unsplash.com/photo-1516321318423-f06f85e504b3',
+  'https://images.unsplash.com/photo-1573496359142-b8d87734a5a2',
+  'https://images.unsplash.com/photo-1600880292203-757bb62b4baf',
+  'https://images.unsplash.com/photo-1523240795612-9a054b0db644',
+  'https://images.unsplash.com/photo-1484480974693-6ca0a78fb36b',
+  'https://images.unsplash.com/photo-1568992687947-868a62a9f521',
+  'https://images.unsplash.com/photo-1573497491208-6b1acb260507'
+];
+function imgUrl(id,w,h){return IMGS[id]+'?w='+w+'&h='+h+'&q=80&fit=crop';}
+
+var COURSES = [
+  {id:0,title:'Mastering High-Stakes Client Conversations',
+   expert:'Brian Ahearn',xrole:'Chief Influence Officer · Influence PEOPLE',xinit:'BA',xcol:'#0e3060',
+   tags:['Advanced','Sales','Negotiation'],dur:'1h 24m',rating:4.9,enrolled:1847,
+   desc:'Award-winning negotiation expert Brian Ahearn reveals the psychological frameworks top financial advisors use to turn difficult conversations into closed deals. Real case studies from $1M+ client engagements.',
+   progress:0,
+   lessons:[
+     {id:1,title:'The psychology of persuasion in finance',dur:'11:00',ytId:'dQw4w9WgXcQ',done:false},
+     {id:2,title:'Reading client resistance signals',dur:'9:00',ytId:'dQw4w9WgXcQ',done:false},
+     {id:3,title:'Reframing objections in real-time',dur:'13:00',ytId:'dQw4w9WgXcQ',done:false},
+     {id:4,title:'The commitment & consistency principle',dur:'10:00',ytId:'dQw4w9WgXcQ',done:false},
+     {id:5,title:'Closing without pressure',dur:'14:00',ytId:'dQw4w9WgXcQ',done:false},
+     {id:6,title:'Handling "I need to think about it"',dur:'16:00',ytId:'dQw4w9WgXcQ',done:false},
+     {id:7,title:'Post-meeting follow-up mastery',dur:'11:00',ytId:'dQw4w9WgXcQ',done:false},
+   ]},
+  {id:1,title:'Prospecting in the Digital Age',
+   expert:'Jeb Blount',xrole:'CEO · Sales Gravy · Author of Fanatical Prospecting',xinit:'JB',xcol:'#3a2000',
+   tags:['Intermediate','Sales','Prospecting'],dur:'58m',rating:4.8,enrolled:2103,
+   desc:'Jeb Blount breaks down how modern sales professionals blend traditional outreach with LinkedIn, email, and video to build a consistent pipeline of qualified prospects.',
+   progress:0,
+   lessons:[
+     {id:1,title:'Why most prospecting fails before it starts',dur:'8:00',ytId:'dQw4w9WgXcQ',done:false},
+     {id:2,title:'Building your ideal client profile',dur:'11:00',ytId:'dQw4w9WgXcQ',done:false},
+     {id:3,title:'LinkedIn as a research and outreach tool',dur:'10:00',ytId:'dQw4w9WgXcQ',done:false},
+     {id:4,title:'The 3-touch email sequence that works',dur:'9:00',ytId:'dQw4w9WgXcQ',done:false},
+     {id:5,title:'Video prospecting — standing out in the inbox',dur:'12:00',ytId:'dQw4w9WgXcQ',done:false},
+     {id:6,title:'Building prospecting habits that stick',dur:'8:00',ytId:'dQw4w9WgXcQ',done:false},
+   ]},
+  {id:2,title:'The Trust Formula: Building Client Relationships That Last',
+   expert:'Colleen Stanley',xrole:'President · SalesLeadership Inc.',xinit:'CS',xcol:'#003a20',
+   tags:['All Levels','Relationships','EQ'],dur:'1h 12m',rating:4.9,enrolled:3241,
+   desc:'Emotional intelligence pioneer Colleen Stanley shows how top performers build the kind of trust that makes clients loyal for decades. Covers EQ frameworks, body language, and the neuroscience of rapport.',
+   progress:64,
+   lessons:[
+     {id:1,title:'Why logic alone never closes a deal',dur:'9:00',ytId:'dQw4w9WgXcQ',done:true},
+     {id:2,title:'The EQ framework for sales professionals',dur:'11:00',ytId:'dQw4w9WgXcQ',done:true},
+     {id:3,title:'Active listening — the lost skill',dur:'10:00',ytId:'dQw4w9WgXcQ',done:true},
+     {id:4,title:'Reading the room — body language signals',dur:'12:00',ytId:'dQw4w9WgXcQ',done:false},
+     {id:5,title:'Building trust through vulnerability',dur:'9:00',ytId:'dQw4w9WgXcQ',done:false},
+     {id:6,title:'Maintaining trust through difficult periods',dur:'11:00',ytId:'dQw4w9WgXcQ',done:false},
+     {id:7,title:'Turning clients into advocates',dur:'10:00',ytId:'dQw4w9WgXcQ',done:false},
+   ]},
+  {id:3,title:'Closing Techniques for Complex Sales',
+   expert:'Anthony Iannarino',xrole:'Author · The Lost Art of Closing',xinit:'AI',xcol:'#200030',
+   tags:['Advanced','Closing','B2B'],dur:'1h 8m',rating:4.7,enrolled:1204,
+   desc:'Anthony Iannarino dismantles outdated closing tactics and replaces them with a commitment-based framework that works in complex, multi-stakeholder financial and insurance sales.',
+   progress:0,
+   lessons:[
+     {id:1,title:'Why traditional closing is dead',dur:'10:00',ytId:'dQw4w9WgXcQ',done:false},
+     {id:2,title:'The nine commitments that lead to a close',dur:'13:00',ytId:'dQw4w9WgXcQ',done:false},
+     {id:3,title:'Multi-stakeholder navigation',dur:'11:00',ytId:'dQw4w9WgXcQ',done:false},
+     {id:4,title:'Handling procurement gatekeepers',dur:'9:00',ytId:'dQw4w9WgXcQ',done:false},
+     {id:5,title:'The final commitment conversation',dur:'14:00',ytId:'dQw4w9WgXcQ',done:false},
+     {id:6,title:'Post-close relationship acceleration',dur:'11:00',ytId:'dQw4w9WgXcQ',done:false},
+   ]},
+  {id:4,title:'Referral Mastery: The Systematic Approach',
+   expert:'Michael Goldberg',xrole:'Networking Expert · Author of Knock-Out Networking',xinit:'MG',xcol:'#002040',
+   tags:['All Levels','Referrals','Networking'],dur:'44m',rating:4.6,enrolled:876,
+   desc:'Michael Goldberg lays out a repeatable, low-pressure system for generating a steady stream of warm referrals from your existing client base.',
+   progress:0,
+   lessons:[
+     {id:1,title:'The referral mindset shift',dur:'7:00',ytId:'dQw4w9WgXcQ',done:false},
+     {id:2,title:'When and how to ask for referrals',dur:'10:00',ytId:'dQw4w9WgXcQ',done:false},
+     {id:3,title:'Creating a referral network by design',dur:'9:00',ytId:'dQw4w9WgXcQ',done:false},
+     {id:4,title:'The referral conversation script',dur:'10:00',ytId:'dQw4w9WgXcQ',done:false},
+     {id:5,title:'Tracking and nurturing your referral sources',dur:'8:00',ytId:'dQw4w9WgXcQ',done:false},
+   ]},
+  {id:5,title:'Time Blocking for Peak Producers',
+   expert:'Darren Hardy',xrole:'Publisher · SUCCESS Magazine',xinit:'DH',xcol:'#1a1000',
+   tags:['All Levels','Productivity','Habits'],dur:'52m',rating:4.8,enrolled:2891,
+   desc:'Darren Hardy shares the exact time-blocking and habit systems that separate the top 1% of financial and insurance producers from everyone else.',
+   progress:0,
+   lessons:[
+     {id:1,title:'The compound effect applied to your calendar',dur:'9:00',ytId:'dQw4w9WgXcQ',done:false},
+     {id:2,title:'Designing your ideal week',dur:'12:00',ytId:'dQw4w9WgXcQ',done:false},
+     {id:3,title:'Protecting your prime selling time',dur:'11:00',ytId:'dQw4w9WgXcQ',done:false},
+     {id:4,title:'Eliminating the time thieves',dur:'10:00',ytId:'dQw4w9WgXcQ',done:false},
+     {id:5,title:'Accountability systems that actually work',dur:'10:00',ytId:'dQw4w9WgXcQ',done:false},
+   ]},
+  {id:6,title:'Underwriting Relationships: Working With Carriers',
+   expert:'Elizabeth Scheithe',xrole:'VP Underwriting · 28 years experience',xinit:'ES',xcol:'#00202a',
+   tags:['Advanced','Insurance','Underwriting'],dur:'1h 4m',rating:4.8,enrolled:641,
+   desc:'Veteran underwriter Elizabeth Scheithe gives agents a rare behind-the-scenes view of how underwriting decisions are made — and how to position cases for the best possible outcomes.',
+   progress:0,
+   lessons:[
+     {id:1,title:'How underwriters think — the inside view',dur:'11:00',ytId:'dQw4w9WgXcQ',done:false},
+     {id:2,title:'Submitting cases that get prioritised',dur:'10:00',ytId:'dQw4w9WgXcQ',done:false},
+     {id:3,title:'Navigating complex medical histories',dur:'13:00',ytId:'dQw4w9WgXcQ',done:false},
+     {id:4,title:'Building strong carrier relationships',dur:'9:00',ytId:'dQw4w9WgXcQ',done:false},
+     {id:5,title:'When to escalate and how to do it',dur:'11:00',ytId:'dQw4w9WgXcQ',done:false},
+     {id:6,title:'Rating disputes — the professional approach',dur:'10:00',ytId:'dQw4w9WgXcQ',done:false},
+   ]},
+  {id:7,title:'Long-Term Care Planning Conversations',
+   expert:'Harley Gordon',xrole:'Author · How to Protect Your Family\'s Assets',xinit:'HG',xcol:'#1a0010',
+   tags:['Advanced','Insurance','LTC'],dur:'48m',rating:4.9,enrolled:512,
+   desc:'Harley Gordon walks through the sensitive conversations around long-term care planning, giving agents the language and frameworks to guide clients through one of the most emotional financial decisions of their lives.',
+   progress:0,
+   lessons:[
+     {id:1,title:'Why LTC conversations are different',dur:'9:00',ytId:'dQw4w9WgXcQ',done:false},
+     {id:2,title:'Introducing the topic without fear',dur:'11:00',ytId:'dQw4w9WgXcQ',done:false},
+     {id:3,title:'Understanding client risk profiles',dur:'10:00',ytId:'dQw4w9WgXcQ',done:false},
+     {id:4,title:'Policy options and how to present them',dur:'12:00',ytId:'dQw4w9WgXcQ',done:false},
+     {id:5,title:'Handling objections in LTC sales',dur:'6:00',ytId:'dQw4w9WgXcQ',done:false},
+   ]},
+];
+
+/* ── STATE ── */
+var urlParams    = new URLSearchParams(location.search);
+var courseId     = parseInt(urlParams.get('id') || '2', 10);
+var startLesson  = parseInt(urlParams.get('lesson') || '0', 10);
+var course       = COURSES[courseId] || COURSES[2];
+var currentIdx   = startLesson;   // index into course.lessons[]
+
+// Determine first unfinished lesson as default
+if(startLesson === 0){
+  var firstUnfinished = course.lessons.findIndex(function(l){return !l.done;});
+  currentIdx = firstUnfinished >= 0 ? firstUnfinished : 0;
+}
+
+var ytPlayer, pollTimer, hideTimer;
+var isPlaying   = false;
+var upnextShown = false;
+var upnextTimer = null;
+var upnextCountdownTimer = null;
+var upnextSecondsLeft = 15;
+var descExpanded = false;
+var currentSpeed = 1;
+var isDragging = false;
+
+/* ── RENDER PAGE ── */
+function renderPage(){
+  document.title = course.title + ' · Hoopis Performance Network';
+  document.getElementById('topbarTitle').textContent = course.title;
+  document.getElementById('ciTitle').textContent = course.title;
+  document.getElementById('ciAvatar').textContent = course.xinit;
+  document.getElementById('ciAvatar').style.background = 'linear-gradient(135deg,'+course.xcol+',#00c8d4)';
+  document.getElementById('ciExpertName').textContent = course.expert;
+  document.getElementById('ciExpertRole').textContent = course.xrole;
+  document.getElementById('ciRating').textContent = course.rating;
+  document.getElementById('ciEnrolled').textContent = (course.enrolled).toLocaleString();
+  document.getElementById('ciLessons').textContent = course.lessons.length;
+
+  var prog = course.progress || 0;
+  document.getElementById('ciProgPct').textContent = prog + '%';
+  document.getElementById('ciProgFill').style.width = prog + '%';
+  document.getElementById('progPillFill').style.width = prog + '%';
+  document.getElementById('progPillPct').textContent = prog + '%';
+
+  var fullDesc = course.desc;
+  var shortDesc = fullDesc.length > 140 ? fullDesc.slice(0,140)+'…' : fullDesc;
+  document.getElementById('ciDesc').textContent = shortDesc;
+  if(fullDesc.length <= 140) document.getElementById('ciDescToggle').style.display = 'none';
+
+  document.getElementById('ciTags').innerHTML = course.tags.map(function(t){
+    return '<span class="ci-tag">'+t+'</span>';
+  }).join('') + '<span class="ci-tag">'+course.dur+'</span>';
+
+  document.getElementById('sidebarMeta').textContent = course.lessons.length+' lessons · '+course.dur;
+
+  renderLessons();
+  renderRec();
+}
+
+function renderLessons(){
+  var list = document.getElementById('lessonList');
+  list.innerHTML = '';
+  course.lessons.forEach(function(lesson, idx){
+    var item = document.createElement('div');
+    var isActive = idx === currentIdx;
+    var isDone = lesson.done;
+    item.className = 'lesson-item' + (isActive ? ' active' : '') + (isDone ? ' completed' : '');
+    item.innerHTML =
+      '<div class="lesson-num">' + (isDone
+        ? '<svg viewBox="0 0 24 24"><polyline points="20 6 9 17 4 12" stroke="#22c55e" stroke-width="2.5" fill="none" stroke-linecap="round"/></svg>'
+        : (idx+1)
+      ) + '</div>' +
+      '<div class="lesson-body">' +
+        '<div class="lesson-title">'+lesson.title+'</div>' +
+        (isActive ? '<div class="lesson-now">▶ Now Playing</div>' : '') +
+      '</div>' +
+      '<div class="lesson-dur">'+lesson.dur+'</div>';
+    item.addEventListener('click', function(){ loadLesson(idx); });
+    list.appendChild(item);
+  });
+  // Scroll active into view
+  var activeEl = list.querySelector('.active');
+  if(activeEl) setTimeout(function(){ activeEl.scrollIntoView({block:'nearest',behavior:'smooth'}); }, 300);
+}
+
+function renderRec(){
+  var rail = document.getElementById('recRail');
+  rail.innerHTML = '';
+  COURSES.forEach(function(c){
+    if(c.id === course.id) return;
+    var card = document.createElement('div');
+    card.className = 'rec-card';
+    card.innerHTML =
+      '<div class="rec-card-thumb"><img src="'+imgUrl(c.id,360,240)+'" alt="'+c.title+'" loading="lazy"></div>' +
+      '<div class="rec-card-body">' +
+        '<div class="rec-card-title">'+c.title+'</div>' +
+        '<div class="rec-card-meta">'+c.expert+'</div>' +
+        '<div class="rec-card-badge">'+c.tags[0]+'</div>' +
+      '</div>';
+    card.addEventListener('click', function(){
+      window.location.href = 'course-player.html?id='+c.id;
+    });
+    rail.appendChild(card);
+  });
+}
+
+/* ── LOAD LESSON ── */
+function loadLesson(idx){
+  currentIdx = idx;
+  var lesson = course.lessons[idx];
+  dismissUpNext();
+  document.getElementById('lessonNameCtrl').textContent = lesson.title;
+  if(ytPlayer && ytPlayer.loadVideoById){
+    ytPlayer.loadVideoById(lesson.ytId);
+    isPlaying = true;
+    updatePlayIcon(true);
+    hideBigPlay();
+  }
+  renderLessons();
+}
+
+function loadNextLesson(){
+  var next = currentIdx + 1;
+  if(next < course.lessons.length){
+    course.lessons[currentIdx].done = true;
+    loadLesson(next);
+  }
+}
+
+/* ── YOUTUBE API ── */
+function onYouTubeIframeAPIReady(){
+  var lesson = course.lessons[currentIdx];
+  ytPlayer = new YT.Player('yt-iframe', {
+    videoId: lesson.ytId,
+    playerVars:{
+      controls:0, modestbranding:1, rel:0,
+      iv_load_policy:3, disablekb:1, playsinline:1,
+      origin: location.origin
+    },
+    events:{
+      onReady: onPlayerReady,
+      onStateChange: onPlayerStateChange
+    }
+  });
+}
+
+function onPlayerReady(e){
+  updateDuration(ytPlayer.getDuration());
+  document.getElementById('lessonNameCtrl').textContent = course.lessons[currentIdx].title;
+  // If returning to an in-progress course, pre-seek
+  if(currentIdx === course.lessons.findIndex(function(l){return !l.done;}) && course.progress > 0){
+    // e.g. seek to ~30% into the lesson for demo
+  }
+}
+
+function onPlayerStateChange(e){
+  var S = YT.PlayerState;
+  if(e.data === S.PLAYING){
+    isPlaying = true;
+    updatePlayIcon(true);
+    hideBigPlay();
+    showSpinner(false);
+    startPoll();
+  } else if(e.data === S.PAUSED){
+    isPlaying = false;
+    updatePlayIcon(false);
+    stopPoll();
+  } else if(e.data === S.BUFFERING){
+    showSpinner(true);
+  } else if(e.data === S.ENDED){
+    isPlaying = false;
+    updatePlayIcon(false);
+    stopPoll();
+    course.lessons[currentIdx].done = true;
+    loadNextLesson();
+  }
+  if(e.data !== S.BUFFERING) showSpinner(false);
+}
+
+function startPoll(){
+  stopPoll();
+  pollTimer = setInterval(function(){
+    if(!ytPlayer || !ytPlayer.getCurrentTime) return;
+    var cur = ytPlayer.getCurrentTime();
+    var dur = ytPlayer.getDuration();
+    if(!isDragging) updateProgressUI(cur, dur);
+    checkUpNext(cur, dur);
+    // buffered
+    try{
+      var buf = ytPlayer.getVideoLoadedFraction() * dur;
+      document.getElementById('progressBuffered').style.width = (buf/dur*100)+'%';
+    }catch(err){}
+  }, 500);
+}
+function stopPoll(){ if(pollTimer) clearInterval(pollTimer); }
+
+/* ── PROGRESS UI ── */
+function updateProgressUI(cur, dur){
+  if(!dur || dur === 0) return;
+  var pct = (cur/dur)*100;
+  document.getElementById('progressFill').style.width = pct+'%';
+  document.getElementById('progressThumb').style.left = pct+'%';
+  document.getElementById('timeCurrent').textContent = fmtTime(cur);
+  document.getElementById('timeDuration').textContent = fmtTime(dur);
+}
+function updateDuration(dur){
+  document.getElementById('timeDuration').textContent = fmtTime(dur);
+}
+function fmtTime(s){
+  s = Math.floor(s||0);
+  var m = Math.floor(s/60), sec = s%60;
+  return m+':'+(sec<10?'0':'')+sec;
+}
+
+/* ── CONTROLS AUTO-HIDE ── */
+var controlsOverlay = document.getElementById('controlsOverlay');
+function showControls(){
+  controlsOverlay.classList.add('visible');
+  clearTimeout(hideTimer);
+  if(isPlaying){
+    hideTimer = setTimeout(function(){
+      if(isPlaying) controlsOverlay.classList.remove('visible');
+    }, 3000);
+  }
+}
+document.getElementById('playerContainer').addEventListener('mousemove', showControls);
+document.getElementById('playerContainer').addEventListener('mouseleave', function(){
+  if(isPlaying){
+    controlsOverlay.classList.remove('visible');
+    clearTimeout(hideTimer);
+  }
+});
+document.getElementById('playerContainer').addEventListener('click', function(e){
+  if(e.target === this || e.target.id === 'yt-iframe'){
+    togglePlay();
+    showControls();
+  }
+});
+
+/* ── PLAY / PAUSE ── */
+document.getElementById('btnPlay').addEventListener('click', function(e){
+  e.stopPropagation(); togglePlay();
+});
+document.getElementById('bigPlay').addEventListener('click', function(e){
+  e.stopPropagation(); togglePlay();
+});
+function togglePlay(){
+  if(!ytPlayer || !ytPlayer.getPlayerState) return;
+  if(isPlaying){ ytPlayer.pauseVideo(); } else { ytPlayer.playVideo(); }
+}
+function updatePlayIcon(playing){
+  document.getElementById('iconPlay').innerHTML = playing
+    ? '<rect x="6" y="4" width="4" height="16"/><rect x="14" y="4" width="4" height="16"/>'
+    : '<polygon points="5 3 19 12 5 21 5 3"/>';
+}
+function hideBigPlay(){ document.getElementById('bigPlay').classList.add('hidden'); }
+function showSpinner(show){ document.getElementById('spinner').classList.toggle('show', show); }
+
+/* ── SKIP ── */
+document.getElementById('btnBack10').addEventListener('click', function(e){
+  e.stopPropagation();
+  if(ytPlayer && ytPlayer.seekTo) ytPlayer.seekTo(Math.max(0, ytPlayer.getCurrentTime()-10), true);
+});
+document.getElementById('btnFwd10').addEventListener('click', function(e){
+  e.stopPropagation();
+  if(ytPlayer && ytPlayer.seekTo) ytPlayer.seekTo(ytPlayer.getCurrentTime()+10, true);
+});
+
+/* ── PROGRESS BAR SCRUB ── */
+var track = document.getElementById('progressTrack');
+track.addEventListener('mousedown', function(e){
+  isDragging = true;
+  scrub(e);
+});
+document.addEventListener('mousemove', function(e){
+  if(isDragging) scrub(e);
+});
+document.addEventListener('mouseup', function(e){
+  if(isDragging){
+    isDragging = false;
+    scrub(e);
+    if(ytPlayer && ytPlayer.seekTo){
+      var dur = ytPlayer.getDuration();
+      var rect = track.getBoundingClientRect();
+      var pct = Math.min(1, Math.max(0, (e.clientX - rect.left)/rect.width));
+      ytPlayer.seekTo(pct * dur, true);
+    }
+  }
+});
+function scrub(e){
+  var rect = track.getBoundingClientRect();
+  var pct = Math.min(100, Math.max(0, (e.clientX - rect.left)/rect.width*100));
+  document.getElementById('progressFill').style.width = pct+'%';
+  document.getElementById('progressThumb').style.left = pct+'%';
+}
+
+/* ── VOLUME ── */
+document.getElementById('btnMute').addEventListener('click', function(e){
+  e.stopPropagation();
+  if(!ytPlayer) return;
+  if(ytPlayer.isMuted()){
+    ytPlayer.unMute();
+    document.getElementById('volSlider').value = ytPlayer.getVolume();
+    updateVolIcon(ytPlayer.getVolume());
+  } else {
+    ytPlayer.mute();
+    document.getElementById('volSlider').value = 0;
+    updateVolIcon(0);
+  }
+});
+document.getElementById('volSlider').addEventListener('input', function(e){
+  e.stopPropagation();
+  if(ytPlayer){
+    ytPlayer.setVolume(parseInt(this.value));
+    ytPlayer.unMute();
+    updateVolIcon(parseInt(this.value));
+  }
+});
+function updateVolIcon(vol){
+  var icon = document.getElementById('iconVol');
+  if(vol === 0){
+    icon.innerHTML = '<polygon points="11 5 6 9 2 9 2 15 6 15 11 19 11 5"/><line x1="23" y1="9" x2="17" y2="15"/><line x1="17" y1="9" x2="23" y2="15"/>';
+  } else if(vol < 50){
+    icon.innerHTML = '<polygon points="11 5 6 9 2 9 2 15 6 15 11 19 11 5"/><path d="M15.54 8.46a5 5 0 0 1 0 7.07"/>';
+  } else {
+    icon.innerHTML = '<polygon points="11 5 6 9 2 9 2 15 6 15 11 19 11 5"/><path d="M19.07 4.93a10 10 0 0 1 0 14.14"/><path d="M15.54 8.46a5 5 0 0 1 0 7.07"/>';
+  }
+}
+
+/* ── SPEED ── */
+document.getElementById('speedBtn').addEventListener('click', function(e){
+  e.stopPropagation();
+  document.getElementById('speedMenu').classList.toggle('open');
+});
+document.querySelectorAll('.speed-opt').forEach(function(opt){
+  opt.addEventListener('click', function(e){
+    e.stopPropagation();
+    var speed = parseFloat(this.dataset.speed);
+    currentSpeed = speed;
+    if(ytPlayer && ytPlayer.setPlaybackRate) ytPlayer.setPlaybackRate(speed);
+    document.getElementById('speedBtn').textContent = speed+'×';
+    document.querySelectorAll('.speed-opt').forEach(function(o){ o.classList.remove('active'); });
+    this.classList.add('active');
+    document.getElementById('speedMenu').classList.remove('open');
+  });
+});
+document.addEventListener('click', function(){
+  document.getElementById('speedMenu').classList.remove('open');
+});
+
+/* ── FULLSCREEN ── */
+document.getElementById('btnFullscreen').addEventListener('click', function(e){
+  e.stopPropagation();
+  var container = document.getElementById('playerContainer');
+  if(!document.fullscreenElement){
+    container.requestFullscreen && container.requestFullscreen();
+  } else {
+    document.exitFullscreen && document.exitFullscreen();
+  }
+});
+document.addEventListener('fullscreenchange', function(){
+  var icon = document.getElementById('iconFs');
+  if(document.fullscreenElement){
+    icon.innerHTML = '<path d="M8 3v3a2 2 0 0 1-2 2H3m18 0h-3a2 2 0 0 1-2-2V3m0 18v-3a2 2 0 0 0 2-2h3M3 16h3a2 2 0 0 0 2 2v3" fill="none" stroke="currentColor" stroke-width="2"/>';
+  } else {
+    icon.innerHTML = '<path d="M8 3H5a2 2 0 0 0-2 2v3m18 0V5a2 2 0 0 0-2-2h-3m0 18h3a2 2 0 0 0 2-2v-3M3 16v3a2 2 0 0 0 2 2h3" fill="none" stroke="currentColor" stroke-width="2"/>';
+  }
+});
+
+/* ── UP NEXT CARD ── */
+function checkUpNext(cur, dur){
+  if(!dur || upnextShown) return;
+  var remaining = dur - cur;
+  var nextIdx = currentIdx + 1;
+  if(remaining <= 15 && remaining > 0 && nextIdx < course.lessons.length){
+    showUpNext(nextIdx, remaining);
+  }
+}
+function showUpNext(nextIdx, remaining){
+  upnextShown = true;
+  var next = course.lessons[nextIdx];
+  var card = document.getElementById('upnextCard');
+  document.getElementById('upnextTitle').textContent = next.title;
+  document.getElementById('upnextDur').textContent = next.dur;
+  document.getElementById('upnextThumb').src = imgUrl(course.id, 480, 270);
+  upnextSecondsLeft = Math.ceil(remaining);
+  document.getElementById('upnextCountdown').textContent = upnextSecondsLeft+'s';
+  document.getElementById('upnextFill').style.width = '0%';
+
+  card.classList.add('show');
+
+  // countdown
+  upnextCountdownTimer = setInterval(function(){
+    upnextSecondsLeft--;
+    document.getElementById('upnextCountdown').textContent = Math.max(0,upnextSecondsLeft)+'s';
+    var pct = ((15 - upnextSecondsLeft)/15)*100;
+    document.getElementById('upnextFill').style.width = pct+'%';
+    if(upnextSecondsLeft <= 0){
+      clearInterval(upnextCountdownTimer);
+      loadLesson(nextIdx);
+    }
+  }, 1000);
+
+  document.getElementById('upnextPlay').onclick = function(){ loadLesson(nextIdx); };
+}
+function dismissUpNext(){
+  upnextShown = false;
+  clearInterval(upnextCountdownTimer);
+  document.getElementById('upnextCard').classList.remove('show');
+}
+document.getElementById('upnextDismiss').addEventListener('click', function(e){
+  e.stopPropagation(); dismissUpNext();
+});
+
+/* ── DESCRIPTION TOGGLE ── */
+document.getElementById('ciDescToggle').addEventListener('click', function(){
+  descExpanded = !descExpanded;
+  document.getElementById('ciDesc').textContent = descExpanded ? course.desc : course.desc.slice(0,140)+'…';
+  this.textContent = descExpanded ? 'Show less ↑' : 'Show more ↓';
+});
+
+/* ── BACK BUTTON: confirm if playing ── */
+document.getElementById('backBtn').addEventListener('click', function(e){
+  if(isPlaying){
+    e.preventDefault();
+    if(confirm('Leave course? Your progress has been saved.')){
+      window.location.href = 'index.html';
+    }
+  }
+});
+
+/* ── TOP BAR SCROLL ── */
+window.addEventListener('scroll', function(){
+  document.getElementById('topbar').classList.toggle('solid', window.scrollY > 20);
+}, {passive:true});
+
+/* ── KEYBOARD SHORTCUTS ── */
+document.addEventListener('keydown', function(e){
+  if(e.target.tagName === 'INPUT' || e.target.tagName === 'TEXTAREA') return;
+  if(e.code === 'Space'){ e.preventDefault(); togglePlay(); }
+  if(e.code === 'ArrowRight'){ if(ytPlayer && ytPlayer.seekTo) ytPlayer.seekTo(ytPlayer.getCurrentTime()+10,true); }
+  if(e.code === 'ArrowLeft'){ if(ytPlayer && ytPlayer.seekTo) ytPlayer.seekTo(Math.max(0,ytPlayer.getCurrentTime()-10),true); }
+  if(e.code === 'KeyF'){ document.getElementById('btnFullscreen').click(); }
+  if(e.code === 'KeyM'){ document.getElementById('btnMute').click(); }
+});
+
+/* ── INIT ── */
+renderPage();
+</script>
+</body>
+</html>
