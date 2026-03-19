@@ -645,7 +645,7 @@ function renderLessons(){
     item.className = 'lesson-item' + (isActive ? ' active' : '') + (isDone ? ' completed' : '');
     item.innerHTML =
       '<div class="lesson-num">' + (isDone
-        ? '<svg viewBox="0 0 24 24"><polyline points="20 6 9 17 4 12" stroke="#22c55e" stroke-width="2.5" fill="none" stroke-linecap="round"/></svg>'
+        ? '<svg viewBox="0 0 24 24"><polyline points="20 6 9 17 4 12" stroke="#ffffff" stroke-width="2.5" fill="none" stroke-linecap="round"/></svg>'
         : (idx+1)
       ) + '</div>' +
       '<div class="lesson-body">' +
@@ -711,8 +711,8 @@ function onYouTubeIframeAPIReady(){
   ytPlayer = new YT.Player('yt-iframe', {
     videoId: lesson.ytId,
     playerVars:{
-      controls:0, modestbranding:1, rel:0,
-      iv_load_policy:3, disablekb:1, playsinline:1,
+      controls:0, enablejsapi:1, modestbranding:1,
+      rel:0, iv_load_policy:3, playsinline:1,
       origin: location.origin
     },
     events:{
@@ -726,7 +726,7 @@ function onPlayerReady(e){
   playerReady = true;
   updateDuration(ytPlayer.getDuration());
   document.getElementById('lessonNameCtrl').textContent = course.lessons[currentIdx].title;
-  if(pendingPlay){ pendingPlay = false; ytPlayer.playVideo(); }
+  if(pendingPlay){ pendingPlay = false; ytCmd('playVideo'); }
 }
 
 function onPlayerStateChange(e){
@@ -813,6 +813,31 @@ document.getElementById('playerContainer').addEventListener('click', function(e)
   }
 });
 
+/* ── YOUTUBE COMMAND (dual: JS API + postMessage fallback) ── */
+function ytCmd(fn){
+  /* Primary: YT.Player API */
+  if(ytPlayer && playerReady){ try{ ytPlayer[fn](); }catch(e){} }
+  /* Fallback: postMessage directly to the iframe YouTube creates */
+  var iframe = document.querySelector('#playerContainer iframe');
+  if(iframe){
+    try{
+      iframe.contentWindow.postMessage(
+        JSON.stringify({event:'command', func:fn, args:[]}), '*'
+      );
+    }catch(e){}
+  }
+}
+
+/* Listen for YouTube state events via postMessage (backup to YT.Player events) */
+window.addEventListener('message', function(e){
+  if(!e.data) return;
+  try{
+    var d = (typeof e.data === 'string') ? JSON.parse(e.data) : e.data;
+    if(d.event === 'onStateChange') onPlayerStateChange({data: d.info});
+    if(d.event === 'onReady' && !playerReady){ playerReady = true; if(pendingPlay){ pendingPlay = false; ytCmd('playVideo'); } }
+  }catch(ex){}
+});
+
 /* ── PLAY / PAUSE ── */
 document.getElementById('btnPlay').addEventListener('click', function(e){
   e.stopPropagation(); togglePlay();
@@ -821,10 +846,8 @@ document.getElementById('bigPlay').addEventListener('click', function(e){
   e.stopPropagation(); togglePlay();
 });
 function togglePlay(){
-  if(!playerReady){ pendingPlay = true; return; }
-  try{
-    if(isPlaying){ ytPlayer.pauseVideo(); } else { ytPlayer.playVideo(); }
-  }catch(e){}
+  if(!isPlaying && !playerReady){ pendingPlay = true; }
+  ytCmd(isPlaying ? 'pauseVideo' : 'playVideo');
 }
 function updatePlayIcon(playing){
   document.getElementById('iconPlay').innerHTML = playing
