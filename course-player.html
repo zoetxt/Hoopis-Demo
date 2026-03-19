@@ -593,6 +593,8 @@ if(startLesson === 0){
 
 var ytPlayer, pollTimer, hideTimer;
 var isPlaying   = false;
+var playerReady = false;
+var pendingPlay = false;
 var upnextShown = false;
 var upnextTimer = null;
 var upnextCountdownTimer = null;
@@ -721,12 +723,10 @@ function onYouTubeIframeAPIReady(){
 }
 
 function onPlayerReady(e){
+  playerReady = true;
   updateDuration(ytPlayer.getDuration());
   document.getElementById('lessonNameCtrl').textContent = course.lessons[currentIdx].title;
-  // If returning to an in-progress course, pre-seek
-  if(currentIdx === course.lessons.findIndex(function(l){return !l.done;}) && course.progress > 0){
-    // e.g. seek to ~30% into the lesson for demo
-  }
+  if(pendingPlay){ pendingPlay = false; ytPlayer.playVideo(); }
 }
 
 function onPlayerStateChange(e){
@@ -821,8 +821,10 @@ document.getElementById('bigPlay').addEventListener('click', function(e){
   e.stopPropagation(); togglePlay();
 });
 function togglePlay(){
-  if(!ytPlayer || !ytPlayer.getPlayerState) return;
-  if(isPlaying){ ytPlayer.pauseVideo(); } else { ytPlayer.playVideo(); }
+  if(!playerReady){ pendingPlay = true; return; }
+  try{
+    if(isPlaying){ ytPlayer.pauseVideo(); } else { ytPlayer.playVideo(); }
+  }catch(e){}
 }
 function updatePlayIcon(playing){
   document.getElementById('iconPlay').innerHTML = playing
