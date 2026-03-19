@@ -321,8 +321,14 @@ body{background:var(--navy);color:var(--white);font-family:'Helvetica Neue',Aria
 .chapter-item:hover{opacity:0.72}
 .ch-icon{width:38px;height:38px;border-radius:50%;display:flex;align-items:center;justify-content:center;flex-shrink:0;font-size:15px;font-weight:700}
 .ch-icon.done{background:var(--green);color:#fff}
-.ch-icon.cur{background:rgba(0,200,212,0.15);border:1.5px solid var(--teal);color:var(--teal);font-size:12px;font-weight:700;letter-spacing:0.3px}
+.ch-icon.cur{background:rgba(0,200,212,0.15);border:1.5px solid var(--teal);color:var(--teal);font-size:13px;font-weight:700}
 .ch-icon.pending{background:rgba(255,255,255,0.05);border:1px solid var(--border2);color:var(--muted);font-size:13px}
+
+/* Hover: fade number out, show play icon */
+.ch-icon{position:relative;transition:background 0.18s,border-color 0.18s}
+.ch-icon::after{content:'▶';position:absolute;inset:0;display:flex;align-items:center;justify-content:center;font-size:11px;opacity:0;transition:opacity 0.18s;color:#fff}
+.chapter-item:hover .ch-icon{color:transparent !important;background:var(--teal) !important;border-color:var(--teal) !important}
+.chapter-item:hover .ch-icon::after{opacity:1}
 .ch-body{flex:1}
 .ch-name{font-size:14px;font-weight:600;color:var(--white);line-height:1.35}
 .ch-name.muted-name{color:var(--muted);font-weight:400}
@@ -830,7 +836,7 @@ function openCourse(id,resume=false){
   document.getElementById('ov-chapters').innerHTML=c.chapters.map((ch,i)=>{
     let iconClass, iconContent;
     if(ch.done){ iconClass='done'; iconContent='✓'; }
-    else if(ch.cur){ iconClass='cur'; iconContent='NOW'; }
+    else if(ch.cur){ iconClass='cur'; iconContent=String(i+1); }
     else { iconClass='pending'; iconContent=String(i+1); }
     return `<div class="chapter-item">
       <div class="ch-icon ${iconClass}">${iconContent}</div>
