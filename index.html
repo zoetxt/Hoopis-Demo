@@ -310,19 +310,42 @@ body{background:var(--navy);color:var(--white);font-family:'Helvetica Neue',Aria
 .ov-prog-bar-outer{background:rgba(255,255,255,0.08);border-radius:4px;height:5px;margin-bottom:6px}
 .ov-prog-bar-inner{background:var(--teal);border-radius:4px;height:5px}
 .ov-prog-pct{font-size:11px;color:var(--muted)}
-.ov-section-title{font-size:15px;font-weight:700;margin-bottom:14px;padding-bottom:8px;border-bottom:1px solid var(--border);display:flex;align-items:center;gap:8px}
-.ov-section-title .teal-dot{width:6px;height:6px;border-radius:50%;background:var(--teal);flex-shrink:0}
-.chapter-list{display:flex;flex-direction:column;gap:5px;margin-bottom:26px}
-.chapter-item{display:flex;align-items:center;gap:14px;padding:11px 14px;border-radius:7px;background:rgba(255,255,255,0.03);cursor:pointer;border:1px solid transparent;transition:all 0.15s}
-.chapter-item:hover{border-color:var(--border2);background:rgba(255,255,255,0.05)}
-.chapter-item.cur{border-color:var(--teal3);background:rgba(0,200,212,0.07)}
-.ch-num{font-size:12px;color:var(--muted);min-width:20px;font-weight:600;font-family:monospace}
-.ch-info{flex:1}
-.ch-name{font-size:13px;font-weight:600;margin-bottom:2px}
-.ch-dur{font-size:11px;color:var(--muted)}
-.ch-done{font-size:14px;color:var(--teal)}
-.ch-cur{font-size:10px;color:var(--teal);font-weight:700;letter-spacing:0.5px;border:1px solid var(--teal3);padding:2px 7px;border-radius:10px}
-.ch-lock{font-size:12px;color:var(--border2)}
+.ov-section-title{font-size:16px;font-weight:700;margin-bottom:16px;display:flex;align-items:center;justify-content:space-between}
+.ov-section-title .teal-dot{width:6px;height:6px;border-radius:50%;background:var(--teal);flex-shrink:0;margin-right:8px}
+
+/* Redesigned chapter list */
+.chapter-list{display:flex;flex-direction:column;margin-bottom:32px}
+.chapter-item{display:flex;align-items:center;gap:16px;padding:15px 0;border-bottom:1px solid var(--border);cursor:pointer;transition:opacity 0.15s;background:transparent}
+.chapter-item:last-child{border-bottom:none}
+.chapter-item:hover{opacity:0.72}
+.ch-icon{width:38px;height:38px;border-radius:50%;display:flex;align-items:center;justify-content:center;flex-shrink:0;font-size:15px;font-weight:700}
+.ch-icon.done{background:var(--teal);color:var(--navy)}
+.ch-icon.cur{background:rgba(0,200,212,0.15);border:1.5px solid var(--teal);color:var(--teal);font-size:12px;font-weight:700;letter-spacing:0.3px}
+.ch-icon.pending{background:rgba(255,255,255,0.05);border:1px solid var(--border2);color:var(--muted);font-size:13px}
+.ch-body{flex:1}
+.ch-name{font-size:14px;font-weight:600;color:var(--white);line-height:1.35}
+.ch-name.muted-name{color:var(--muted);font-weight:400}
+.ch-dur-right{font-size:13px;color:var(--muted);flex-shrink:0;padding-left:12px}
+
+/* What you will learn */
+.what-learn{margin-bottom:28px}
+.learn-grid{display:grid;grid-template-columns:1fr 1fr;gap:12px 24px;margin-top:14px}
+.learn-item{display:flex;align-items:flex-start;gap:10px;font-size:13px;color:#b0c4de;line-height:1.45}
+.learn-icon{color:var(--teal);flex-shrink:0;font-size:17px;margin-top:0px}
+
+/* You may also be interested in */
+.also-interested{margin-top:8px;padding-top:24px;border-top:1px solid var(--border)}
+.also-header{display:flex;align-items:center;justify-content:space-between;margin-bottom:14px}
+.also-title{font-size:16px;font-weight:700}
+.also-viewall{font-size:12px;color:var(--teal);cursor:pointer;font-weight:600;transition:opacity 0.15s}
+.also-viewall:hover{opacity:0.75}
+.also-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:12px}
+.also-card{cursor:pointer;border-radius:8px;overflow:hidden;background:var(--navy3);border:1px solid var(--border);transition:border-color 0.2s,transform 0.18s}
+.also-card:hover{border-color:var(--teal3);transform:translateY(-2px)}
+.also-card img{width:100%;aspect-ratio:16/9;object-fit:cover;display:block}
+.also-card-body{padding:9px 10px 11px}
+.also-card-title{font-size:12px;font-weight:600;line-height:1.3;margin-bottom:5px;color:var(--white)}
+.also-card-meta{font-size:11px;color:var(--muted)}
 .stars{color:var(--gold);font-size:14px;letter-spacing:1px}
 
 /* ============ BROWSE BY TOPIC ============ */
@@ -447,8 +470,10 @@ body{background:var(--navy);color:var(--white);font-family:'Helvetica Neue',Aria
       <div class="ov-expert" id="ov-expert"></div>
       <div class="ov-btns" id="ov-btns"></div>
       <div id="ov-prog"></div>
-      <div class="ov-section-title"><span class="teal-dot"></span>Course Chapters</div>
+      <div class="what-learn" id="ov-learns"></div>
+      <div class="ov-section-title" id="ov-ch-header"><span style="display:flex;align-items:center;gap:8px"><span class="teal-dot"></span>Curriculum</span></div>
       <div class="chapter-list" id="ov-chapters"></div>
+      <div class="also-interested" id="ov-also"></div>
     </div>
   </div>
 </div>
@@ -468,6 +493,7 @@ function imgUrl(id, w, h){ return `${IMGS[id]}?w=${w}&h=${h}&q=80&fit=crop`; }
 
 const C=[
   {id:0,title:'Mastering High-Stakes Client Conversations',
+   learns:['Apply the psychology of persuasion in live client meetings','Handle objections calmly with proven reframing frameworks','Use the commitment & consistency principle to close','Master the post-meeting follow-up sequence'],
    expert:'Brian Ahearn',xrole:'Chief Influence Officer · Influence PEOPLE',xinit:'BA',xcol:'#0e3060',
    tags:['Advanced','Sales','Negotiation'],match:98,yr:2024,dur:'1h 24m',nc:7,
    desc:'Award-winning negotiation expert Brian Ahearn reveals the psychological frameworks top financial advisors use to turn difficult conversations into closed deals. Real case studies from $1M+ client engagements.',
@@ -488,6 +514,7 @@ const C=[
      {name:'Linda R.',role:'Wealth Management Associate',init:'LR',bg:'#2a1a00',stars:4,text:'Chapter 6 on handling "I need to think about it" is something I\'ve never seen covered this directly anywhere else.',date:'6 weeks ago'},
    ]},
   {id:1,title:'Prospecting in the Digital Age',
+   learns:['Build your ideal client profile from scratch','Use LinkedIn for targeted research and outreach','Write a 3-touch email sequence that gets replies','Create prospecting habits that compound over time'],
    expert:'Jeb Blount',xrole:'CEO · Sales Gravy · Author of Fanatical Prospecting',xinit:'JB',xcol:'#3a2000',
    tags:['Intermediate','Sales','Prospecting'],match:95,yr:2024,dur:'58m',nc:6,
    desc:'Jeb Blount, author of Fanatical Prospecting, breaks down how modern sales professionals blend traditional outreach with LinkedIn, email, and video to build a consistent pipeline.',
@@ -507,6 +534,7 @@ const C=[
      {name:'Tom B.',role:'Account Executive',init:'TB',bg:'#1a0e2a',stars:4,text:'Very actionable. Would love a chapter specifically on phone prospecting.',date:'2 months ago'},
    ]},
   {id:2,title:'The Trust Formula: Building Client Relationships That Last',
+   learns:['Apply EQ frameworks to every client interaction','Read body language and non-verbal signals accurately','Build deep trust through structured vulnerability','Turn loyal clients into active advocates'],
    expert:'Colleen Stanley',xrole:'President · SalesLeadership Inc.',xinit:'CS',xcol:'#003a20',
    tags:['All Levels','Relationships','EQ'],match:96,yr:2024,dur:'1h 12m',nc:7,started:true,progress:64,curChap:3,
    desc:'Emotional intelligence pioneer Colleen Stanley shows how top performers build the kind of trust that makes clients loyal for decades. Covers EQ frameworks, body language, and the neuroscience of rapport.',
@@ -527,6 +555,7 @@ const C=[
      {name:'Amara O.',role:'Insurance Agent',init:'AO',bg:'#1a0e2a',stars:5,text:'Chapter 3 on active listening alone changed three client meetings this week.',date:'1 month ago'},
    ]},
   {id:3,title:'Closing Techniques for Complex Sales',
+   learns:['Identify and secure the nine commitment stages','Navigate multi-stakeholder sales environments','Handle procurement gatekeepers professionally','Apply the final commitment conversation framework'],
    expert:'Anthony Iannarino',xrole:'Author · The Lost Art of Closing',xinit:'AI',xcol:'#200030',
    tags:['Advanced','Closing','B2B'],match:91,yr:2023,dur:'1h 8m',nc:6,
    desc:'Anthony Iannarino dismantles outdated closing tactics and replaces them with a commitment-based framework that works in complex, multi-stakeholder financial and insurance sales.',
@@ -542,6 +571,7 @@ const C=[
      {name:'Nina P.',role:'Wealth Advisor',init:'NP',bg:'#0e2a1a',stars:4,text:'Dense with insight. Requires a second watch to absorb everything. Worth it.',date:'3 months ago'},
    ]},
   {id:4,title:'Referral Mastery: The Systematic Approach',
+   learns:['Shift from hoping for referrals to generating them systematically','Ask for referrals naturally without feeling pushy','Design a referral network that works on autopilot','Track and nurture your referral sources long-term'],
    expert:'Michael Goldberg',xrole:'Networking Expert · Author of Knock-Out Networking',xinit:'MG',xcol:'#002040',
    tags:['All Levels','Referrals','Networking'],match:88,yr:2024,dur:'44m',nc:5,
    desc:'Michael Goldberg lays out a repeatable, low-pressure system for generating a steady stream of warm referrals from your existing client base.',
@@ -557,6 +587,7 @@ const C=[
      {name:'Kevin S.',role:'Insurance Broker',init:'KS',bg:'#1a0e2a',stars:4,text:'Practical and actionable. Would benefit from more role-playing examples.',date:'2 months ago'},
    ]},
   {id:5,title:'Time Blocking for Peak Producers',
+   learns:['Design your ideal production week template','Protect your prime selling hours from interruption','Eliminate the top 5 daily productivity time-thieves','Build accountability systems that actually hold'],
    expert:'Darren Hardy',xrole:'Publisher · SUCCESS Magazine',xinit:'DH',xcol:'#1a1000',
    tags:['All Levels','Productivity','Habits'],match:85,yr:2023,dur:'52m',nc:5,
    desc:'Darren Hardy shares the exact time-blocking and habit systems that separate the top 1% of financial and insurance producers from everyone else.',
@@ -572,6 +603,7 @@ const C=[
      {name:'Sarah F.',role:'New Agent',init:'SF',bg:'#0e2a1a',stars:5,text:'Game-changing for someone early in their career. The ideal week template alone was worth it.',date:'6 weeks ago'},
    ]},
   {id:6,title:'Underwriting Relationships: Working With Carriers',
+   learns:['Understand how underwriters evaluate and score cases','Submit cases in a way that gets them prioritized','Navigate complex medical histories with confidence','Build carrier relationships that open doors'],
    expert:'Elizabeth Scheithe',xrole:'VP Underwriting · 28 years experience',xinit:'ES',xcol:'#00202a',
    tags:['Advanced','Insurance','Underwriting'],match:93,yr:2024,dur:'1h 4m',nc:6,
    desc:'Veteran underwriter Elizabeth Scheithe gives agents a rare behind-the-scenes view of how underwriting decisions are made — and how to position cases for the best possible outcomes.',
@@ -587,6 +619,7 @@ const C=[
      {name:'Maya R.',role:'Life Insurance Specialist',init:'MR',bg:'#1a0e2a',stars:5,text:'Elizabeth can explain complex processes simply without dumbing them down.',date:'1 month ago'},
    ]},
   {id:7,title:'Long-Term Care Planning Conversations',
+   learns:['Initiate LTC conversations without triggering avoidance','Work effectively with multi-generational family dynamics','Frame product vs. planning in the right sequence','Close LTC conversations with dignity and clarity'],
    expert:'Harley Gordon',xrole:'Founder · CLTC · National LTC Authority',xinit:'HG',xcol:'#0d001a',
    tags:['Advanced','Insurance','LTC'],match:87,yr:2024,dur:'48m',nc:5,
    desc:'Harley Gordon, founder of the Certified in Long-Term Care designation, shows agents how to initiate and navigate the emotionally charged LTC planning conversation with families.',
@@ -792,12 +825,48 @@ function openCourse(id,resume=false){
       <div class="ov-prog-pct">${c.progress}% complete · ${rem} min remaining</div>
     </div>`;
   } else prog.innerHTML='';
-  document.getElementById('ov-chapters').innerHTML=c.chapters.map((ch,i)=>`
-    <div class="chapter-item${ch.cur?' cur':''}">
-      <div class="ch-num">${String(i+1).padStart(2,'0')}</div>
-      <div class="ch-info"><div class="ch-name">${ch.n}</div><div class="ch-dur">${ch.d}</div></div>
-      <div>${ch.done?'<span class="ch-done">✓</span>':ch.cur?'<span class="ch-cur">CURRENT</span>':'<span class="ch-lock">▷</span>'}</div>
-    </div>`).join('');
+  // Chapters — redesigned with status circles
+  document.getElementById('ov-chapters').innerHTML=c.chapters.map((ch,i)=>{
+    let iconClass, iconContent;
+    if(ch.done){ iconClass='done'; iconContent='✓'; }
+    else if(ch.cur){ iconClass='cur'; iconContent='NOW'; }
+    else { iconClass='pending'; iconContent=String(i+1); }
+    return `<div class="chapter-item">
+      <div class="ch-icon ${iconClass}">${iconContent}</div>
+      <div class="ch-body"><div class="ch-name${ch.done?' muted-name':''}">${ch.n}</div></div>
+      <div class="ch-dur-right">${ch.d}</div>
+    </div>`;
+  }).join('');
+
+  // What you will learn
+  const learnsEl = document.getElementById('ov-learns');
+  if(c.learns && c.learns.length){
+    learnsEl.innerHTML=`
+      <div class="ov-section-title"><span style="display:flex;align-items:center;gap:8px"><span class="teal-dot"></span>What you will learn</span></div>
+      <div class="learn-grid">${c.learns.map(l=>`
+        <div class="learn-item"><span class="learn-icon">🎯</span><span>${l}</span></div>`).join('')}
+      </div>`;
+  } else learnsEl.innerHTML='';
+
+  // You may also be interested in
+  const alsoEl = document.getElementById('ov-also');
+  const alsoIds = C.filter((_,i)=>i!==id).sort(()=>Math.random()-0.5).slice(0,4).map(x=>x.id);
+  alsoEl.innerHTML=`
+    <div class="also-header">
+      <div class="also-title">You may also be interested in</div>
+      <div class="also-viewall">View All →</div>
+    </div>
+    <div class="also-grid">${alsoIds.map(aid=>{
+      const ac=C[aid];
+      return `<div class="also-card" onclick="openCourse(${aid})">
+        <img src="${imgUrl(aid,320,180)}" alt="${ac.title}" loading="lazy">
+        <div class="also-card-body">
+          <div class="also-card-title">${ac.title}</div>
+          <div class="also-card-meta">${ac.tags[0]} · ${ac.dur}</div>
+        </div>
+      </div>`;}).join('')}
+    </div>`;
+
   document.getElementById('overlay').scrollTop=0;
 }
 function closeOverlay(){
