@@ -1,0 +1,747 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Hoopis Performance Network</title>
+<style>
+/* ── TOKENS ───────────────────────────────────────────────── */
+:root{
+  --bg:        #0c0f1a;
+  --surface:   #141828;
+  --surface2:  #1c2236;
+  --teal:      #00c8d4;
+  --teal-dim:  rgba(0,200,212,.14);
+  --teal-glow: rgba(0,200,212,.22);
+  --white:     #ffffff;
+  --muted:     #8a9ec0;
+  --border:    #1e2d48;
+  --border2:   #273650;
+  --green:     #22c55e;
+  --gold:      #f5c518;
+  --red:       #ef4444;
+  --radius:    14px;
+  --card-r:    16px;
+}
+*{box-sizing:border-box;margin:0;padding:0}
+html{font-size:18px;-webkit-font-smoothing:antialiased}
+body{
+  background:var(--bg);
+  color:var(--white);
+  font-family:'Helvetica Neue',Arial,sans-serif;
+  min-height:100vh;
+  overflow-x:hidden;
+}
+
+/* ── CONTAINER (80 vw, centered) ──────────────────────────── */
+.wrap{
+  width:80vw;
+  margin:0 auto;
+}
+
+/* ── HEADER ───────────────────────────────────────────────── */
+.topbar{
+  position:sticky;top:0;z-index:50;
+  background:rgba(12,15,26,.96);
+  backdrop-filter:blur(16px);
+  border-bottom:1px solid var(--border);
+  padding:0 0 0 0;
+}
+.topbar-inner{
+  display:grid;
+  grid-template-columns:220px 1fr 280px;
+  align-items:center;
+  gap:32px;
+  height:80px;
+}
+.logo-link{display:flex;align-items:center;text-decoration:none;flex-shrink:0}
+.logo-img{height:44px;object-fit:contain;filter:brightness(0) invert(1)}
+
+/* Search bar */
+.search-wrap{position:relative;width:100%}
+.search-input{
+  width:100%;
+  height:56px;
+  background:rgba(255,255,255,.07);
+  border:1.5px solid var(--border2);
+  border-radius:28px;
+  padding:0 24px 0 56px;
+  color:var(--white);
+  font-size:20px;
+  outline:none;
+  transition:border-color .2s,box-shadow .2s,background .2s;
+}
+.search-input::placeholder{color:var(--muted)}
+.search-input:focus{
+  border-color:var(--teal);
+  background:rgba(0,200,212,.05);
+  box-shadow:0 0 0 4px var(--teal-dim);
+}
+.search-icon{
+  position:absolute;left:20px;top:50%;transform:translateY(-50%);
+  width:22px;height:22px;opacity:.5;pointer-events:none;
+}
+.search-dropdown{
+  display:none;
+  position:absolute;top:calc(100% + 8px);left:0;right:0;
+  background:#1a2236;
+  border:1px solid var(--border2);
+  border-radius:16px;
+  box-shadow:0 24px 64px rgba(0,0,0,.7);
+  max-height:420px;overflow-y:auto;z-index:200;
+  padding:8px 0;
+}
+.search-dropdown.open{display:block}
+.search-label{
+  font-size:13px;font-weight:700;letter-spacing:.8px;
+  color:var(--muted);text-transform:uppercase;
+  padding:10px 20px 6px;
+}
+.search-item{
+  display:flex;align-items:center;gap:14px;
+  padding:12px 20px;cursor:pointer;
+  transition:background .15s;
+}
+.search-item:hover,.search-item.active{background:rgba(0,200,212,.1)}
+.search-thumb{
+  width:56px;height:40px;border-radius:8px;
+  object-fit:cover;flex-shrink:0;
+}
+.search-info{flex:1;min-width:0}
+.search-title{font-size:16px;font-weight:600;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.search-cat{font-size:13px;color:var(--teal);margin-top:2px}
+.search-empty{padding:28px 20px;text-align:center;color:var(--muted);font-size:17px}
+
+/* User pill */
+.user-pill{
+  display:flex;align-items:center;gap:14px;
+  justify-content:flex-end;flex-shrink:0;
+}
+.user-greet{font-size:18px;color:var(--muted);white-space:nowrap}
+.user-greet strong{color:var(--white);font-size:20px}
+.user-avatar{
+  width:48px;height:48px;border-radius:12px;
+  background:linear-gradient(135deg,var(--teal),#0088cc);
+  display:flex;align-items:center;justify-content:center;
+  font-size:18px;font-weight:800;color:var(--white);flex-shrink:0;
+}
+
+/* ── HERO BANNER ──────────────────────────────────────────── */
+.hero{
+  position:relative;
+  height:220px;
+  margin:32px 0;
+  border-radius:20px;
+  overflow:hidden;
+  background:linear-gradient(120deg,#060d1f 0%,#0d2040 40%,#001a2e 70%,#060d1f 100%);
+  display:flex;align-items:center;
+  border:1px solid var(--border);
+}
+.hero-grid{
+  position:absolute;inset:0;
+  background-image:
+    linear-gradient(rgba(0,200,212,.06) 1px,transparent 1px),
+    linear-gradient(90deg,rgba(0,200,212,.06) 1px,transparent 1px);
+  background-size:60px 60px;
+}
+.hero-glow{
+  position:absolute;right:-80px;top:-80px;
+  width:480px;height:480px;border-radius:50%;
+  background:radial-gradient(circle,rgba(0,200,212,.18) 0%,transparent 70%);
+  pointer-events:none;
+}
+.hero-content{
+  position:relative;z-index:2;
+  padding:0 60px;
+  display:flex;align-items:center;justify-content:space-between;
+  width:100%;
+}
+.hero-text{}
+.hero-eyebrow{
+  font-size:14px;font-weight:700;letter-spacing:1.5px;
+  text-transform:uppercase;color:var(--teal);margin-bottom:10px;
+}
+.hero-headline{
+  font-size:52px;font-weight:900;line-height:1.05;
+  background:linear-gradient(90deg,#fff 0%,#a0c8ff 100%);
+  -webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text;
+}
+.hero-sub{
+  font-size:22px;color:var(--muted);margin-top:10px;font-weight:400;
+}
+.hero-cta{
+  display:flex;align-items:center;gap:14px;
+  background:#ffffff;
+  color:#060d1f;
+  border:none;border-radius:12px;
+  padding:0 36px;
+  height:60px;
+  font-size:20px;font-weight:800;
+  cursor:pointer;white-space:nowrap;
+  transition:transform .15s,box-shadow .15s;
+  text-decoration:none;flex-shrink:0;
+}
+.hero-cta:hover{transform:scale(1.04);box-shadow:0 8px 32px rgba(255,255,255,.2)}
+
+/* ── SHELVES ──────────────────────────────────────────────── */
+.shelf{margin-bottom:44px}
+.shelf-header{
+  display:flex;align-items:baseline;justify-content:space-between;
+  margin-bottom:20px;
+}
+.shelf-title{
+  font-size:30px;font-weight:800;
+  display:flex;align-items:center;gap:12px;
+}
+.shelf-title-bar{
+  display:inline-block;width:4px;height:28px;
+  background:var(--teal);border-radius:2px;
+}
+.shelf-see-all{
+  font-size:18px;color:var(--teal);cursor:pointer;
+  text-decoration:none;font-weight:600;
+  opacity:.8;transition:opacity .15s;
+}
+.shelf-see-all:hover{opacity:1}
+
+/* ── COURSE GRID ──────────────────────────────────────────── */
+.course-grid{
+  display:grid;
+  grid-template-columns:repeat(3,1fr);
+  gap:24px;
+}
+
+/* ── COURSE CARD ──────────────────────────────────────────── */
+.card{
+  background:var(--surface);
+  border:1.5px solid var(--border);
+  border-radius:var(--card-r);
+  overflow:hidden;
+  cursor:pointer;
+  transition:transform .2s cubic-bezier(.2,.8,.2,1),
+             border-color .2s,
+             box-shadow .2s;
+  display:flex;flex-direction:column;
+}
+.card:hover{
+  transform:scale(1.03);
+  border-color:var(--teal);
+  box-shadow:0 20px 60px rgba(0,0,0,.55),0 0 0 1px var(--teal-glow);
+}
+
+/* Thumbnail */
+.card-thumb{
+  position:relative;height:210px;overflow:hidden;flex-shrink:0;
+}
+.card-thumb img{
+  width:100%;height:100%;object-fit:cover;
+  transition:transform .4s;display:block;
+}
+.card:hover .card-thumb img{transform:scale(1.06)}
+.thumb-grad{
+  position:absolute;inset:0;
+  background:linear-gradient(180deg,rgba(0,0,0,.1) 30%,rgba(0,0,0,.65) 100%);
+}
+
+/* Badges on thumb */
+.badge{
+  position:absolute;
+  font-size:13px;font-weight:700;border-radius:6px;
+  padding:5px 11px;backdrop-filter:blur(8px);letter-spacing:.3px;
+}
+.badge-cat{
+  top:12px;left:12px;
+  background:rgba(0,200,212,.25);
+  border:1px solid rgba(0,200,212,.45);
+  color:#fff;
+}
+.badge-dur{
+  top:12px;right:12px;
+  background:rgba(0,0,0,.55);
+  border:1px solid rgba(255,255,255,.15);
+  color:#fff;
+}
+.badge-popular{
+  top:12px;left:12px;
+  background:rgba(239,68,68,.25);
+  border:1px solid rgba(239,68,68,.5);
+  color:#fff;
+}
+
+/* Thumb progress bar */
+.thumb-prog{
+  position:absolute;bottom:0;left:0;right:0;height:5px;
+  background:rgba(255,255,255,.15);
+}
+.thumb-prog-fill{
+  height:100%;background:var(--green);
+  border-radius:0 3px 3px 0;
+  transition:width .4s;
+}
+
+/* Card body */
+.card-body{
+  padding:20px 22px 18px;
+  display:flex;flex-direction:column;gap:10px;flex:1;
+}
+.card-level{
+  display:inline-flex;align-items:center;
+  font-size:13px;font-weight:700;
+  padding:4px 10px;border-radius:5px;
+  background:var(--teal-dim);
+  border:1px solid rgba(0,200,212,.25);
+  color:var(--teal);
+  letter-spacing:.3px;
+  width:fit-content;
+}
+.card-title{
+  font-size:22px;font-weight:800;line-height:1.25;
+  display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical;overflow:hidden;
+}
+.card-desc{
+  font-size:16px;color:var(--muted);line-height:1.5;
+  display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical;overflow:hidden;
+  flex:1;
+}
+.card-instructor{
+  display:flex;align-items:center;gap:10px;
+}
+.instr-avatar{
+  width:32px;height:32px;border-radius:8px;
+  object-fit:cover;flex-shrink:0;
+}
+.instr-name{font-size:15px;color:var(--muted);font-weight:500}
+
+/* Card footer */
+.card-footer{
+  display:flex;align-items:center;justify-content:space-between;
+  padding-top:10px;
+  border-top:1px solid var(--border);
+  gap:12px;
+}
+.card-stars{
+  display:flex;align-items:center;gap:6px;
+  font-size:15px;color:var(--muted);
+}
+.stars-val{color:var(--gold);font-weight:700;font-size:16px}
+.enrolled-ct{font-size:14px}
+
+.btn{
+  display:inline-flex;align-items:center;justify-content:center;gap:8px;
+  height:40px;
+  border-radius:9px;
+  font-size:15px;font-weight:700;
+  cursor:pointer;border:none;
+  transition:transform .15s,opacity .15s;
+  padding:0 18px;white-space:nowrap;
+  flex-shrink:0;
+}
+.btn:hover{transform:scale(1.04);opacity:.9}
+.btn-enroll{background:#fff;color:#060d1f}
+.btn-resume{background:var(--teal);color:#060d1f}
+.btn-complete{
+  background:rgba(34,197,94,.15);
+  border:1px solid var(--green);
+  color:var(--green);cursor:default;
+}
+.btn-complete:hover{transform:none;opacity:1}
+
+/* Progress bar (below thumb in continue learning) */
+.card-prog-row{
+  display:flex;align-items:center;gap:10px;
+  font-size:13px;color:var(--muted);
+}
+.card-prog-bar{
+  flex:1;height:6px;background:var(--border);border-radius:3px;overflow:hidden;
+}
+.card-prog-fill{height:100%;background:var(--green);border-radius:3px}
+
+/* ── FOOTER STRIP ─────────────────────────────────────────── */
+.page-footer{
+  border-top:1px solid var(--border);
+  padding:24px 0;
+  margin-top:8px;
+}
+.footer-inner{
+  display:flex;align-items:center;justify-content:space-between;
+}
+.footer-copy{font-size:15px;color:var(--muted)}
+.footer-logo{height:28px;filter:brightness(0) invert(1);opacity:.4}
+
+/* ── SCROLLBAR ────────────────────────────────────────────── */
+::-webkit-scrollbar{width:6px;height:6px}
+::-webkit-scrollbar-track{background:transparent}
+::-webkit-scrollbar-thumb{background:var(--border2);border-radius:3px}
+</style>
+</head>
+<body>
+
+<!-- ══ HEADER ══════════════════════════════════════════════ -->
+<header class="topbar">
+  <div class="wrap">
+    <div class="topbar-inner">
+
+      <a class="logo-link" href="index.html">
+        <img class="logo-img" src="hoopis-logo.svg" alt="Hoopis Performance Network">
+      </a>
+
+      <div class="search-wrap">
+        <svg class="search-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+          <circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/>
+        </svg>
+        <input id="searchInput" class="search-input" type="text"
+               placeholder="Search courses..." autocomplete="off">
+        <div id="searchDropdown" class="search-dropdown"></div>
+      </div>
+
+      <div class="user-pill">
+        <div class="user-greet">Welcome back, <strong>James</strong></div>
+        <div class="user-avatar">JW</div>
+      </div>
+
+    </div>
+  </div>
+</header>
+
+<!-- ══ PAGE BODY ════════════════════════════════════════════ -->
+<main>
+<div class="wrap">
+
+  <!-- HERO ──────────────────────────────────────────────── -->
+  <div class="hero">
+    <div class="hero-grid"></div>
+    <div class="hero-glow"></div>
+    <div class="hero-content">
+      <div class="hero-text">
+        <div class="hero-eyebrow">Hoopis Performance Network</div>
+        <div class="hero-headline">Expand Your Expertise</div>
+        <div class="hero-sub">Insurance &amp; Financial Services Training</div>
+      </div>
+      <a class="hero-cta" href="index.html">
+        <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><rect x="2" y="3" width="20" height="14" rx="2"/><polyline points="8 21 12 17 16 21"/></svg>
+        Browse All Courses
+      </a>
+    </div>
+  </div>
+
+  <!-- ── FEATURED COURSES (3×2) ──────────────────────────── -->
+  <section class="shelf">
+    <div class="shelf-header">
+      <div class="shelf-title">
+        <span class="shelf-title-bar"></span>
+        Featured Courses
+      </div>
+      <a class="shelf-see-all" href="index.html">View all →</a>
+    </div>
+    <div class="course-grid" id="featuredGrid"></div>
+  </section>
+
+  <!-- ── CONTINUE LEARNING ───────────────────────────────── -->
+  <section class="shelf">
+    <div class="shelf-header">
+      <div class="shelf-title">
+        <span class="shelf-title-bar"></span>
+        Continue Learning
+      </div>
+      <a class="shelf-see-all" href="index.html">View all →</a>
+    </div>
+    <div class="course-grid" id="continueGrid"></div>
+  </section>
+
+  <!-- ── TRENDING ────────────────────────────────────────── -->
+  <section class="shelf">
+    <div class="shelf-header">
+      <div class="shelf-title">
+        <span class="shelf-title-bar"></span>
+        Trending This Month
+      </div>
+      <a class="shelf-see-all" href="index.html">View all →</a>
+    </div>
+    <div class="course-grid" id="trendingGrid"></div>
+  </section>
+
+</div><!-- /wrap -->
+
+<!-- FOOTER -->
+<div class="wrap">
+  <footer class="page-footer">
+    <div class="footer-inner">
+      <img class="footer-logo" src="hoopis-logo.svg" alt="Hoopis">
+      <span class="footer-copy">&copy; 2025 Hoopis Performance Network. All rights reserved.</span>
+    </div>
+  </footer>
+</div>
+
+</main>
+
+<script>
+/* ── COURSE DATA ─────────────────────────────────────────── */
+var COURSES = [
+  {
+    id:1, pid:0,
+    title:'Life Insurance Fundamentals',
+    desc:'Master core life insurance concepts from term to whole life policies and beyond.',
+    thumb:'https://images.unsplash.com/photo-1573497491208-6b1acb260507?w=800&h=450&q=80&fit=crop',
+    cat:'Life Insurance', level:'Beginner', dur:'3h 20m',
+    instructor:{name:'Sarah Mitchell',avatar:'https://i.pravatar.cc/40?img=1'},
+    rating:4.8, enrolled:3240, progress:35,
+    slug:'life-insurance-fundamentals'
+  },
+  {
+    id:2, pid:1,
+    title:'Prospecting in the Digital Age',
+    desc:'Build a consistent pipeline using modern outreach, LinkedIn, and video prospecting.',
+    thumb:'https://images.unsplash.com/photo-1516321318423-f06f85e504b3?w=800&h=450&q=80&fit=crop',
+    cat:'Sales', level:'Intermediate', dur:'58m',
+    instructor:{name:'Jeb Blount',avatar:'https://i.pravatar.cc/40?img=2'},
+    rating:4.8, enrolled:2103, progress:0,
+    slug:'prospecting-digital-age'
+  },
+  {
+    id:3, pid:2,
+    title:'The Trust Formula',
+    desc:'Emotional intelligence frameworks that build client loyalty for decades.',
+    thumb:'https://images.unsplash.com/photo-1573496359142-b8d87734a5a2?w=800&h=450&q=80&fit=crop',
+    cat:'Relationships', level:'All Levels', dur:'1h 12m',
+    instructor:{name:'Colleen Stanley',avatar:'https://i.pravatar.cc/40?img=3'},
+    rating:4.9, enrolled:5120, progress:64,
+    slug:'trust-formula'
+  },
+  {
+    id:4, pid:3,
+    title:'Closing Techniques for Complex Sales',
+    desc:'Commitment-based closing that works in multi-stakeholder financial sales.',
+    thumb:'https://images.unsplash.com/photo-1600880292203-757bb62b4baf?w=800&h=450&q=80&fit=crop',
+    cat:'Closing', level:'Advanced', dur:'1h 8m',
+    instructor:{name:'Anthony Iannarino',avatar:'https://i.pravatar.cc/40?img=4'},
+    rating:4.7, enrolled:1204, progress:0,
+    slug:'closing-complex-sales'
+  },
+  {
+    id:5, pid:4,
+    title:'Referral Mastery: The Systematic Approach',
+    desc:'A repeatable, low-pressure system for generating steady warm referrals.',
+    thumb:'https://images.unsplash.com/photo-1523240795612-9a054b0db644?w=800&h=450&q=80&fit=crop',
+    cat:'Networking', level:'All Levels', dur:'44m',
+    instructor:{name:'Michael Goldberg',avatar:'https://i.pravatar.cc/40?img=5'},
+    rating:4.6, enrolled:2200, progress:0,
+    slug:'referral-mastery'
+  },
+  {
+    id:6, pid:5,
+    title:'Time Blocking for Peak Producers',
+    desc:'Habit-based scheduling used by the top 1% of financial professionals.',
+    thumb:'https://images.unsplash.com/photo-1484480974693-6ca0a78fb36b?w=800&h=450&q=80&fit=crop',
+    cat:'Productivity', level:'All Levels', dur:'52m',
+    instructor:{name:'Darren Hardy',avatar:'https://i.pravatar.cc/40?img=6'},
+    rating:4.8, enrolled:6700, progress:0,
+    slug:'time-blocking'
+  },
+  {
+    id:7, pid:6,
+    title:'Underwriting Relationships',
+    desc:'A veteran underwriter\'s inside view on how to get your cases prioritized.',
+    thumb:'https://images.unsplash.com/photo-1568992687947-868a62a9f521?w=800&h=450&q=80&fit=crop',
+    cat:'Insurance', level:'Advanced', dur:'1h 4m',
+    instructor:{name:'Elizabeth Scheithe',avatar:'https://i.pravatar.cc/40?img=7'},
+    rating:4.8, enrolled:641, progress:25,
+    slug:'underwriting-relationships'
+  },
+  {
+    id:8, pid:7,
+    title:'Long-Term Care Planning Conversations',
+    desc:'Guide clients through LTC options with confidence and compassion.',
+    thumb:'https://images.unsplash.com/photo-1573497491208-6b1acb260507?w=800&h=450&q=80&fit=crop',
+    cat:'Long-Term Care', level:'Advanced', dur:'48m',
+    instructor:{name:'Harley Gordon',avatar:'https://i.pravatar.cc/40?img=8'},
+    rating:4.9, enrolled:512, progress:0,
+    slug:'ltc-planning'
+  },
+  {
+    id:9, pid:0,
+    title:'Mastering High-Stakes Client Conversations',
+    desc:'Psychological frameworks for turning difficult conversations into closed deals.',
+    thumb:'https://images.unsplash.com/photo-1543269865-cbf427effbad?w=800&h=450&q=80&fit=crop',
+    cat:'Sales', level:'Advanced', dur:'1h 24m',
+    instructor:{name:'Brian Ahearn',avatar:'https://i.pravatar.cc/40?img=9'},
+    rating:4.9, enrolled:1847, progress:0,
+    slug:'high-stakes-conversations'
+  }
+];
+
+var FEATURED   = [1,2,3,4,5,6];
+var CONTINUING = [3,7,1];   /* courses with progress */
+var TRENDING   = [9,6,8];
+
+/* ── RENDER CARD ─────────────────────────────────────────── */
+function renderCard(id, mode){
+  var c = COURSES.find(function(x){ return x.id === id; });
+  if(!c) return '';
+
+  var playerUrl = 'course-player.html?id=' + c.pid + '&lesson=0';
+  var isContinue = mode === 'continue';
+  var isTrending = mode === 'trending';
+
+  /* Badge top-left */
+  var badgeLeft = isTrending
+    ? '<div class="badge badge-popular">🔥 Popular</div>'
+    : '<div class="badge badge-cat">' + c.cat + '</div>';
+
+  /* Thumb progress overlay */
+  var thumbProg = (c.progress > 0 && isContinue)
+    ? '<div class="thumb-prog"><div class="thumb-prog-fill" style="width:' + c.progress + '%"></div></div>'
+    : '';
+
+  /* Footer button */
+  var btn = '';
+  if(c.progress === 100){
+    btn = '<button class="btn btn-complete" onclick="event.stopPropagation()">✓ Completed</button>';
+  } else if(c.progress > 0){
+    btn = '<button class="btn btn-resume" onclick="event.stopPropagation();window.location.href=\'' + playerUrl + '\'">Resume →</button>';
+  } else {
+    btn = '<button class="btn btn-enroll" onclick="event.stopPropagation();window.location.href=\'' + playerUrl + '\'">Enroll Now</button>';
+  }
+
+  /* Progress row (continue shelf) */
+  var progRow = (c.progress > 0 && c.progress < 100 && isContinue)
+    ? '<div class="card-prog-row"><div class="card-prog-bar"><div class="card-prog-fill" style="width:' + c.progress + '%"></div></div><span>' + c.progress + '%</span></div>'
+    : '';
+
+  /* Star rendering */
+  var stars = '';
+  var full = Math.floor(c.rating);
+  for(var i=0;i<5;i++){
+    stars += '<span style="color:' + (i < full ? '#f5c518' : '#3a4a6a') + '">★</span>';
+  }
+
+  return '<div class="card" onclick="window.location.href=\'' + playerUrl + '\'">' +
+    '<div class="card-thumb">' +
+      '<img src="' + c.thumb + '" alt="' + c.title + '" loading="lazy">' +
+      '<div class="thumb-grad"></div>' +
+      badgeLeft +
+      '<div class="badge badge-dur">' + c.dur + '</div>' +
+      thumbProg +
+    '</div>' +
+    '<div class="card-body">' +
+      '<div class="card-level">' + c.level + '</div>' +
+      '<div class="card-title">' + c.title + '</div>' +
+      '<div class="card-desc">' + c.desc + '</div>' +
+      '<div class="card-instructor">' +
+        '<img class="instr-avatar" src="' + c.instructor.avatar + '" alt="">' +
+        '<span class="instr-name">' + c.instructor.name + '</span>' +
+      '</div>' +
+      progRow +
+      '<div class="card-footer">' +
+        '<div class="card-stars">' +
+          '<span class="stars-val">' + c.rating.toFixed(1) + '</span>' +
+          stars +
+          '<span class="enrolled-ct">' + c.enrolled.toLocaleString() + ' enrolled</span>' +
+        '</div>' +
+        btn +
+      '</div>' +
+    '</div>' +
+  '</div>';
+}
+
+/* ── POPULATE GRIDS ──────────────────────────────────────── */
+function populateGrid(elId, ids, mode){
+  var el = document.getElementById(elId);
+  if(!el) return;
+  el.innerHTML = ids.map(function(id){ return renderCard(id, mode); }).join('');
+}
+
+populateGrid('featuredGrid',  FEATURED,   'featured');
+populateGrid('continueGrid',  CONTINUING, 'continue');
+populateGrid('trendingGrid',  TRENDING,   'trending');
+
+/* ── SEARCH AUTOCOMPLETE ─────────────────────────────────── */
+var searchInput    = document.getElementById('searchInput');
+var searchDropdown = document.getElementById('searchDropdown');
+var searchTimer    = null;
+var activeIdx      = -1;
+
+function buildDropdown(query){
+  var items;
+  var label;
+  if(!query){
+    items = COURSES.slice(0,5);
+    label = 'Popular Courses';
+  } else {
+    var q = query.toLowerCase();
+    items = COURSES.filter(function(c){
+      return c.title.toLowerCase().includes(q) ||
+             c.cat.toLowerCase().includes(q) ||
+             c.desc.toLowerCase().includes(q);
+    });
+    label = items.length ? 'Results for "' + query + '"' : null;
+  }
+
+  if(!items.length){
+    searchDropdown.innerHTML =
+      '<div class="search-empty">😕 No courses found for "' + query + '"</div>';
+  } else {
+    var html = '<div class="search-label">' + label + '</div>';
+    html += items.map(function(c, i){
+      return '<div class="search-item" data-pid="' + c.pid + '" tabindex="-1">' +
+        '<img class="search-thumb" src="' + c.thumb + '" alt="">' +
+        '<div class="search-info">' +
+          '<div class="search-title">' + c.title + '</div>' +
+          '<div class="search-cat">' + c.cat + ' · ' + c.level + ' · ' + c.dur + '</div>' +
+        '</div>' +
+      '</div>';
+    }).join('');
+    searchDropdown.innerHTML = html;
+  }
+
+  activeIdx = -1;
+  searchDropdown.classList.add('open');
+
+  searchDropdown.querySelectorAll('.search-item').forEach(function(item){
+    item.addEventListener('click', function(){
+      window.location.href = 'course-player.html?id=' + item.dataset.pid + '&lesson=0';
+    });
+  });
+}
+
+searchInput.addEventListener('focus', function(){
+  buildDropdown(searchInput.value.trim());
+});
+
+searchInput.addEventListener('input', function(){
+  clearTimeout(searchTimer);
+  searchTimer = setTimeout(function(){
+    buildDropdown(searchInput.value.trim());
+  }, 250);
+});
+
+/* Keyboard navigation */
+searchInput.addEventListener('keydown', function(e){
+  var items = searchDropdown.querySelectorAll('.search-item');
+  if(e.key === 'ArrowDown'){
+    e.preventDefault();
+    activeIdx = Math.min(activeIdx + 1, items.length - 1);
+    items.forEach(function(el,i){ el.classList.toggle('active', i === activeIdx); });
+  } else if(e.key === 'ArrowUp'){
+    e.preventDefault();
+    activeIdx = Math.max(activeIdx - 1, 0);
+    items.forEach(function(el,i){ el.classList.toggle('active', i === activeIdx); });
+  } else if(e.key === 'Enter'){
+    if(activeIdx >= 0 && items[activeIdx]){
+      items[activeIdx].click();
+    }
+  } else if(e.key === 'Escape'){
+    searchDropdown.classList.remove('open');
+    searchInput.blur();
+  }
+});
+
+/* Close on outside click */
+document.addEventListener('click', function(e){
+  if(!e.target.closest('.search-wrap')){
+    searchDropdown.classList.remove('open');
+  }
+});
+</script>
+
+</body>
+</html>
