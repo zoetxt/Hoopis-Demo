@@ -223,34 +223,40 @@ html,body{height:100%;background:var(--bg);color:var(--white);font-family:'Inter
 .lesson-cards-grid{display:grid;grid-template-columns:repeat(5,1fr);gap:14px}
 .lc-card{
   background:var(--surface);border:2px solid var(--border);border-radius:12px;
-  overflow:hidden;cursor:pointer;
-  transition:border-color .2s,transform .18s,box-shadow .18s;
+  cursor:pointer;padding:20px 18px 16px;min-height:160px;
+  display:flex;flex-direction:column;justify-content:space-between;
+  transition:border-color .2s,transform .18s,box-shadow .18s,background .2s;
 }
-.lc-card:hover{border-color:var(--teal);transform:translateY(-3px);box-shadow:0 10px 32px rgba(0,0,0,.5)}
-.lc-card.active{border-color:var(--teal);box-shadow:0 0 0 1px var(--teal)}
-.lc-card.completed{border-color:var(--green)}
-.lc-thumb{position:relative;width:100%;padding-bottom:56.25%;overflow:hidden;background:#000}
-.lc-thumb img{position:absolute;inset:0;width:100%;height:100%;object-fit:cover;display:block}
-.lc-num{
-  position:absolute;top:8px;left:8px;
-  width:26px;height:26px;border-radius:50%;
-  background:rgba(6,13,31,.85);border:1.5px solid rgba(255,255,255,.3);
-  display:flex;align-items:center;justify-content:center;
-  font-size:11px;font-weight:700;color:#fff;
+.lc-card:hover{border-color:var(--teal);transform:translateY(-3px);box-shadow:0 10px 32px rgba(0,0,0,.5);background:var(--surface2)}
+.lc-card.active{border-color:var(--teal);background:rgba(0,200,212,.06);box-shadow:0 0 0 1px var(--teal)}
+.lc-card.completed{border-color:var(--green);background:rgba(34,197,94,.04)}
+/* large ghost chapter number at the top */
+.lc-chap-num{
+  font-size:36px;font-weight:900;line-height:1;letter-spacing:-1px;
+  color:rgba(255,255,255,.1);margin-bottom:10px;font-variant-numeric:tabular-nums;
 }
-.lc-card.completed .lc-num{background:var(--green);border-color:var(--green)}
+.lc-card.active   .lc-chap-num{color:rgba(0,200,212,.35)}
+.lc-card.completed .lc-chap-num{color:rgba(34,197,94,.35)}
+/* title */
+.lc-title{
+  font-size:14px;font-weight:600;line-height:1.45;color:var(--white);flex:1;
+  display:-webkit-box;-webkit-line-clamp:3;-webkit-box-orient:vertical;overflow:hidden;
+  margin-bottom:12px;
+}
+/* footer row: duration left, badge right */
+.lc-footer{display:flex;align-items:center;justify-content:space-between;gap:6px;margin-top:auto}
+.lc-dur{font-size:12px;color:var(--muted);font-weight:500}
 .lc-now-badge{
-  position:absolute;bottom:8px;left:0;right:0;
-  background:rgba(0,200,212,.92);color:#000;
-  font-size:10px;font-weight:800;letter-spacing:.6px;
-  padding:4px 0;text-align:center;text-transform:uppercase;
-  display:none;
+  font-size:10px;font-weight:800;letter-spacing:.7px;text-transform:uppercase;
+  color:var(--teal);display:none;white-space:nowrap;
 }
 .lc-card.active .lc-now-badge{display:block}
-.lc-body{padding:10px 12px 14px}
-.lc-title{font-size:13px;font-weight:600;line-height:1.4;color:var(--white);margin-bottom:5px;
-  display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical;overflow:hidden}
-.lc-dur{font-size:11px;color:var(--muted)}
+/* completed checkmark pill */
+.lc-done-badge{
+  font-size:10px;font-weight:800;letter-spacing:.5px;text-transform:uppercase;
+  color:var(--green);display:none;
+}
+.lc-card.completed .lc-done-badge{display:block}
 
 /* ── FADE IN ── */
 @keyframes fadeInPage{from{opacity:0;transform:translateY(8px)}to{opacity:1;transform:none}}
@@ -619,25 +625,18 @@ function renderLessonCards(){
     var isActive = idx === currentIdx;
     var isDone = lesson.done;
     card.className = 'lc-card' + (isActive ? ' active' : '') + (isDone ? ' completed' : '');
+    var num = String(idx + 1).padStart(2, '0');
     card.innerHTML =
-      '<div class="lc-thumb">' +
-        '<img src="'+imgUrl(courseId,480,270)+'" alt="'+lesson.title+'" loading="lazy">' +
-        '<div class="lc-num">' + (isDone
-          ? '<svg viewBox="0 0 24 24" width="13" height="13"><polyline points="20 6 9 17 4 12" stroke="#fff" stroke-width="2.5" fill="none" stroke-linecap="round"/></svg>'
-          : (idx+1)
-        ) + '</div>' +
-        '<div class="lc-now-badge">▶ Now Playing</div>' +
-      '</div>' +
-      '<div class="lc-body">' +
-        '<div class="lc-title">'+lesson.title+'</div>' +
-        '<div class="lc-dur">'+lesson.dur+'</div>' +
+      '<div class="lc-chap-num">' + num + '</div>' +
+      '<div class="lc-title">' + lesson.title + '</div>' +
+      '<div class="lc-footer">' +
+        '<span class="lc-dur">' + lesson.dur + '</span>' +
+        '<span class="lc-now-badge">▶ Now playing</span>' +
+        '<span class="lc-done-badge">✓ Done</span>' +
       '</div>';
     card.addEventListener('click', function(){ loadLesson(idx); });
     grid.appendChild(card);
   });
-  // Scroll active card into view
-  var activeCard = grid.querySelector('.active');
-  if(activeCard) setTimeout(function(){ activeCard.scrollIntoView({block:'nearest',behavior:'smooth'}); }, 200);
 }
 
 function renderRec(){
