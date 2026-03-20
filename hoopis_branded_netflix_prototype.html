@@ -389,34 +389,46 @@ body{background:var(--navy);color:var(--white);font-family:'Helvetica Neue',Aria
 .stars{color:var(--gold);font-size:14px;letter-spacing:1px}
 
 /* ============ BROWSE BY TOPIC ============ */
-.topic-grid{
-  display:grid;
-  grid-template-columns:repeat(4,1fr);
-  gap:14px;
+.topic-carousel-wrap{position:relative}
+.topic-carousel-btn{
+  position:absolute;top:50%;transform:translateY(-50%);
+  width:36px;height:36px;border-radius:50%;
+  background:rgba(255,255,255,.1);border:1px solid var(--border);
+  color:var(--white);cursor:pointer;
+  display:flex;align-items:center;justify-content:center;
+  z-index:2;font-size:16px;line-height:1;
+  transition:background 0.2s,transform 0.15s;
 }
+.topic-carousel-btn:hover{background:rgba(255,255,255,.22);transform:translateY(-50%) scale(1.08)}
+.topic-carousel-btn.prev{left:-20px}
+.topic-carousel-btn.next{right:-20px}
+.topic-grid{
+  display:flex;
+  gap:14px;
+  overflow-x:auto;
+  scroll-snap-type:x mandatory;
+  scrollbar-width:none;-ms-overflow-style:none;
+  scroll-behavior:smooth;
+}
+.topic-grid::-webkit-scrollbar{display:none}
 .topic-card{
-  background:linear-gradient(135deg,#0a2a2a 0%,#071e1e 60%,#050e14 100%);
-  border:1px solid var(--border);
+  flex:0 0 calc((100% - 42px) / 4);
+  scroll-snap-align:start;
+  border:1px solid rgba(255,255,255,.08);
   border-radius:12px;
   padding:22px 20px 20px;
   cursor:pointer;
-  transition:border-color 0.2s,background 0.2s,transform 0.18s;
+  transition:border-color 0.2s,transform 0.18s,filter 0.18s;
   position:relative;
   overflow:hidden;
 }
-.topic-card::before{
-  content:'';
-  position:absolute;inset:0;
-  background:radial-gradient(ellipse at top left,rgba(0,200,212,0.09) 0%,transparent 65%);
-  pointer-events:none;
-}
 .topic-card:hover{
-  border-color:var(--teal3);
   transform:translateY(-3px);
-  background:linear-gradient(135deg,#0e3434 0%,#092828 60%,#061318 100%);
+  filter:brightness(1.18);
+  border-color:rgba(255,255,255,.22);
 }
-.topic-card-name{font-size:16px;font-weight:700;color:var(--white);line-height:1.25;margin-bottom:8px}
-.topic-card-count{font-size:13px;color:var(--muted)}
+.topic-card-name{font-size:16px;font-weight:700;color:#fff;line-height:1.25;margin-bottom:8px}
+.topic-card-count{font-size:13px;color:rgba(255,255,255,.6)}
 
 /* ============ AI CHAT WIDGET ============ */
 /* ── FAB ── */
@@ -578,15 +590,19 @@ body{background:var(--navy);color:var(--white);font-family:'Helvetica Neue',Aria
 </div>
 <div class="section">
   <div class="section-title"><span class="teal-line"></span>Browse by Topic <span class="see-all">View all →</span></div>
-  <div class="topic-grid">
-    <div class="topic-card"><div class="topic-card-name">Wealth Management</div><div class="topic-card-count">24 courses</div></div>
-    <div class="topic-card"><div class="topic-card-name">Tax Planning</div><div class="topic-card-count">18 courses</div></div>
-    <div class="topic-card"><div class="topic-card-name">Insurance</div><div class="topic-card-count">15 courses</div></div>
-    <div class="topic-card"><div class="topic-card-name">Retirement</div><div class="topic-card-count">21 courses</div></div>
-    <div class="topic-card"><div class="topic-card-name">Estate Planning</div><div class="topic-card-count">12 courses</div></div>
-    <div class="topic-card"><div class="topic-card-name">Communication</div><div class="topic-card-count">16 courses</div></div>
-    <div class="topic-card"><div class="topic-card-name">Compliance</div><div class="topic-card-count">9 courses</div></div>
-    <div class="topic-card"><div class="topic-card-name">Sales</div><div class="topic-card-count">14 courses</div></div>
+  <div class="topic-carousel-wrap">
+    <button class="topic-carousel-btn prev" id="topicPrev">&#8592;</button>
+    <div class="topic-grid" id="topicGrid">
+      <div class="topic-card" style="background:#0b5e7f"><div class="topic-card-name">Wealth Management</div><div class="topic-card-count">24 courses</div></div>
+      <div class="topic-card" style="background:#1e3d72"><div class="topic-card-name">Tax Planning</div><div class="topic-card-count">18 courses</div></div>
+      <div class="topic-card" style="background:#3d1a72"><div class="topic-card-name">Insurance</div><div class="topic-card-count">15 courses</div></div>
+      <div class="topic-card" style="background:#7a1a48"><div class="topic-card-name">Retirement</div><div class="topic-card-count">21 courses</div></div>
+      <div class="topic-card" style="background:#7a4a10"><div class="topic-card-name">Estate Planning</div><div class="topic-card-count">12 courses</div></div>
+      <div class="topic-card" style="background:#145c38"><div class="topic-card-name">Communication</div><div class="topic-card-count">16 courses</div></div>
+      <div class="topic-card" style="background:#1a3a5c"><div class="topic-card-name">Compliance</div><div class="topic-card-count">9 courses</div></div>
+      <div class="topic-card" style="background:#6e1a1a"><div class="topic-card-name">Sales</div><div class="topic-card-count">14 courses</div></div>
+    </div>
+    <button class="topic-carousel-btn next" id="topicNext">&#8594;</button>
   </div>
 </div>
 
@@ -1193,6 +1209,22 @@ renderRail('insuranceSeries',[6,7,2,4]);
       ticking = true;
     }
   }, { passive: true });
+})();
+
+/* ── Topic carousel ── */
+(function(){
+  var grid = document.getElementById('topicGrid');
+  var prev = document.getElementById('topicPrev');
+  var next = document.getElementById('topicNext');
+  if(!grid||!prev||!next) return;
+  function scrollBy4(dir){
+    var card = grid.querySelector('.topic-card');
+    if(!card) return;
+    var step = (card.offsetWidth + 14) * 4;
+    grid.scrollBy({left: dir * step, behavior:'smooth'});
+  }
+  prev.addEventListener('click', function(){ scrollBy4(-1); });
+  next.addEventListener('click', function(){ scrollBy4(1); });
 })();
 </script>
 
