@@ -590,7 +590,7 @@ function renderCard(id, mode){
   var c = COURSES.find(function(x){ return x.id === id; });
   if(!c) return '';
 
-  var playerUrl = 'course-player.html?id=' + c.pid + '&lesson=0';
+  var playerUrl = '#';
   var isContinue = mode === 'continue';
   var isTrending = mode === 'trending';
 
@@ -710,7 +710,7 @@ function buildDropdown(query){
 
   searchDropdown.querySelectorAll('.search-item').forEach(function(item){
     item.addEventListener('click', function(){
-      window.location.href = 'course-player.html?id=' + item.dataset.pid + '&lesson=0';
+      searchDropdown.classList.remove('open');
     });
   });
 }

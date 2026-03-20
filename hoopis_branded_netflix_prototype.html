@@ -967,7 +967,7 @@ function renderRail(id,ids){
     </div>
     <div class="card-expand">
       <div class="card-exp-btns">
-        <button class="btn-exp-play" onclick="event.stopPropagation();window.location.href='course-player.html?id=${cid}&lesson=0'">▶</button>
+        <button class="btn-exp-play" onclick="event.stopPropagation();openCourse(${cid})">▶</button>
         <button class="btn-exp-icon" title="Add to My List" onclick="event.stopPropagation()">+</button>
       </div>
       <div class="card-exp-desc">${c.desc}</div>
@@ -997,12 +997,12 @@ function openCourse(id,resume=false){
   const btns=document.getElementById('ov-btns');
   if(c.started){
     btns.innerHTML=
-      `<button class="btn-ov-play" onclick="window.location.href='course-player.html?id=${id}&lesson=${c.curChap}'">▶ Resume — Chapter ${c.curChap+1}</button>
-       <button class="btn-ov-resume" onclick="window.location.href='course-player.html?id=${id}&lesson=0'">↺ Start Over</button>
+      `<button class="btn-ov-play">▶ Resume — Chapter ${c.curChap+1}</button>
+       <button class="btn-ov-resume">↺ Start Over</button>
        <button class="btn-ov-save">+ My List</button>`;
   } else {
     btns.innerHTML=
-      `<button class="btn-ov-play" onclick="window.location.href='course-player.html?id=${id}&lesson=0'">▶ Start Learning</button>
+      `<button class="btn-ov-play">▶ Start Learning</button>
        <button class="btn-ov-save">+ My List</button>`;
   }
   const prog=document.getElementById('ov-prog');
@@ -1022,7 +1022,7 @@ function openCourse(id,resume=false){
     if(ch.done){ iconClass='done'; iconContent='✓'; }
     else if(ch.cur){ iconClass='cur'; iconContent=String(i+1); }
     else { iconClass='pending'; iconContent=String(i+1); }
-    return `<div class="chapter-item${isActive?' active-row':''}" onclick="window.location.href='course-player.html?id=${id}&lesson=${i}'">
+    return `<div class="chapter-item${isActive?' active-row':''}">
       <div class="ch-icon ${iconClass}">${iconContent}</div>
       <div class="ch-body"><div class="ch-name${ch.done?' muted-name':''}">${ch.n}</div></div>
       <div class="ch-dur-right">${ch.d}</div>
@@ -1120,7 +1120,7 @@ renderRail('insuranceSeries',[6,7,2,4]);
           </div>
           <div class="hero-desc">${c.desc}</div>
           <div class="hero-btns">
-            <button class="btn-play" onclick="window.location.href='course-player.html?id=${cid}&lesson=0'">&#9654; Play Now</button>
+            <button class="btn-play" onclick="openCourse(${cid})">&#9654; Play Now</button>
             <button class="btn-more" onclick="openCourse(${cid})">&#9432; More Info</button>
           </div>
         </div>
@@ -1590,9 +1590,7 @@ renderRail('insuranceSeries',[6,7,2,4]);
   }
 
   function goToCourse(id){
-    var c = C[id];
-    var lessonIdx = c.chapters ? 0 : 0;
-    window.location.href = 'course-player.html?id='+id+'&lesson=0';
+    openCourse(id);
   }
 
   function filterCourses(q){
