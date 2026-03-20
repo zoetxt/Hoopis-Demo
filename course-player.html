@@ -188,21 +188,21 @@ html,body{height:100%;background:var(--bg);color:var(--white);font-family:'Inter
 .ci-tag{padding:4px 12px;border-radius:20px;font-size:11px;font-weight:600;background:var(--teal2);color:var(--teal);border:1px solid var(--teal3)}
 
 /* ── LAYOUT: 2-col from the top ── */
-/* 24px side padding each side; right col fixed 260px                     */
+/* 24px side padding each side; right col fixed 286px                     */
 /* on 1920×1080: player ≈ 1632px wide → 918px tall (85vh)                */
 .layout{
   padding-top:68px;
   padding-left:24px;padding-right:24px;
-  display:grid;grid-template-columns:1fr 260px;
+  display:grid;grid-template-columns:1fr 286px;
   align-items:start;
 }
 
 /* ── RIGHT COLUMN ── */
-/* height = (100vw - 48px - 260px) × 9/16 = exact video height           */
+/* height = (100vw - 48px - 286px) × 9/16 = exact video height           */
 .right-col{
   border-left:1px solid var(--border);
   background:var(--surface);
-  height:calc((100vw - 48px - 260px) * 0.5625);
+  height:calc((100vw - 48px - 286px) * 0.5625);
   overflow-y:auto;
   scrollbar-width:thin;scrollbar-color:var(--border) transparent;
   display:flex;flex-direction:column;
