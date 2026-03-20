@@ -193,50 +193,69 @@ html,body{height:100%;background:var(--bg);color:var(--white);font-family:'Inter
 .ci-tags{display:flex;gap:7px;flex-wrap:wrap;padding-bottom:20px;border-bottom:1px solid var(--border);margin-bottom:0}
 .ci-tag{padding:4px 12px;border-radius:20px;font-size:11px;font-weight:600;background:var(--teal2);color:var(--teal);border:1px solid var(--teal3)}
 
-/* ── RECOMMENDED ── */
+/* ── BELOW PLAYER: 2-col grid ── */
+.below-player{
+  display:grid;grid-template-columns:1fr 360px;
+  align-items:start;
+}
 
-/* ── LESSON CARDS GRID ── */
-.lesson-cards-section{padding:32px 0 8px}
-.lesson-cards-hdr{display:flex;align-items:baseline;justify-content:space-between;margin-bottom:18px}
-.lesson-cards-title{font-size:22px;font-weight:700}
-.lesson-cards-meta{font-size:14px;color:var(--muted)}
-.lesson-cards-grid{display:grid;grid-template-columns:repeat(5,1fr);gap:14px}
+/* ── COURSE INFO (left col) ── */
+.course-info{padding:24px 28px 24px 0}
+
+/* ── LESSON SIDEBAR (right col) ── */
+.lesson-sidebar{
+  border-left:1px solid var(--border);
+  background:var(--surface);
+  /* exact video height: container is 80vw, video is 56.25% of that = 45vw */
+  height:45vw;
+  overflow-y:auto;
+  scrollbar-width:thin;scrollbar-color:var(--border) transparent;
+  display:flex;flex-direction:column;
+}
+.lesson-sidebar::-webkit-scrollbar{width:4px}
+.lesson-sidebar::-webkit-scrollbar-thumb{background:var(--border);border-radius:2px}
+.lesson-sidebar-hdr{
+  padding:16px 16px 12px;border-bottom:1px solid var(--border);flex-shrink:0;
+  display:flex;align-items:baseline;justify-content:space-between;
+  position:sticky;top:0;background:var(--surface);z-index:2;
+}
+.lesson-sidebar-title{font-size:16px;font-weight:700}
+.lesson-sidebar-meta{font-size:12px;color:var(--muted)}
+.lesson-cards-grid{display:flex;flex-direction:column;padding:8px 10px;gap:8px;flex:1}
+
+/* ── LESSON CARDS ── */
 .lc-card{
-  background:var(--surface);border:2px solid var(--border);border-radius:12px;
-  cursor:pointer;padding:20px 18px 16px;min-height:160px;
+  background:var(--surface2);border:1.5px solid var(--border);border-radius:10px;
+  cursor:pointer;padding:14px 14px 12px;min-height:110px;
   display:flex;flex-direction:column;justify-content:space-between;
-  transition:border-color .2s,transform .18s,box-shadow .18s,background .2s;
+  transition:border-color .2s,background .2s,box-shadow .18s;
+  flex-shrink:0;
 }
-.lc-card:hover{border-color:var(--teal);transform:translateY(-3px);box-shadow:0 10px 32px rgba(0,0,0,.5);background:var(--surface2)}
-.lc-card.active{border-color:var(--teal);background:rgba(0,200,212,.06);box-shadow:0 0 0 1px var(--teal)}
+.lc-card:hover{border-color:var(--teal);background:rgba(0,200,212,.04);box-shadow:0 4px 16px rgba(0,0,0,.4)}
+.lc-card.active{border-color:var(--teal);background:rgba(0,200,212,.08);box-shadow:0 0 0 1px var(--teal)}
 .lc-card.completed{border-color:var(--green);background:rgba(34,197,94,.04)}
-/* large ghost chapter number at the top */
 .lc-chap-num{
-  font-size:36px;font-weight:900;line-height:1;letter-spacing:-1px;
-  color:rgba(255,255,255,.1);margin-bottom:10px;font-variant-numeric:tabular-nums;
+  font-size:24px;font-weight:900;line-height:1;letter-spacing:-0.5px;
+  color:rgba(255,255,255,.1);margin-bottom:8px;font-variant-numeric:tabular-nums;
 }
-.lc-card.active   .lc-chap-num{color:rgba(0,200,212,.35)}
-.lc-card.completed .lc-chap-num{color:rgba(34,197,94,.35)}
-/* title */
+.lc-card.active   .lc-chap-num{color:rgba(0,200,212,.4)}
+.lc-card.completed .lc-chap-num{color:rgba(34,197,94,.4)}
 .lc-title{
-  font-size:14px;font-weight:600;line-height:1.45;color:var(--white);flex:1;
-  display:-webkit-box;-webkit-line-clamp:3;-webkit-box-orient:vertical;overflow:hidden;
-  margin-bottom:12px;
+  font-size:13px;font-weight:600;line-height:1.4;color:var(--white);flex:1;
+  display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical;overflow:hidden;
+  margin-bottom:10px;
 }
-/* footer row: duration left, badge right */
-.lc-footer{display:flex;align-items:center;justify-content:space-between;gap:6px;margin-top:auto}
-.lc-dur{font-size:12px;color:var(--muted);font-weight:500}
-.lc-now-badge{
-  font-size:10px;font-weight:800;letter-spacing:.7px;text-transform:uppercase;
-  color:var(--teal);display:none;white-space:nowrap;
-}
+.lc-footer{display:flex;align-items:center;justify-content:space-between;gap:6px}
+.lc-dur{font-size:11px;color:var(--muted);font-weight:500}
+.lc-now-badge{font-size:10px;font-weight:800;letter-spacing:.7px;text-transform:uppercase;color:var(--teal);display:none;white-space:nowrap}
 .lc-card.active .lc-now-badge{display:block}
-/* completed checkmark pill */
-.lc-done-badge{
-  font-size:10px;font-weight:800;letter-spacing:.5px;text-transform:uppercase;
-  color:var(--green);display:none;
-}
+.lc-done-badge{font-size:10px;font-weight:800;letter-spacing:.5px;text-transform:uppercase;color:var(--green);display:none}
 .lc-card.completed .lc-done-badge{display:block}
+
+@media(max-width:900px){
+  .below-player{grid-template-columns:1fr}
+  .lesson-sidebar{height:auto;max-height:400px;border-left:none;border-top:1px solid var(--border)}
+}
 
 /* ── FADE IN ── */
 @keyframes fadeInPage{from{opacity:0;transform:translateY(8px)}to{opacity:1;transform:none}}
@@ -244,13 +263,9 @@ body{animation:fadeInPage .4s ease both}
 
 /* ── RESPONSIVE ── */
 @media(max-width:900px){
-  .lesson-cards-grid{grid-template-columns:repeat(3,1fr)}
   .ctrl-center{display:none}
   .vol-wrap{display:none}
   .topbar-title{font-size:12px;max-width:180px}
-}
-@media(max-width:600px){
-  .lesson-cards-grid{grid-template-columns:repeat(2,1fr)}
 }
 </style>
 </head>
@@ -372,42 +387,45 @@ body{animation:fadeInPage .4s ease both}
       </div><!-- /player-container -->
     </div><!-- /player-wrap -->
 
-    <!-- COURSE INFO -->
-    <div class="course-info" id="courseInfo">
-      <div class="ci-row">
-        <div class="ci-main">
-          <div class="ci-title" id="ciTitle"></div>
-          <div class="ci-instructor">
-            <div class="ci-avatar" id="ciAvatar"></div>
-            <div>
-              <div class="ci-expert-name" id="ciExpertName"></div>
-              <div class="ci-expert-role" id="ciExpertRole"></div>
+    <!-- BELOW PLAYER: course info (left) + lesson sidebar (right) -->
+    <div class="below-player">
+
+      <!-- LEFT: course metadata -->
+      <div class="course-info" id="courseInfo">
+        <div class="ci-row">
+          <div class="ci-main">
+            <div class="ci-title" id="ciTitle"></div>
+            <div class="ci-instructor">
+              <div class="ci-avatar" id="ciAvatar"></div>
+              <div>
+                <div class="ci-expert-name" id="ciExpertName"></div>
+                <div class="ci-expert-role" id="ciExpertRole"></div>
+              </div>
             </div>
+            <div class="ci-stats">
+              <div class="ci-stat"><span class="ci-stat-val" id="ciLessons"></span> lessons</div>
+            </div>
+            <div class="ci-prog-wrap">
+              <div class="ci-prog-label"><span>Course Progress</span><span id="ciProgPct"></span></div>
+              <div class="ci-prog-track"><div class="ci-prog-fill" id="ciProgFill"></div></div>
+            </div>
+            <div class="ci-desc" id="ciDesc"></div>
+            <button class="ci-desc-toggle" id="ciDescToggle">Show more ↓</button>
+            <div class="ci-tags" id="ciTags"></div>
           </div>
-          <div class="ci-stats">
-            <div class="ci-stat"><span class="ci-stat-val" id="ciLessons"></span> lessons</div>
-          </div>
-          <div class="ci-prog-wrap">
-            <div class="ci-prog-label"><span>Course Progress</span><span id="ciProgPct"></span></div>
-            <div class="ci-prog-track"><div class="ci-prog-fill" id="ciProgFill"></div></div>
-          </div>
-          <div class="ci-desc" id="ciDesc"></div>
-          <button class="ci-desc-toggle" id="ciDescToggle">Show more ↓</button>
-          <div class="ci-tags" id="ciTags"></div>
         </div>
       </div>
-    </div>
 
-    <!-- LESSON CARDS GRID -->
-    <div class="lesson-cards-section">
-      <div class="lesson-cards-hdr">
-        <div class="lesson-cards-title">Course Content</div>
-        <div class="lesson-cards-meta" id="lessonCardsMeta"></div>
-      </div>
-      <div class="lesson-cards-grid" id="lessonCardsGrid"></div>
-    </div>
+      <!-- RIGHT: scrollable lesson cards -->
+      <aside class="lesson-sidebar">
+        <div class="lesson-sidebar-hdr">
+          <span class="lesson-sidebar-title">Course Content</span>
+          <span class="lesson-sidebar-meta" id="lessonCardsMeta"></span>
+        </div>
+        <div class="lesson-cards-grid" id="lessonCardsGrid"></div>
+      </aside>
 
-    <!-- RECOMMENDED -->
+    </div><!-- /below-player -->
 
 </div><!-- /layout -->
 
