@@ -607,14 +607,14 @@ body{background:var(--navy);color:var(--white);font-family:'Helvetica Neue',Aria
   <div class="topic-carousel-wrap">
     <button class="topic-carousel-btn prev" id="topicPrev">&#8592;</button>
     <div class="topic-grid" id="topicGrid">
-      <div class="topic-card" style="background:#0b5e7f"><div class="topic-card-name">Wealth Management</div><div class="topic-card-count">24 courses</div></div>
-      <div class="topic-card" style="background:#1e3d72"><div class="topic-card-name">Tax Planning</div><div class="topic-card-count">18 courses</div></div>
-      <div class="topic-card" style="background:#3d1a72"><div class="topic-card-name">Insurance</div><div class="topic-card-count">15 courses</div></div>
-      <div class="topic-card" style="background:#7a1a48"><div class="topic-card-name">Retirement</div><div class="topic-card-count">21 courses</div></div>
-      <div class="topic-card" style="background:#7a4a10"><div class="topic-card-name">Estate Planning</div><div class="topic-card-count">12 courses</div></div>
-      <div class="topic-card" style="background:#145c38"><div class="topic-card-name">Communication</div><div class="topic-card-count">16 courses</div></div>
-      <div class="topic-card" style="background:#1a3a5c"><div class="topic-card-name">Compliance</div><div class="topic-card-count">9 courses</div></div>
-      <div class="topic-card" style="background:#6e1a1a"><div class="topic-card-name">Sales</div><div class="topic-card-count">14 courses</div></div>
+      <div class="topic-card" style="background:#1565C0"><div class="topic-card-name">Wealth Management</div><div class="topic-card-count">24 courses</div></div>
+      <div class="topic-card" style="background:#283593"><div class="topic-card-name">Tax Planning</div><div class="topic-card-count">18 courses</div></div>
+      <div class="topic-card" style="background:#4527A0"><div class="topic-card-name">Insurance</div><div class="topic-card-count">15 courses</div></div>
+      <div class="topic-card" style="background:#880E4F"><div class="topic-card-name">Retirement</div><div class="topic-card-count">21 courses</div></div>
+      <div class="topic-card" style="background:#BF360C"><div class="topic-card-name">Estate Planning</div><div class="topic-card-count">12 courses</div></div>
+      <div class="topic-card" style="background:#2E7D32"><div class="topic-card-name">Communication</div><div class="topic-card-count">16 courses</div></div>
+      <div class="topic-card" style="background:#00695C"><div class="topic-card-name">Compliance</div><div class="topic-card-count">9 courses</div></div>
+      <div class="topic-card" style="background:#C62828"><div class="topic-card-name">Sales</div><div class="topic-card-count">14 courses</div></div>
     </div>
     <button class="topic-carousel-btn next" id="topicNext">&#8594;</button>
   </div>
@@ -671,6 +671,13 @@ const IMGS = {
   5: 'https://images.unsplash.com/photo-1484480974693-6ca0a78fb36b',
   6: 'https://images.unsplash.com/photo-1568992687947-868a62a9f521',
   7: 'https://images.unsplash.com/photo-1573497491208-6b1acb260507',
+};
+const VIDEOS = {
+  0: 'https://videos.pexels.com/video-files/3209301/3209301-hd_1920_1080_25fps.mp4',
+  1: 'https://videos.pexels.com/video-files/3126361/3126361-hd_1920_1080_25fps.mp4',
+  2: 'https://videos.pexels.com/video-files/7735499/7735499-hd_1920_1080_25fps.mp4',
+  3: 'https://videos.pexels.com/video-files/5923409/5923409-hd_1920_1080_30fps.mp4',
+  5: 'https://videos.pexels.com/video-files/6774635/6774635-hd_1920_1080_30fps.mp4',
 };
 function imgUrl(id, w, h){ return `${IMGS[id]}?w=${w}&h=${h}&q=80&fit=crop`; }
 
@@ -1091,8 +1098,11 @@ renderRail('insuranceSeries',[6,7,2,4]);
 
     const stars = '★'.repeat(Math.round(c.rating)) + '☆'.repeat(5 - Math.round(c.rating));
 
+    const heroBg = VIDEOS[cid]
+      ? `<video class="hero-bg" autoplay muted loop playsinline preload="auto"><source src="${VIDEOS[cid]}" type="video/mp4"></video>`
+      : `<img class="hero-bg" src="${imgUrl(cid,1400,820)}" alt="${c.title}" loading="${i===0?'eager':'lazy'}">`;
     slide.innerHTML = `
-      <img class="hero-bg" src="${imgUrl(cid,1400,820)}" alt="${c.title}" loading="${i===0?'eager':'lazy'}">
+      ${heroBg}
       <div class="hero-overlay"></div>
       <div class="hero-bottom"></div>
       <div class="hero-content">
