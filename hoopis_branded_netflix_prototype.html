@@ -513,6 +513,11 @@ body{background:var(--navy);color:var(--white);font-family:'Helvetica Neue',Aria
 .chat-send{width:36px;height:36px;border-radius:10px;background:var(--teal);color:var(--navy);border:none;cursor:pointer;display:flex;align-items:center;justify-content:center;transition:transform 0.1s,opacity 0.15s;flex-shrink:0}
 .chat-send:hover{transform:scale(1.08)}.chat-send:disabled{opacity:0.4;cursor:not-allowed;transform:none}
 @media(max-width:480px){.chat-panel{bottom:0;right:0;left:0;width:100%;border-radius:16px 16px 0 0;height:90vh}}
+/* ── FOOTER ── */
+.page-footer{border-top:1px solid var(--border);padding:24px 0;margin-top:8px}
+.footer-inner{max-width:80vw;margin:0 auto;display:flex;align-items:center;justify-content:space-between}
+.footer-copy{font-size:15px;color:var(--muted)}
+.footer-logo{height:28px;filter:brightness(0) invert(1);opacity:.4}
 </style>
 
 <div style="background:var(--navy);min-height:100vh">
@@ -1631,5 +1636,13 @@ renderRail('insuranceSeries',[6,7,2,4]);
   });
 })();
 </script>
+
+<footer class="page-footer">
+  <div class="footer-inner">
+    <img class="footer-logo" src="hoopis-logo.svg" alt="Hoopis Performance Network">
+    <span class="footer-copy">&copy; 2025 Hoopis Performance Network. All rights reserved.</span>
+  </div>
+</footer>
+
 </body>
 </html>
