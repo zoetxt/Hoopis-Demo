@@ -5,7 +5,7 @@
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <title>Hoopis Performance Network</title>
 <style>
-/* ── TOKENS ───────────────────────────────────────────────── */
+/* ── TOKENS ────────────────────────────────────────────── */
 :root{
   --bg:        #0c0f1a;
   --navy:      #060d1f;
@@ -37,7 +37,7 @@ body{
   overflow-x:hidden;
 }
 
-/* ── CONTAINER (80 vw, centered) ──────────────────────────── */
+/* ── CONTAINER (80 vw, centered) ────────────────────────── */
 .wrap{width:80vw;margin:0 auto}
 .page-wrap{max-width:80vw;margin:0 auto}
 
@@ -105,7 +105,7 @@ body{
 .user-greet strong{color:var(--white);font-size:20px}
 .avatar{width:36px;height:36px;border-radius:12px;background:linear-gradient(135deg,var(--teal),#0088cc);display:flex;align-items:center;justify-content:center;font-size:14px;font-weight:800;cursor:pointer;color:var(--white);flex-shrink:0}
 
-/* ── HERO BANNER ──────────────────────────────────────────── */
+/* ── HERO BANNER ───────────────────────────────────────────── */
 .hero{
   position:relative;
   height:220px;
@@ -162,7 +162,7 @@ body{
 }
 .hero-cta:hover{transform:scale(1.04);box-shadow:0 8px 32px rgba(255,255,255,.2)}
 
-/* ── SHELVES ──────────────────────────────────────────────── */
+/* ── SHELVES ───────────────────────────────────────────────────── */
 .shelf{margin-bottom:44px}
 .shelf-header{
   display:flex;align-items:baseline;justify-content:space-between;
@@ -183,14 +183,14 @@ body{
 }
 .shelf-see-all:hover{opacity:1}
 
-/* ── COURSE GRID ──────────────────────────────────────────── */
+/* ── COURSE GRID ──────────────────────────────────────────────────── */
 .course-grid{
   display:grid;
   grid-template-columns:repeat(3,1fr);
   gap:24px;
 }
 
-/* ── COURSE CARD ──────────────────────────────────────────── */
+/* ── COURSE CARD ──────────────────────────────────────────────────── */
 .card{
   background:var(--surface);
   border:1.5px solid var(--border);
@@ -335,7 +335,7 @@ body{
 }
 .card-prog-fill{height:100%;background:var(--green);border-radius:4px}
 
-/* ── FOOTER STRIP ─────────────────────────────────────────── */
+/* ── FOOTER STRIP ────────────────────────────────────────────────── */
 .page-footer{
   border-top:1px solid var(--border);
   padding:24px 0;
@@ -345,12 +345,12 @@ body{
 .footer-copy{font-size:15px;color:var(--muted)}
 .footer-logo{height:28px;filter:brightness(0) invert(1);opacity:.4}
 
-/* ── SCROLLBAR ────────────────────────────────────────────── */
+/* ── SCROLLBAR ────────────────────────────────────────────────────── */
 ::-webkit-scrollbar{width:6px;height:6px}
 ::-webkit-scrollbar-track{background:transparent}
 ::-webkit-scrollbar-thumb{background:var(--border2);border-radius:4px}
 
-/* ── COURSE PREVIEW OVERLAY ──────────────────────────────── */
+/* ── COURSE PREVIEW OVERLAY ────────────────────────────────────────────── */
 .overlay-bg{position:fixed;inset:0;background:rgba(0,0,0,0.88);z-index:100;display:flex;align-items:flex-start;justify-content:center;overflow-y:auto;padding:32px 20px}
 .overlay-box{background:var(--navy2);border-radius:16px;width:100%;max-width:min(92vw,1344px);max-height:88vh;display:flex;flex-direction:column;overflow:hidden;position:relative;margin:auto;border:1px solid var(--border2)}
 .overlay-hero{flex-shrink:0;position:relative;height:340px;overflow:hidden}
@@ -409,11 +409,45 @@ body{
 .ch-name{font-size:15px;font-weight:600;color:var(--white);line-height:1.35}
 .ch-name.muted-name{color:var(--muted);font-weight:400}
 .ch-dur-right{font-size:13px;color:var(--muted);flex-shrink:0;padding-left:12px}
+
+/* ── CATALOG LAYOUT ────────────────────────────────────────────────────────────────── */
+.catalog-layout{display:grid;grid-template-columns:240px 1fr;gap:32px;align-items:start;margin-top:32px;margin-bottom:32px}
+.cat-sidebar{position:sticky;top:96px;max-height:calc(100vh - 120px);overflow-y:auto;scrollbar-width:thin;scrollbar-color:var(--border) transparent;padding-right:4px;position:relative}
+.cat-sidebar::-webkit-scrollbar{width:4px}
+.cat-sidebar::-webkit-scrollbar-thumb{background:var(--border);border-radius:4px}
+.cat-sidebar-hdr{font-size:16px;font-weight:700;color:var(--white);margin-bottom:12px;padding-bottom:12px;border-bottom:1px solid var(--border)}
+.cat-all-pill{display:flex;align-items:center;justify-content:space-between;padding:10px 12px;border-radius:8px;cursor:pointer;font-size:15px;color:var(--white);background:rgba(255,255,255,.04);margin-bottom:16px;border:1px solid transparent;transition:background .15s}
+.cat-all-pill:hover{background:rgba(255,255,255,.08)}
+.cat-all-pill.active{border-left:3px solid var(--teal);background:rgba(0,200,212,.08);padding-left:9px}
+.cat-group{margin-bottom:16px}
+.cat-group-hdr{display:flex;align-items:center;justify-content:space-between;font-size:12px;font-weight:700;letter-spacing:.8px;text-transform:uppercase;color:var(--muted);padding:8px 4px;cursor:pointer;user-select:none}
+.cat-group-hdr:hover{color:var(--white)}
+.cat-chevron{transition:transform .2s;font-style:normal;font-size:10px}
+.cat-group.collapsed .cat-chevron{transform:rotate(-90deg)}
+.cat-group.collapsed .cat-items{display:none}
+.cat-items{}
+.cat-item{display:flex;align-items:center;justify-content:space-between;padding:10px 12px;border-radius:8px;cursor:pointer;font-size:15px;color:rgba(255,255,255,.75);transition:background .15s;border-left:3px solid transparent}
+.cat-item:hover{background:rgba(255,255,255,.05);color:var(--white)}
+.cat-item.active{border-left-color:var(--teal);background:rgba(0,200,212,.08);padding-left:9px;color:var(--white)}
+.cat-count{font-size:12px;color:var(--muted);background:rgba(255,255,255,.07);padding:2px 8px;border-radius:10px;flex-shrink:0}
+.cat-sidebar-fade{position:sticky;bottom:0;height:48px;background:linear-gradient(to bottom,transparent,var(--navy));pointer-events:none;margin-top:-48px}
+/* Grid */
+.cat-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:20px}
+.catalog-results-hdr{font-size:15px;color:var(--muted);margin-bottom:16px;min-height:20px}
+/* Paginator */
+.paginator{display:flex;align-items:center;justify-content:center;gap:8px;padding:32px 0 8px}
+.page-btn{min-width:40px;height:40px;padding:0 8px;display:flex;align-items:center;justify-content:center;border-radius:8px;cursor:pointer;font-size:15px;font-weight:600;border:1px solid var(--border);background:transparent;color:var(--white);transition:background .15s,border-color .15s;font-family:inherit}
+.page-btn:hover:not([disabled]):not(.page-active){background:rgba(255,255,255,.07);border-color:var(--border2)}
+.page-btn.page-active{background:var(--teal);border-color:var(--teal);color:#060d1f}
+.page-btn[disabled]{opacity:.3;cursor:not-allowed}
+.page-ellipsis{color:var(--muted);padding:0 4px;font-size:15px;line-height:40px}
+/* exp-initials */
+.exp-initials{width:40px;height:40px;border-radius:50%;background:linear-gradient(135deg,var(--teal),#0088cc);display:flex;align-items:center;justify-content:center;font-size:14px;font-weight:800;color:var(--white);flex-shrink:0}
 </style>
 </head>
 <body>
 
-<!-- ══ HEADER ══════════════════════════════════════════════ -->
+<!-- ══ HEADER ════════════════════════════════════════════════════════════ -->
 <div class="topbar">
 <div class="page-wrap"><div class="topbar-inner">
   <div class="topbar-left">
@@ -436,11 +470,11 @@ body{
   </div>
 </div></div></div>
 
-<!-- ══ PAGE BODY ════════════════════════════════════════════ -->
+<!-- ══ PAGE BODY ═══════════════════════════════════════════════════════════════════════════════════ -->
 <main style="padding-top:80px">
 <div class="wrap">
 
-  <!-- HERO ──────────────────────────────────────────────── -->
+  <!-- HERO ────────────────────────────────────────────────────────────────────── -->
   <div class="hero">
     <div class="hero-grid"></div>
     <div class="hero-glow"></div>
@@ -457,41 +491,23 @@ body{
     </div>
   </div>
 
-  <!-- ── FEATURED COURSES (3×2) ──────────────────────────── -->
-  <section class="shelf">
-    <div class="shelf-header">
-      <div class="shelf-title">
-        <span class="shelf-title-bar"></span>
-        Featured Courses
+  <!-- CATALOG LAYOUT -->
+  <div class="catalog-layout">
+    <aside class="cat-sidebar" id="catSidebar">
+      <div class="cat-sidebar-hdr">Browse by Category</div>
+      <div class="cat-all-pill active" id="catAll" onclick="setCategory(null)">
+        <span>All Courses</span>
+        <span class="cat-count" id="catAllCount">0</span>
       </div>
-      <a class="shelf-see-all" href="index.html">View all →</a>
+      <div id="catGroups"></div>
+      <div class="cat-sidebar-fade"></div>
+    </aside>
+    <div class="catalog-main">
+      <div class="catalog-results-hdr" id="catalogHdr"></div>
+      <div class="course-grid cat-grid" id="courseGrid"></div>
+      <div class="paginator" id="paginator"></div>
     </div>
-    <div class="course-grid" id="featuredGrid"></div>
-  </section>
-
-  <!-- ── CONTINUE LEARNING ───────────────────────────────── -->
-  <section class="shelf">
-    <div class="shelf-header">
-      <div class="shelf-title">
-        <span class="shelf-title-bar"></span>
-        Continue Learning
-      </div>
-      <a class="shelf-see-all" href="index.html">View all →</a>
-    </div>
-    <div class="course-grid" id="continueGrid"></div>
-  </section>
-
-  <!-- ── TRENDING ────────────────────────────────────────── -->
-  <section class="shelf">
-    <div class="shelf-header">
-      <div class="shelf-title">
-        <span class="shelf-title-bar"></span>
-        Trending This Month
-      </div>
-      <a class="shelf-see-all" href="index.html">View all →</a>
-    </div>
-    <div class="course-grid" id="trendingGrid"></div>
-  </section>
+  </div>
 
 </div><!-- /wrap -->
 
@@ -505,393 +521,485 @@ body{
 </main>
 
 <script>
-/* ── COURSE DATA ─────────────────────────────────────────── */
+/* ── COURSE DATA ──────────────────────────────────────────────────── */
 var COURSES = [
-  {
-    id:1, pid:0,
-    title:'Life Insurance Fundamentals',
-    desc:'Master core life insurance concepts from term to whole life policies and beyond.',
-    thumb:'https://images.unsplash.com/photo-1573497491208-6b1acb260507?w=800&h=450&q=80&fit=crop',
-    cat:'Life Insurance', level:'Beginner', dur:'3h 20m',
-    instructor:{name:'Sarah Mitchell',avatar:'https://i.pravatar.cc/40?img=1'},
-    rating:4.8, enrolled:3240, progress:35,
-    slug:'life-insurance-fundamentals'
-  },
-  {
-    id:2, pid:1,
-    title:'Prospecting in the Digital Age',
-    desc:'Build a consistent pipeline using modern outreach, LinkedIn, and video prospecting.',
-    thumb:'https://images.unsplash.com/photo-1516321318423-f06f85e504b3?w=800&h=450&q=80&fit=crop',
-    cat:'Sales', level:'Intermediate', dur:'58m',
-    instructor:{name:'Jeb Blount',avatar:'https://i.pravatar.cc/40?img=2'},
-    rating:4.8, enrolled:2103, progress:0,
-    slug:'prospecting-digital-age'
-  },
-  {
-    id:3, pid:2,
-    title:'The Trust Formula',
-    desc:'Emotional intelligence frameworks that build client loyalty for decades.',
-    thumb:'https://images.unsplash.com/photo-1573496359142-b8d87734a5a2?w=800&h=450&q=80&fit=crop',
-    cat:'Relationships', level:'All Levels', dur:'1h 12m',
-    instructor:{name:'Colleen Stanley',avatar:'https://i.pravatar.cc/40?img=3'},
-    rating:4.9, enrolled:5120, progress:64,
-    slug:'trust-formula'
-  },
-  {
-    id:4, pid:3,
-    title:'Closing Techniques for Complex Sales',
-    desc:'Commitment-based closing that works in multi-stakeholder financial sales.',
-    thumb:'https://images.unsplash.com/photo-1600880292203-757bb62b4baf?w=800&h=450&q=80&fit=crop',
-    cat:'Closing', level:'Advanced', dur:'1h 8m',
-    instructor:{name:'Anthony Iannarino',avatar:'https://i.pravatar.cc/40?img=4'},
-    rating:4.7, enrolled:1204, progress:0,
-    slug:'closing-complex-sales'
-  },
-  {
-    id:5, pid:4,
-    title:'Referral Mastery: The Systematic Approach',
-    desc:'A repeatable, low-pressure system for generating steady warm referrals.',
-    thumb:'https://images.unsplash.com/photo-1523240795612-9a054b0db644?w=800&h=450&q=80&fit=crop',
-    cat:'Networking', level:'All Levels', dur:'44m',
-    instructor:{name:'Michael Goldberg',avatar:'https://i.pravatar.cc/40?img=5'},
-    rating:4.6, enrolled:2200, progress:0,
-    slug:'referral-mastery'
-  },
-  {
-    id:6, pid:5,
-    title:'Time Blocking for Peak Producers',
-    desc:'Habit-based scheduling used by the top 1% of financial professionals.',
-    thumb:'https://images.unsplash.com/photo-1484480974693-6ca0a78fb36b?w=800&h=450&q=80&fit=crop',
-    cat:'Productivity', level:'All Levels', dur:'52m',
-    instructor:{name:'Darren Hardy',avatar:'https://i.pravatar.cc/40?img=6'},
-    rating:4.8, enrolled:6700, progress:0,
-    slug:'time-blocking'
-  },
-  {
-    id:7, pid:6,
-    title:'Underwriting Relationships',
-    desc:'A veteran underwriter\'s inside view on how to get your cases prioritized.',
-    thumb:'https://images.unsplash.com/photo-1568992687947-868a62a9f521?w=800&h=450&q=80&fit=crop',
-    cat:'Insurance', level:'Advanced', dur:'1h 4m',
-    instructor:{name:'Elizabeth Scheithe',avatar:'https://i.pravatar.cc/40?img=7'},
-    rating:4.8, enrolled:641, progress:25,
-    slug:'underwriting-relationships'
-  },
-  {
-    id:8, pid:7,
-    title:'Long-Term Care Planning Conversations',
-    desc:'Guide clients through LTC options with confidence and compassion.',
-    thumb:'https://images.unsplash.com/photo-1573497491208-6b1acb260507?w=800&h=450&q=80&fit=crop',
-    cat:'Long-Term Care', level:'Advanced', dur:'48m',
-    instructor:{name:'Harley Gordon',avatar:'https://i.pravatar.cc/40?img=8'},
-    rating:4.9, enrolled:512, progress:0,
-    slug:'ltc-planning'
-  },
-  {
-    id:9, pid:0,
-    title:'Mastering High-Stakes Client Conversations',
-    desc:'Psychological frameworks for turning difficult conversations into closed deals.',
-    thumb:'https://images.unsplash.com/photo-1543269865-cbf427effbad?w=800&h=450&q=80&fit=crop',
-    cat:'Sales', level:'Advanced', dur:'1h 24m',
-    instructor:{name:'Brian Ahearn',avatar:'https://i.pravatar.cc/40?img=9'},
-    rating:4.9, enrolled:1847, progress:0,
-    slug:'high-stakes-conversations'
-  }
+  {id:1,title:'Personal Observation Strategies for Better Prospecting',author:'Eszylfie Taylor',category:'Prospecting',playlist:'0-3 Year',level:'Beginner–Intermediate',slug:'personal-observation-strategies-for-better-prospecting',thumbnail:'https://picsum.photos/seed/personal-observation-strategies-for-better-prospecting/800/450',duration:'8m',youtubeId:'sMlczYnSVYo',progress:0},
+  {id:2,title:'Keys to Prospecting and Telephoning',author:'Chris Koon',category:'Prospecting',playlist:'0-3 Year',level:'Beginner–Intermediate',slug:'keys-to-prospecting-and-telephoning',thumbnail:'https://picsum.photos/seed/keys-to-prospecting-and-telephoning/800/450',duration:'9m',youtubeId:'sMlczYnSVYo',progress:0},
+  {id:3,title:'Strategies for Increasing Prospecting Success',author:'Sabine Robinson',category:'Prospecting',playlist:'0-3 Year',level:'Beginner–Intermediate',slug:'strategies-for-increasing-prospecting-success',thumbnail:'https://picsum.photos/seed/strategies-for-increasing-prospecting-success/800/450',duration:'10m',youtubeId:'sMlczYnSVYo',progress:0},
+  {id:4,title:'Overcoming Prospecting Objections',author:'Joey Davenport',category:'Prospecting',playlist:'0-3 Year',level:'Beginner–Intermediate',slug:'overcoming-prospecting-objections',thumbnail:'https://picsum.photos/seed/overcoming-prospecting-objections/800/450',duration:'11m',youtubeId:'sMlczYnSVYo',progress:0},
+  {id:5,title:'Introducing Yourself to Referrals and Getting the Appointment',author:'Kyle Gleich',category:'Prospecting',playlist:'0-3 Year',level:'Beginner–Intermediate',slug:'introducing-yourself-to-referrals-and-getting-the-appointment',thumbnail:'https://picsum.photos/seed/introducing-yourself-to-referrals-and-getting-the-appointment/800/450',duration:'12m',youtubeId:'sMlczYnSVYo',progress:0},
+  {id:6,title:'Getting a Quantity of Introductions: Field-Tested Language Role Play',author:'David Resseguie',category:'Prospecting',playlist:'0-3 Year',level:'Beginner–Intermediate',slug:'getting-a-quantity-of-introductions-field-tested-language-role-play',thumbnail:'https://picsum.photos/seed/getting-a-quantity-of-introductions-field-tested-language-role-play/800/450',duration:'13m',youtubeId:'sMlczYnSVYo',progress:0},
+  {id:7,title:'The Four Food Groups of Marketing and Business Development',author:'Linda Witham',category:'Prospecting',playlist:'0-3 Year',level:'Beginner–Intermediate',slug:'the-four-food-groups-of-marketing-and-business-development',thumbnail:'https://picsum.photos/seed/the-four-food-groups-of-marketing-and-business-development/800/450',duration:'14m',youtubeId:'sMlczYnSVYo',progress:0},
+  {id:8,title:'Strategies to Replicate Your Top Clients and Prospecting Up',author:'Eszylfie Taylor',category:'Prospecting',playlist:'0-3 Year',level:'Beginner–Intermediate',slug:'strategies-to-replicate-your-top-clients-and-prospecting-up',thumbnail:'https://picsum.photos/seed/strategies-to-replicate-your-top-clients-and-prospecting-up/800/450',duration:'15m',youtubeId:'sMlczYnSVYo',progress:0},
+  {id:9,title:'Overcoming the Fear of Prospecting',author:'Katherine Forrester',category:'Prospecting',playlist:'0-3 Year',level:'Beginner–Intermediate',slug:'overcoming-the-fear-of-prospecting',thumbnail:'https://picsum.photos/seed/overcoming-the-fear-of-prospecting/800/450',duration:'16m',youtubeId:'sMlczYnSVYo',progress:0},
+  {id:10,title:'Language for Overcoming Common Prospecting Objections',author:'David Resseguie',category:'Prospecting',playlist:'0-3 Year',level:'Beginner–Intermediate',slug:'language-for-overcoming-common-prospecting-objections',thumbnail:'https://picsum.photos/seed/language-for-overcoming-common-prospecting-objections/800/450',duration:'17m',youtubeId:'sMlczYnSVYo',progress:0},
+  {id:11,title:'Prospecting Buddy – Objection Handling Tool',author:'HPN Team',category:'Prospecting',playlist:'0-3 Year',level:'Beginner–Intermediate',slug:'prospecting-buddy-objection-handling-tool',thumbnail:'https://picsum.photos/seed/prospecting-buddy-objection-handling-tool/800/450',duration:'18m',youtubeId:'sMlczYnSVYo',progress:0},
+  {id:12,title:'Field-Tested Episode: Critical Networking Skills',author:'Michael Goldberg',category:'Networking',playlist:'0-3 Year',level:'Beginner–Intermediate',slug:'field-tested-episode-critical-networking-skills',thumbnail:'https://picsum.photos/seed/field-tested-episode-critical-networking-skills/800/450',duration:'20m',youtubeId:'sMlczYnSVYo',progress:0},
+  {id:13,title:'How Networking Works at the Beginning of Your Career',author:'David Fisher',category:'Networking',playlist:'0-3 Year',level:'Beginner–Intermediate',slug:'how-networking-works-at-the-beginning-of-your-career',thumbnail:'https://picsum.photos/seed/how-networking-works-at-the-beginning-of-your-career/800/450',duration:'22m',youtubeId:'sMlczYnSVYo',progress:0},
+  {id:14,title:'Social Intelligence: Becoming a Connector',author:'Maribeth Kuzmeski',category:'Networking',playlist:'0-3 Year',level:'Beginner–Intermediate',slug:'social-intelligence-becoming-a-connector',thumbnail:'https://picsum.photos/seed/social-intelligence-becoming-a-connector/800/450',duration:'8m',youtubeId:'sMlczYnSVYo',progress:0},
+  {id:15,title:'Personal Observation Strategies for Better Prospecting',author:'Eszylfie Taylor',category:'Networking',playlist:'0-3 Year',level:'Beginner–Intermediate',slug:'personal-observation-strategies-for-better-prospecting',thumbnail:'https://picsum.photos/seed/personal-observation-strategies-for-better-prospecting/800/450',duration:'9m',youtubeId:'sMlczYnSVYo',progress:0},
+  {id:16,title:'Networking and Business Development Is a Contact Sport',author:'Joe Sweeney',category:'Networking',playlist:'0-3 Year',level:'Beginner–Intermediate',slug:'networking-and-business-development-is-a-contact-sport',thumbnail:'https://picsum.photos/seed/networking-and-business-development-is-a-contact-sport/800/450',duration:'10m',youtubeId:'sMlczYnSVYo',progress:0},
+  {id:17,title:'Networking Roundtable: Starting a Conversation',author:'Michael Goldberg',category:'Networking',playlist:'0-3 Year',level:'Beginner–Intermediate',slug:'networking-roundtable-starting-a-conversation',thumbnail:'https://picsum.photos/seed/networking-roundtable-starting-a-conversation/800/450',duration:'11m',youtubeId:'sMlczYnSVYo',progress:0},
+  {id:18,title:'So … You Don\'t Have a Natural Market?',author:'Jane Blaufus',category:'Networking',playlist:'0-3 Year',level:'Beginner–Intermediate',slug:'so-you-don-t-have-a-natural-market',thumbnail:'https://picsum.photos/seed/so-you-don-t-have-a-natural-market/800/450',duration:'12m',youtubeId:'sMlczYnSVYo',progress:0},
+  {id:19,title:'Networking: Identifying What People Want',author:'Joe Sweeney',category:'Networking',playlist:'0-3 Year',level:'Beginner–Intermediate',slug:'networking-identifying-what-people-want',thumbnail:'https://picsum.photos/seed/networking-identifying-what-people-want/800/450',duration:'13m',youtubeId:'sMlczYnSVYo',progress:0},
+  {id:20,title:'Networking Roundtable: Ending a Conversation',author:'Michael Goldberg',category:'Networking',playlist:'0-3 Year',level:'Beginner–Intermediate',slug:'networking-roundtable-ending-a-conversation',thumbnail:'https://picsum.photos/seed/networking-roundtable-ending-a-conversation/800/450',duration:'14m',youtubeId:'sMlczYnSVYo',progress:0},
+  {id:21,title:'Getting Referrals from Centers of Influence',author:'Matt Anderson',category:'Networking',playlist:'0-3 Year',level:'Beginner–Intermediate',slug:'getting-referrals-from-centers-of-influence',thumbnail:'https://picsum.photos/seed/getting-referrals-from-centers-of-influence/800/450',duration:'15m',youtubeId:'sMlczYnSVYo',progress:0},
+  {id:22,title:'Connect on Social Media by Telling Your Story',author:'Maribeth Kuzmeski',category:'Social Media',playlist:'0-3 Year',level:'Beginner–Intermediate',slug:'connect-on-social-media-by-telling-your-story',thumbnail:'https://picsum.photos/seed/connect-on-social-media-by-telling-your-story/800/450',duration:'16m',youtubeId:'sMlczYnSVYo',progress:0},
+  {id:23,title:'Best Practices for Your LinkedIn Profile',author:'David Fisher',category:'Social Media',playlist:'0-3 Year',level:'Beginner–Intermediate',slug:'best-practices-for-your-linkedin-profile',thumbnail:'https://picsum.photos/seed/best-practices-for-your-linkedin-profile/800/450',duration:'17m',youtubeId:'sMlczYnSVYo',progress:0},
+  {id:24,title:'Leveraging LinkedIn to Create Favorable Introductions',author:'David Resseguie',category:'Social Media',playlist:'0-3 Year',level:'Beginner–Intermediate',slug:'leveraging-linkedin-to-create-favorable-introductions',thumbnail:'https://picsum.photos/seed/leveraging-linkedin-to-create-favorable-introductions/800/450',duration:'18m',youtubeId:'sMlczYnSVYo',progress:0},
+  {id:25,title:'Utilizing Social Media to Identify Prospecting Opportunities',author:'Paul Tokarz',category:'Social Media',playlist:'0-3 Year',level:'Beginner–Intermediate',slug:'utilizing-social-media-to-identify-prospecting-opportunities',thumbnail:'https://picsum.photos/seed/utilizing-social-media-to-identify-prospecting-opportunities/800/450',duration:'20m',youtubeId:'sMlczYnSVYo',progress:0},
+  {id:26,title:'Language and Techniques to Harness Social Media Proactively',author:'David Fisher',category:'Social Media',playlist:'0-3 Year',level:'Beginner–Intermediate',slug:'language-and-techniques-to-harness-social-media-proactively',thumbnail:'https://picsum.photos/seed/language-and-techniques-to-harness-social-media-proactively/800/450',duration:'22m',youtubeId:'sMlczYnSVYo',progress:0},
+  {id:27,title:'Strategic Calling Language for Social Media',author:'Ben Newman',category:'Social Media',playlist:'0-3 Year',level:'Beginner–Intermediate',slug:'strategic-calling-language-for-social-media',thumbnail:'https://picsum.photos/seed/strategic-calling-language-for-social-media/800/450',duration:'8m',youtubeId:'sMlczYnSVYo',progress:0},
+  {id:28,title:'Biggest Lessons Learned in Developing a Social Media Presence',author:'Paul Tokarz',category:'Social Media',playlist:'0-3 Year',level:'Beginner–Intermediate',slug:'biggest-lessons-learned-in-developing-a-social-media-presence',thumbnail:'https://picsum.photos/seed/biggest-lessons-learned-in-developing-a-social-media-presence/800/450',duration:'9m',youtubeId:'sMlczYnSVYo',progress:0},
+  {id:29,title:'Differentiating Your Brand through Social Media',author:'David Fisher',category:'Social Media',playlist:'0-3 Year',level:'Beginner–Intermediate',slug:'differentiating-your-brand-through-social-media',thumbnail:'https://picsum.photos/seed/differentiating-your-brand-through-social-media/800/450',duration:'10m',youtubeId:'sMlczYnSVYo',progress:0},
+  {id:30,title:'Amplifying Your Team\'s Brand through Social Media',author:'David Fisher',category:'Social Media',playlist:'0-3 Year',level:'Beginner–Intermediate',slug:'amplifying-your-team-s-brand-through-social-media',thumbnail:'https://picsum.photos/seed/amplifying-your-team-s-brand-through-social-media/800/450',duration:'11m',youtubeId:'sMlczYnSVYo',progress:0},
+  {id:31,title:'Social Media Strategies to Build Awareness Around Your Brand',author:'Paul Tokarz',category:'Social Media',playlist:'0-3 Year',level:'Beginner–Intermediate',slug:'social-media-strategies-to-build-awareness-around-your-brand',thumbnail:'https://picsum.photos/seed/social-media-strategies-to-build-awareness-around-your-brand/800/450',duration:'12m',youtubeId:'sMlczYnSVYo',progress:0},
+  {id:32,title:'High Impact Language for Overcoming Common Phoning Objections',author:'Jim Effner',category:'Telephoning',playlist:'0-3 Year',level:'Beginner–Intermediate',slug:'high-impact-language-for-overcoming-common-phoning-objections',thumbnail:'https://picsum.photos/seed/high-impact-language-for-overcoming-common-phoning-objections/800/450',duration:'13m',youtubeId:'sMlczYnSVYo',progress:0},
+  {id:33,title:'Phoning Tone and Technique to Get the Appointment',author:'Don Badgley',category:'Telephoning',playlist:'0-3 Year',level:'Beginner–Intermediate',slug:'phoning-tone-and-technique-to-get-the-appointment',thumbnail:'https://picsum.photos/seed/phoning-tone-and-technique-to-get-the-appointment/800/450',duration:'14m',youtubeId:'sMlczYnSVYo',progress:0},
+  {id:34,title:'Calling Your Project 200',author:'Gail Goodman',category:'Telephoning',playlist:'0-3 Year',level:'Beginner–Intermediate',slug:'calling-your-project-200',thumbnail:'https://picsum.photos/seed/calling-your-project-200/800/450',duration:'15m',youtubeId:'sMlczYnSVYo',progress:0},
+  {id:35,title:'3 Powerful Tips for Building Better Phoning Habits',author:'David Resseguie',category:'Telephoning',playlist:'0-3 Year',level:'Beginner–Intermediate',slug:'3-powerful-tips-for-building-better-phoning-habits',thumbnail:'https://picsum.photos/seed/3-powerful-tips-for-building-better-phoning-habits/800/450',duration:'16m',youtubeId:'sMlczYnSVYo',progress:0},
+  {id:36,title:'Prospecting Outreach Best Practices: Beyond Phoning',author:'Sabine Robinson',category:'Telephoning',playlist:'0-3 Year',level:'Beginner–Intermediate',slug:'prospecting-outreach-best-practices-beyond-phoning',thumbnail:'https://picsum.photos/seed/prospecting-outreach-best-practices-beyond-phoning/800/450',duration:'17m',youtubeId:'sMlczYnSVYo',progress:0},
+  {id:37,title:'Top 5 Reasons Advisors Avoid the Telephone',author:'Gail Goodman',category:'Telephoning',playlist:'0-3 Year',level:'Beginner–Intermediate',slug:'top-5-reasons-advisors-avoid-the-telephone',thumbnail:'https://picsum.photos/seed/top-5-reasons-advisors-avoid-the-telephone/800/450',duration:'18m',youtubeId:'sMlczYnSVYo',progress:0},
+  {id:38,title:'Attitude and Tone: Common Phoning Mistakes New Advisors Make',author:'Don Badgley',category:'Telephoning',playlist:'0-3 Year',level:'Beginner–Intermediate',slug:'attitude-and-tone-common-phoning-mistakes-new-advisors-make',thumbnail:'https://picsum.photos/seed/attitude-and-tone-common-phoning-mistakes-new-advisors-make/800/450',duration:'20m',youtubeId:'sMlczYnSVYo',progress:0},
+  {id:39,title:'Telephoning Mindset: Breaking Down the Phoning Process',author:'Jim Effner',category:'Telephoning',playlist:'0-3 Year',level:'Beginner–Intermediate',slug:'telephoning-mindset-breaking-down-the-phoning-process',thumbnail:'https://picsum.photos/seed/telephoning-mindset-breaking-down-the-phoning-process/800/450',duration:'22m',youtubeId:'sMlczYnSVYo',progress:0},
+  {id:40,title:'Language for Phoning and Booking Meetings',author:'Vince Silva',category:'Telephoning',playlist:'0-3 Year',level:'Beginner–Intermediate',slug:'language-for-phoning-and-booking-meetings',thumbnail:'https://picsum.photos/seed/language-for-phoning-and-booking-meetings/800/450',duration:'8m',youtubeId:'sMlczYnSVYo',progress:0},
+  {id:41,title:'Phoning Strategies to Get Referrals to Take Your Calls',author:'David Resseguie',category:'Telephoning',playlist:'0-3 Year',level:'Beginner–Intermediate',slug:'phoning-strategies-to-get-referrals-to-take-your-calls',thumbnail:'https://picsum.photos/seed/phoning-strategies-to-get-referrals-to-take-your-calls/800/450',duration:'9m',youtubeId:'sMlczYnSVYo',progress:0},
+  {id:42,title:'Phone Buddy – Objection Handling Tool',author:'HPN Team',category:'Telephoning',playlist:'0-3 Year',level:'Beginner–Intermediate',slug:'phone-buddy-objection-handling-tool',thumbnail:'https://picsum.photos/seed/phone-buddy-objection-handling-tool/800/450',duration:'10m',youtubeId:'sMlczYnSVYo',progress:0},
+  {id:43,title:'The Approach: The Most Difficult and Artful Part of the Sales Process',author:'Don Badgley',category:'Factfinding',playlist:'0-3 Year',level:'Beginner–Intermediate',slug:'the-approach-the-most-difficult-and-artful-part-of-the-sales-process',thumbnail:'https://picsum.photos/seed/the-approach-the-most-difficult-and-artful-part-of-the-sales-process/800/450',duration:'11m',youtubeId:'sMlczYnSVYo',progress:0},
+  {id:44,title:'Using Questions to Solve Problems vs. Sell a Product',author:'Eszylfie Taylor',category:'Factfinding',playlist:'0-3 Year',level:'Beginner–Intermediate',slug:'using-questions-to-solve-problems-vs-sell-a-product',thumbnail:'https://picsum.photos/seed/using-questions-to-solve-problems-vs-sell-a-product/800/450',duration:'12m',youtubeId:'sMlczYnSVYo',progress:0},
+  {id:45,title:'Techniques to Become a More Effective Listener',author:'Penny Phillips',category:'Factfinding',playlist:'0-3 Year',level:'Beginner–Intermediate',slug:'techniques-to-become-a-more-effective-listener',thumbnail:'https://picsum.photos/seed/techniques-to-become-a-more-effective-listener/800/450',duration:'13m',youtubeId:'sMlczYnSVYo',progress:0},
+  {id:46,title:'Techniques to Build Rapport',author:'Joey Davenport',category:'Factfinding',playlist:'0-3 Year',level:'Beginner–Intermediate',slug:'techniques-to-build-rapport',thumbnail:'https://picsum.photos/seed/techniques-to-build-rapport/800/450',duration:'14m',youtubeId:'sMlczYnSVYo',progress:0},
+  {id:47,title:'Language and Techniques During the Initial Appointment',author:'Kyle Gleich',category:'Factfinding',playlist:'0-3 Year',level:'Beginner–Intermediate',slug:'language-and-techniques-during-the-initial-appointment',thumbnail:'https://picsum.photos/seed/language-and-techniques-during-the-initial-appointment/800/450',duration:'15m',youtubeId:'sMlczYnSVYo',progress:0},
+  {id:48,title:'Creating a Factfinding Process',author:'Leo Tucker',category:'Factfinding',playlist:'0-3 Year',level:'Beginner–Intermediate',slug:'creating-a-factfinding-process',thumbnail:'https://picsum.photos/seed/creating-a-factfinding-process/800/450',duration:'16m',youtubeId:'sMlczYnSVYo',progress:0},
+  {id:49,title:'The Need vs. Greed Life Sale',author:'Eszylfie Taylor',category:'Factfinding',playlist:'0-3 Year',level:'Beginner–Intermediate',slug:'the-need-vs-greed-life-sale',thumbnail:'https://picsum.photos/seed/the-need-vs-greed-life-sale/800/450',duration:'17m',youtubeId:'sMlczYnSVYo',progress:0},
+  {id:50,title:'Taking the Driver\'s Seat: Helping Your Clients Navigate the Factfinding Process',author:'Kyle Gleich',category:'Factfinding',playlist:'0-3 Year',level:'Beginner–Intermediate',slug:'taking-the-driver-s-seat-helping-your-clients-navigate-the-factfinding-process',thumbnail:'https://picsum.photos/seed/taking-the-driver-s-seat-helping-your-clients-navigate-the-factfinding-process/800/450',duration:'18m',youtubeId:'sMlczYnSVYo',progress:0},
+  {id:51,title:'Finding the Money: Simple Money Saving Strategies for Your Clients',author:'Eszylfie Taylor',category:'Factfinding',playlist:'0-3 Year',level:'Beginner–Intermediate',slug:'finding-the-money-simple-money-saving-strategies-for-your-clients',thumbnail:'https://picsum.photos/seed/finding-the-money-simple-money-saving-strategies-for-your-clients/800/450',duration:'20m',youtubeId:'sMlczYnSVYo',progress:0},
+  {id:52,title:'Making Connections through Questions',author:'Maribeth Kuzmeski',category:'Factfinding',playlist:'0-3 Year',level:'Beginner–Intermediate',slug:'making-connections-through-questions',thumbnail:'https://picsum.photos/seed/making-connections-through-questions/800/450',duration:'22m',youtubeId:'sMlczYnSVYo',progress:0},
+  {id:53,title:'Think Like a Consumer: How to Leverage Financial Comparisons',author:'Adam Holt',category:'Closing',playlist:'0-3 Year',level:'Beginner–Intermediate',slug:'think-like-a-consumer-how-to-leverage-financial-comparisons',thumbnail:'https://picsum.photos/seed/think-like-a-consumer-how-to-leverage-financial-comparisons/800/450',duration:'8m',youtubeId:'sMlczYnSVYo',progress:0},
+  {id:54,title:'Closing Language Techniques: "Let\'s Get Started"',author:'Eszylfie Taylor',category:'Closing',playlist:'0-3 Year',level:'Beginner–Intermediate',slug:'closing-language-techniques-let-s-get-started',thumbnail:'https://picsum.photos/seed/closing-language-techniques-let-s-get-started/800/450',duration:'9m',youtubeId:'sMlczYnSVYo',progress:0},
+  {id:55,title:'Leveraging Presentation Skills to Move Clients to Action',author:'Ellen Rogin',category:'Closing',playlist:'0-3 Year',level:'Beginner–Intermediate',slug:'leveraging-presentation-skills-to-move-clients-to-action',thumbnail:'https://picsum.photos/seed/leveraging-presentation-skills-to-move-clients-to-action/800/450',duration:'10m',youtubeId:'sMlczYnSVYo',progress:0},
+  {id:56,title:'Closing Power Phrases and Follow Up Strategies',author:'Chris Koon',category:'Closing',playlist:'0-3 Year',level:'Beginner–Intermediate',slug:'closing-power-phrases-and-follow-up-strategies',thumbnail:'https://picsum.photos/seed/closing-power-phrases-and-follow-up-strategies/800/450',duration:'11m',youtubeId:'sMlczYnSVYo',progress:0},
+  {id:57,title:'Closing Case Preparation',author:'Joey Davenport',category:'Closing',playlist:'0-3 Year',level:'Beginner–Intermediate',slug:'closing-case-preparation',thumbnail:'https://picsum.photos/seed/closing-case-preparation/800/450',duration:'12m',youtubeId:'sMlczYnSVYo',progress:0},
+  {id:58,title:'How to Connect More Deeply and Emotionally with Story Telling',author:'Deirdre Van Nest',category:'Closing',playlist:'0-3 Year',level:'Beginner–Intermediate',slug:'how-to-connect-more-deeply-and-emotionally-with-story-telling',thumbnail:'https://picsum.photos/seed/how-to-connect-more-deeply-and-emotionally-with-story-telling/800/450',duration:'13m',youtubeId:'sMlczYnSVYo',progress:0},
+  {id:59,title:'The Proactive Advisor: Anticipating Client\'s Needs Before They Ask',author:'Adam Holt',category:'Closing',playlist:'0-3 Year',level:'Beginner–Intermediate',slug:'the-proactive-advisor-anticipating-client-s-needs-before-they-ask',thumbnail:'https://picsum.photos/seed/the-proactive-advisor-anticipating-client-s-needs-before-they-ask/800/450',duration:'14m',youtubeId:'sMlczYnSVYo',progress:0},
+  {id:60,title:'Creating a Sense of Urgency in the Close',author:'Michael Venditouli',category:'Closing',playlist:'0-3 Year',level:'Beginner–Intermediate',slug:'creating-a-sense-of-urgency-in-the-close',thumbnail:'https://picsum.photos/seed/creating-a-sense-of-urgency-in-the-close/800/450',duration:'15m',youtubeId:'sMlczYnSVYo',progress:0},
+  {id:61,title:'Using Stories and Specifics',author:'Ben Newman',category:'Closing',playlist:'0-3 Year',level:'Beginner–Intermediate',slug:'using-stories-and-specifics',thumbnail:'https://picsum.photos/seed/using-stories-and-specifics/800/450',duration:'16m',youtubeId:'sMlczYnSVYo',progress:0},
+  {id:62,title:'Relationship-Focus, Sales Cycle Power Phrases',author:'Eszylfie Taylor',category:'Closing',playlist:'0-3 Year',level:'Beginner–Intermediate',slug:'relationship-focus-sales-cycle-power-phrases',thumbnail:'https://picsum.photos/seed/relationship-focus-sales-cycle-power-phrases/800/450',duration:'17m',youtubeId:'sMlczYnSVYo',progress:0},
+  {id:63,title:'Follow Up Techniques After the Initial Appointment',author:'Kyle Gleich',category:'Closing',playlist:'0-3 Year',level:'Beginner–Intermediate',slug:'follow-up-techniques-after-the-initial-appointment',thumbnail:'https://picsum.photos/seed/follow-up-techniques-after-the-initial-appointment/800/450',duration:'18m',youtubeId:'sMlczYnSVYo',progress:0},
+  {id:64,title:'DAD: My Formula for Success',author:'Harry Hoopis',category:'Sales Psychology',playlist:'0-3 Year',level:'Beginner–Intermediate',slug:'dad-my-formula-for-success',thumbnail:'https://picsum.photos/seed/dad-my-formula-for-success/800/450',duration:'20m',youtubeId:'sMlczYnSVYo',progress:0},
+  {id:65,title:'Changing Your Negative Self-Talk: Turnaround and Dispute',author:'John Laurito',category:'Sales Psychology',playlist:'0-3 Year',level:'Beginner–Intermediate',slug:'changing-your-negative-self-talk-turnaround-and-dispute',thumbnail:'https://picsum.photos/seed/changing-your-negative-self-talk-turnaround-and-dispute/800/450',duration:'22m',youtubeId:'sMlczYnSVYo',progress:0},
+  {id:66,title:'Success By Design: How to Use the Power of Visualization to Build Your Business',author:'Ellen Rogin',category:'Sales Psychology',playlist:'0-3 Year',level:'Beginner–Intermediate',slug:'success-by-design-how-to-use-the-power-of-visualization-to-build-your-business',thumbnail:'https://picsum.photos/seed/success-by-design-how-to-use-the-power-of-visualization-to-build-your-business/800/450',duration:'8m',youtubeId:'sMlczYnSVYo',progress:0},
+  {id:67,title:'Think Like a Consumer: How to Leverage Financial Comparisons',author:'Adam Holt',category:'Sales Psychology',playlist:'0-3 Year',level:'Beginner–Intermediate',slug:'think-like-a-consumer-how-to-leverage-financial-comparisons',thumbnail:'https://picsum.photos/seed/think-like-a-consumer-how-to-leverage-financial-comparisons/800/450',duration:'9m',youtubeId:'sMlczYnSVYo',progress:0},
+  {id:68,title:'Advice to New Advisors: There Are No Failures, It\'s Just Part of the Process',author:'Don Badgley',category:'Sales Psychology',playlist:'0-3 Year',level:'Beginner–Intermediate',slug:'advice-to-new-advisors-there-are-no-failures-it-s-just-part-of-the-process',thumbnail:'https://picsum.photos/seed/advice-to-new-advisors-there-are-no-failures-it-s-just-part-of-the-process/800/450',duration:'10m',youtubeId:'sMlczYnSVYo',progress:0},
+  {id:69,title:'Best Practices to Elevate Your Emotional Intelligence',author:'Penny Phillips',category:'Sales Psychology',playlist:'0-3 Year',level:'Beginner–Intermediate',slug:'best-practices-to-elevate-your-emotional-intelligence',thumbnail:'https://picsum.photos/seed/best-practices-to-elevate-your-emotional-intelligence/800/450',duration:'11m',youtubeId:'sMlczYnSVYo',progress:0},
+  {id:70,title:'Build Mental Toughness by Harnessing the Power of Identity',author:'David Resseguie',category:'Sales Psychology',playlist:'0-3 Year',level:'Beginner–Intermediate',slug:'build-mental-toughness-by-harnessing-the-power-of-identity',thumbnail:'https://picsum.photos/seed/build-mental-toughness-by-harnessing-the-power-of-identity/800/450',duration:'12m',youtubeId:'sMlczYnSVYo',progress:0},
+  {id:71,title:'Mental Toughness: Managing the Ups and Downs of the Business',author:'Sabine Robinson',category:'Sales Psychology',playlist:'0-3 Year',level:'Beginner–Intermediate',slug:'mental-toughness-managing-the-ups-and-downs-of-the-business',thumbnail:'https://picsum.photos/seed/mental-toughness-managing-the-ups-and-downs-of-the-business/800/450',duration:'13m',youtubeId:'sMlczYnSVYo',progress:0},
+  {id:72,title:'Expectancy Theory and PCT: Your Thinking and Developing Mental Toughness',author:'Dr. Jason Selk',category:'Sales Psychology',playlist:'0-3 Year',level:'Beginner–Intermediate',slug:'expectancy-theory-and-pct-your-thinking-and-developing-mental-toughness',thumbnail:'https://picsum.photos/seed/expectancy-theory-and-pct-your-thinking-and-developing-mental-toughness/800/450',duration:'14m',youtubeId:'sMlczYnSVYo',progress:0},
+  {id:73,title:'Authority, Curiosity and Scarcity',author:'Ben Newman',category:'Sales Psychology',playlist:'0-3 Year',level:'Beginner–Intermediate',slug:'authority-curiosity-and-scarcity',thumbnail:'https://picsum.photos/seed/authority-curiosity-and-scarcity/800/450',duration:'15m',youtubeId:'sMlczYnSVYo',progress:0},
+  {id:74,title:'Field-Tested Episode: Three Reasons to Own Life Insurance in Today\'s Environment',author:'Tom Hegna',category:'Life Insurance',playlist:'0-3 Year',level:'Beginner–Intermediate',slug:'field-tested-episode-three-reasons-to-own-life-insurance-in-today-s-environment',thumbnail:'https://picsum.photos/seed/field-tested-episode-three-reasons-to-own-life-insurance-in-today-s-environment/800/450',duration:'16m',youtubeId:'sMlczYnSVYo',progress:0},
+  {id:75,title:'The Need vs. Greed Life Sale',author:'Eszylfie Taylor',category:'Life Insurance',playlist:'0-3 Year',level:'Beginner–Intermediate',slug:'the-need-vs-greed-life-sale',thumbnail:'https://picsum.photos/seed/the-need-vs-greed-life-sale/800/450',duration:'17m',youtubeId:'sMlczYnSVYo',progress:0},
+  {id:76,title:'Advocating for Life Insurance: Determining the Need',author:'Ande Frazier',category:'Life Insurance',playlist:'0-3 Year',level:'Beginner–Intermediate',slug:'advocating-for-life-insurance-determining-the-need',thumbnail:'https://picsum.photos/seed/advocating-for-life-insurance-determining-the-need/800/450',duration:'18m',youtubeId:'sMlczYnSVYo',progress:0},
+  {id:77,title:'Factfinding for Life Insurance',author:'Joey Davenport',category:'Life Insurance',playlist:'0-3 Year',level:'Beginner–Intermediate',slug:'factfinding-for-life-insurance',thumbnail:'https://picsum.photos/seed/factfinding-for-life-insurance/800/450',duration:'20m',youtubeId:'sMlczYnSVYo',progress:0},
+  {id:78,title:'Explaining Human Life Value',author:'Shaun McDuffie',category:'Life Insurance',playlist:'0-3 Year',level:'Beginner–Intermediate',slug:'explaining-human-life-value',thumbnail:'https://picsum.photos/seed/explaining-human-life-value/800/450',duration:'22m',youtubeId:'sMlczYnSVYo',progress:0},
+  {id:79,title:'How to Engage in the Icky Conversations of Life',author:'Dina Weiss',category:'Life Insurance',playlist:'0-3 Year',level:'Beginner–Intermediate',slug:'how-to-engage-in-the-icky-conversations-of-life',thumbnail:'https://picsum.photos/seed/how-to-engage-in-the-icky-conversations-of-life/800/450',duration:'8m',youtubeId:'sMlczYnSVYo',progress:0},
+  {id:80,title:'Positioning the Need for Life Insurance: A Language Demonstration',author:'David Resseguie',category:'Life Insurance',playlist:'0-3 Year',level:'Beginner–Intermediate',slug:'positioning-the-need-for-life-insurance-a-language-demonstration',thumbnail:'https://picsum.photos/seed/positioning-the-need-for-life-insurance-a-language-demonstration/800/450',duration:'9m',youtubeId:'sMlczYnSVYo',progress:0},
+  {id:81,title:'Taking a Stand for Life Insurance: Uncovering the Need',author:'Ande Frazier',category:'Life Insurance',playlist:'0-3 Year',level:'Beginner–Intermediate',slug:'taking-a-stand-for-life-insurance-uncovering-the-need',thumbnail:'https://picsum.photos/seed/taking-a-stand-for-life-insurance-uncovering-the-need/800/450',duration:'10m',youtubeId:'sMlczYnSVYo',progress:0},
+  {id:82,title:'Factfinding: Determining the Life Insurance Need',author:'Joey Davenport',category:'Life Insurance',playlist:'0-3 Year',level:'Beginner–Intermediate',slug:'factfinding-determining-the-life-insurance-need',thumbnail:'https://picsum.photos/seed/factfinding-determining-the-life-insurance-need/800/450',duration:'11m',youtubeId:'sMlczYnSVYo',progress:0},
+  {id:83,title:'Permanent Life Insurance Sales Concepts',author:'Ian Freeman',category:'Life Insurance',playlist:'0-3 Year',level:'Beginner–Intermediate',slug:'permanent-life-insurance-sales-concepts',thumbnail:'https://picsum.photos/seed/permanent-life-insurance-sales-concepts/800/450',duration:'12m',youtubeId:'sMlczYnSVYo',progress:0},
+  {id:84,title:'Understanding the Art and Science of High Activity',author:'Sabine Robinson',category:'Activity Management',playlist:'0-3 Year',level:'Beginner–Intermediate',slug:'understanding-the-art-and-science-of-high-activity',thumbnail:'https://picsum.photos/seed/understanding-the-art-and-science-of-high-activity/800/450',duration:'13m',youtubeId:'sMlczYnSVYo',progress:0},
+  {id:85,title:'Daily Disciplines to Stay Productive and Organized',author:'Vince Silva',category:'Activity Management',playlist:'0-3 Year',level:'Beginner–Intermediate',slug:'daily-disciplines-to-stay-productive-and-organized',thumbnail:'https://picsum.photos/seed/daily-disciplines-to-stay-productive-and-organized/800/450',duration:'14m',youtubeId:'sMlczYnSVYo',progress:0},
+  {id:86,title:'The Keys to Establishing a High Activity Practice',author:'Sabine Robinson',category:'Activity Management',playlist:'0-3 Year',level:'Beginner–Intermediate',slug:'the-keys-to-establishing-a-high-activity-practice',thumbnail:'https://picsum.photos/seed/the-keys-to-establishing-a-high-activity-practice/800/450',duration:'15m',youtubeId:'sMlczYnSVYo',progress:0},
+  {id:87,title:'Establishing a Daily Contact Commitment',author:'Joe Jordan',category:'Activity Management',playlist:'0-3 Year',level:'Beginner–Intermediate',slug:'establishing-a-daily-contact-commitment',thumbnail:'https://picsum.photos/seed/establishing-a-daily-contact-commitment/800/450',duration:'16m',youtubeId:'sMlczYnSVYo',progress:0},
+  {id:88,title:'Staying Focused through Activity Management',author:'Marissa Savino',category:'Activity Management',playlist:'0-3 Year',level:'Beginner–Intermediate',slug:'staying-focused-through-activity-management',thumbnail:'https://picsum.photos/seed/staying-focused-through-activity-management/800/450',duration:'17m',youtubeId:'sMlczYnSVYo',progress:0},
+  {id:89,title:'The Four D\'s of Time Management',author:'Mickey Rosenzweig',category:'Activity Management',playlist:'0-3 Year',level:'Beginner–Intermediate',slug:'the-four-d-s-of-time-management',thumbnail:'https://picsum.photos/seed/the-four-d-s-of-time-management/800/450',duration:'18m',youtubeId:'sMlczYnSVYo',progress:0},
+  {id:90,title:'Three Core Principles of Execution',author:'Brian Moran',category:'Activity Management',playlist:'0-3 Year',level:'Beginner–Intermediate',slug:'three-core-principles-of-execution',thumbnail:'https://picsum.photos/seed/three-core-principles-of-execution/800/450',duration:'20m',youtubeId:'sMlczYnSVYo',progress:0},
+  {id:91,title:'Adding a Day of Productivity Each Month',author:'Ben Newman',category:'Activity Management',playlist:'0-3 Year',level:'Beginner–Intermediate',slug:'adding-a-day-of-productivity-each-month',thumbnail:'https://picsum.photos/seed/adding-a-day-of-productivity-each-month/800/450',duration:'22m',youtubeId:'sMlczYnSVYo',progress:0},
+  {id:92,title:'Sustaining Activity Requirements',author:'Jim Ruta',category:'Activity Management',playlist:'0-3 Year',level:'Beginner–Intermediate',slug:'sustaining-activity-requirements',thumbnail:'https://picsum.photos/seed/sustaining-activity-requirements/800/450',duration:'8m',youtubeId:'sMlczYnSVYo',progress:0},
+  {id:93,title:'Time Management: Compartmentalize Your Daily Activities and Increase Your Production',author:'Bob Kievit',category:'Activity Management',playlist:'0-3 Year',level:'Beginner–Intermediate',slug:'time-management-compartmentalize-your-daily-activities-and-increase-your-production',thumbnail:'https://picsum.photos/seed/time-management-compartmentalize-your-daily-activities-and-increase-your-production/800/450',duration:'9m',youtubeId:'sMlczYnSVYo',progress:0},
+  {id:94,title:'Insights for the Brand New Financial Advisor',author:'Vince Silva',category:'Motivation',playlist:'0-3 Year',level:'Beginner–Intermediate',slug:'insights-for-the-brand-new-financial-advisor',thumbnail:'https://picsum.photos/seed/insights-for-the-brand-new-financial-advisor/800/450',duration:'10m',youtubeId:'sMlczYnSVYo',progress:0},
+  {id:95,title:'Developing Courage through Conviction',author:'Alan Nero',category:'Motivation',playlist:'0-3 Year',level:'Beginner–Intermediate',slug:'developing-courage-through-conviction',thumbnail:'https://picsum.photos/seed/developing-courage-through-conviction/800/450',duration:'11m',youtubeId:'sMlczYnSVYo',progress:0},
+  {id:96,title:'Have Courageous Conversations and Change Lives',author:'Jane Blaufus',category:'Motivation',playlist:'0-3 Year',level:'Beginner–Intermediate',slug:'have-courageous-conversations-and-change-lives',thumbnail:'https://picsum.photos/seed/have-courageous-conversations-and-change-lives/800/450',duration:'12m',youtubeId:'sMlczYnSVYo',progress:0},
+  {id:97,title:'The Common Denominator of Success',author:'Harry Hoopis',category:'Motivation',playlist:'0-3 Year',level:'Beginner–Intermediate',slug:'the-common-denominator-of-success',thumbnail:'https://picsum.photos/seed/the-common-denominator-of-success/800/450',duration:'13m',youtubeId:'sMlczYnSVYo',progress:0},
+  {id:98,title:'The Value of Life Insurance',author:'Mike White',category:'Motivation',playlist:'0-3 Year',level:'Beginner–Intermediate',slug:'the-value-of-life-insurance',thumbnail:'https://picsum.photos/seed/the-value-of-life-insurance/800/450',duration:'14m',youtubeId:'sMlczYnSVYo',progress:0},
+  {id:99,title:'The #1 Problem that No One Talks About',author:'Joe Jordan',category:'Motivation',playlist:'0-3 Year',level:'Beginner–Intermediate',slug:'the-1-problem-that-no-one-talks-about',thumbnail:'https://picsum.photos/seed/the-1-problem-that-no-one-talks-about/800/450',duration:'15m',youtubeId:'sMlczYnSVYo',progress:0},
+  {id:100,title:'Wake Up and Win Your Day',author:'Shauna Weatherspoon',category:'Motivation',playlist:'0-3 Year',level:'Beginner–Intermediate',slug:'wake-up-and-win-your-day',thumbnail:'https://picsum.photos/seed/wake-up-and-win-your-day/800/450',duration:'16m',youtubeId:'sMlczYnSVYo',progress:0},
+  {id:101,title:'How to Stay Balanced and Positive in this Career',author:'Dave Resseguie',category:'Motivation',playlist:'0-3 Year',level:'Beginner–Intermediate',slug:'how-to-stay-balanced-and-positive-in-this-career',thumbnail:'https://picsum.photos/seed/how-to-stay-balanced-and-positive-in-this-career/800/450',duration:'17m',youtubeId:'sMlczYnSVYo',progress:0},
+  {id:102,title:'True Impact Stories: Owning What You Sell',author:'Alan Nero',category:'Motivation',playlist:'0-3 Year',level:'Beginner–Intermediate',slug:'true-impact-stories-owning-what-you-sell',thumbnail:'https://picsum.photos/seed/true-impact-stories-owning-what-you-sell/800/450',duration:'18m',youtubeId:'sMlczYnSVYo',progress:0},
+  {id:103,title:'Living a Life of Significance',author:'Joe Jordan',category:'Motivation',playlist:'0-3 Year',level:'Beginner–Intermediate',slug:'living-a-life-of-significance',thumbnail:'https://picsum.photos/seed/living-a-life-of-significance/800/450',duration:'20m',youtubeId:'sMlczYnSVYo',progress:0},
+  {id:104,title:'Prospecting Questions for the Retirement Conversation: Getting to the Heart of the Matter',author:'Curtis Cloke',category:'Business Development Strategies',playlist:'3+ Year',level:'Intermediate–Advanced',slug:'prospecting-questions-for-the-retirement-conversation-getting-to-the-heart-of-the-matter',thumbnail:'https://picsum.photos/seed/prospecting-questions-for-the-retirement-conversation-getting-to-the-heart-of-the-matter/800/450',duration:'22m',youtubeId:'sMlczYnSVYo',progress:0},
+  {id:105,title:'Public Speaking for Experienced Advisors',author:'Deirdre Van Nest',category:'Business Development Strategies',playlist:'3+ Year',level:'Intermediate–Advanced',slug:'public-speaking-for-experienced-advisors',thumbnail:'https://picsum.photos/seed/public-speaking-for-experienced-advisors/800/450',duration:'8m',youtubeId:'sMlczYnSVYo',progress:0},
+  {id:106,title:'Missed Opportunity When Prospecting for Retirement: The Discovery Conversation',author:'Curtis Cloke',category:'Business Development Strategies',playlist:'3+ Year',level:'Intermediate–Advanced',slug:'missed-opportunity-when-prospecting-for-retirement-the-discovery-conversation',thumbnail:'https://picsum.photos/seed/missed-opportunity-when-prospecting-for-retirement-the-discovery-conversation/800/450',duration:'9m',youtubeId:'sMlczYnSVYo',progress:0},
+  {id:107,title:'Field-Tested Research: Strategic Alliances',author:'Maribeth Kuzmeski',category:'Business Development Strategies',playlist:'3+ Year',level:'Intermediate–Advanced',slug:'field-tested-research-strategic-alliances',thumbnail:'https://picsum.photos/seed/field-tested-research-strategic-alliances/800/450',duration:'10m',youtubeId:'sMlczYnSVYo',progress:0},
+  {id:108,title:'The Key Strategy to Senior Practice Development',author:'Randy Taylor',category:'Business Development Strategies',playlist:'3+ Year',level:'Intermediate–Advanced',slug:'the-key-strategy-to-senior-practice-development',thumbnail:'https://picsum.photos/seed/the-key-strategy-to-senior-practice-development/800/450',duration:'11m',youtubeId:'sMlczYnSVYo',progress:0},
+  {id:109,title:'Set More Appointments in One Hour than Most Advisors Set in a Month',author:'Deirdre Van Nest',category:'Business Development Strategies',playlist:'3+ Year',level:'Intermediate–Advanced',slug:'set-more-appointments-in-one-hour-than-most-advisors-set-in-a-month',thumbnail:'https://picsum.photos/seed/set-more-appointments-in-one-hour-than-most-advisors-set-in-a-month/800/450',duration:'12m',youtubeId:'sMlczYnSVYo',progress:0},
+  {id:110,title:'Prospecting Language and Getting Referred Up',author:'Marissa Savino',category:'Business Development Strategies',playlist:'3+ Year',level:'Intermediate–Advanced',slug:'prospecting-language-and-getting-referred-up',thumbnail:'https://picsum.photos/seed/prospecting-language-and-getting-referred-up/800/450',duration:'13m',youtubeId:'sMlczYnSVYo',progress:0},
+  {id:111,title:'Identifying Your Best Centers of Influence',author:'Matt Anderson',category:'Business Development Strategies',playlist:'3+ Year',level:'Intermediate–Advanced',slug:'identifying-your-best-centers-of-influence',thumbnail:'https://picsum.photos/seed/identifying-your-best-centers-of-influence/800/450',duration:'14m',youtubeId:'sMlczYnSVYo',progress:0},
+  {id:112,title:'Unique Client and Prospect Marketing Campaigns',author:'Anthony Morris',category:'Business Development Strategies',playlist:'3+ Year',level:'Intermediate–Advanced',slug:'unique-client-and-prospect-marketing-campaigns',thumbnail:'https://picsum.photos/seed/unique-client-and-prospect-marketing-campaigns/800/450',duration:'15m',youtubeId:'sMlczYnSVYo',progress:0},
+  {id:113,title:'Connect on Social Media by Telling Your Story',author:'Maribeth Kuzmeski',category:'Social Media',playlist:'3+ Year',level:'Intermediate–Advanced',slug:'connect-on-social-media-by-telling-your-story',thumbnail:'https://picsum.photos/seed/connect-on-social-media-by-telling-your-story/800/450',duration:'16m',youtubeId:'sMlczYnSVYo',progress:0},
+  {id:114,title:'Best Practices for Your LinkedIn Profile',author:'David Fisher',category:'Social Media',playlist:'3+ Year',level:'Intermediate–Advanced',slug:'best-practices-for-your-linkedin-profile',thumbnail:'https://picsum.photos/seed/best-practices-for-your-linkedin-profile/800/450',duration:'17m',youtubeId:'sMlczYnSVYo',progress:0},
+  {id:115,title:'Leveraging LinkedIn to Create Favorable Introductions',author:'David Resseguie',category:'Social Media',playlist:'3+ Year',level:'Intermediate–Advanced',slug:'leveraging-linkedin-to-create-favorable-introductions',thumbnail:'https://picsum.photos/seed/leveraging-linkedin-to-create-favorable-introductions/800/450',duration:'18m',youtubeId:'sMlczYnSVYo',progress:0},
+  {id:116,title:'Utilizing Social Media to Identify Prospecting Opportunities',author:'Paul Tokarz',category:'Social Media',playlist:'3+ Year',level:'Intermediate–Advanced',slug:'utilizing-social-media-to-identify-prospecting-opportunities',thumbnail:'https://picsum.photos/seed/utilizing-social-media-to-identify-prospecting-opportunities/800/450',duration:'20m',youtubeId:'sMlczYnSVYo',progress:0},
+  {id:117,title:'Language and Techniques to Harness Social Media Proactively',author:'David Fisher',category:'Social Media',playlist:'3+ Year',level:'Intermediate–Advanced',slug:'language-and-techniques-to-harness-social-media-proactively',thumbnail:'https://picsum.photos/seed/language-and-techniques-to-harness-social-media-proactively/800/450',duration:'22m',youtubeId:'sMlczYnSVYo',progress:0},
+  {id:118,title:'Strategic Calling Language for Social Media',author:'Ben Newman',category:'Social Media',playlist:'3+ Year',level:'Intermediate–Advanced',slug:'strategic-calling-language-for-social-media',thumbnail:'https://picsum.photos/seed/strategic-calling-language-for-social-media/800/450',duration:'8m',youtubeId:'sMlczYnSVYo',progress:0},
+  {id:119,title:'Biggest Lessons Learned in Developing a Social Media Presence',author:'Paul Tokarz',category:'Social Media',playlist:'3+ Year',level:'Intermediate–Advanced',slug:'biggest-lessons-learned-in-developing-a-social-media-presence',thumbnail:'https://picsum.photos/seed/biggest-lessons-learned-in-developing-a-social-media-presence/800/450',duration:'9m',youtubeId:'sMlczYnSVYo',progress:0},
+  {id:120,title:'Differentiating Your Brand through Social Media',author:'David Fisher',category:'Social Media',playlist:'3+ Year',level:'Intermediate–Advanced',slug:'differentiating-your-brand-through-social-media',thumbnail:'https://picsum.photos/seed/differentiating-your-brand-through-social-media/800/450',duration:'10m',youtubeId:'sMlczYnSVYo',progress:0},
+  {id:121,title:'Amplifying Your Team\'s Brand through Social Media',author:'David Fisher',category:'Social Media',playlist:'3+ Year',level:'Intermediate–Advanced',slug:'amplifying-your-team-s-brand-through-social-media',thumbnail:'https://picsum.photos/seed/amplifying-your-team-s-brand-through-social-media/800/450',duration:'11m',youtubeId:'sMlczYnSVYo',progress:0},
+  {id:122,title:'Social Media Strategies to Build Awareness Around Your Brand',author:'Paul Tokarz',category:'Social Media',playlist:'3+ Year',level:'Intermediate–Advanced',slug:'social-media-strategies-to-build-awareness-around-your-brand',thumbnail:'https://picsum.photos/seed/social-media-strategies-to-build-awareness-around-your-brand/800/450',duration:'12m',youtubeId:'sMlczYnSVYo',progress:0},
+  {id:123,title:'Is Your Market Really a Market? Ask J.A.M.E.S.',author:'Tiffany Markarian',category:'Target Marketing',playlist:'3+ Year',level:'Intermediate–Advanced',slug:'is-your-market-really-a-market-ask-j-a-m-e-s',thumbnail:'https://picsum.photos/seed/is-your-market-really-a-market-ask-j-a-m-e-s/800/450',duration:'13m',youtubeId:'sMlczYnSVYo',progress:0},
+  {id:124,title:'Working with People You Like: Defining Your Market',author:'Jim Effner',category:'Target Marketing',playlist:'3+ Year',level:'Intermediate–Advanced',slug:'working-with-people-you-like-defining-your-market',thumbnail:'https://picsum.photos/seed/working-with-people-you-like-defining-your-market/800/450',duration:'14m',youtubeId:'sMlczYnSVYo',progress:0},
+  {id:125,title:'Identifying and Working in a Target Market',author:'Shaun McDuffie',category:'Target Marketing',playlist:'3+ Year',level:'Intermediate–Advanced',slug:'identifying-and-working-in-a-target-market',thumbnail:'https://picsum.photos/seed/identifying-and-working-in-a-target-market/800/450',duration:'15m',youtubeId:'sMlczYnSVYo',progress:0},
+  {id:126,title:'Finding Success with Target Marketing: Researching Tactics',author:'Tiffany Markarian',category:'Target Marketing',playlist:'3+ Year',level:'Intermediate–Advanced',slug:'finding-success-with-target-marketing-researching-tactics',thumbnail:'https://picsum.photos/seed/finding-success-with-target-marketing-researching-tactics/800/450',duration:'16m',youtubeId:'sMlczYnSVYo',progress:0},
+  {id:127,title:'Honing in On Your Target Market',author:'Michael Goldberg',category:'Target Marketing',playlist:'3+ Year',level:'Intermediate–Advanced',slug:'honing-in-on-your-target-market',thumbnail:'https://picsum.photos/seed/honing-in-on-your-target-market/800/450',duration:'17m',youtubeId:'sMlczYnSVYo',progress:0},
+  {id:128,title:'What Women Consumers Want from the Financial Advisor',author:'Ande Frazier',category:'Target Marketing',playlist:'3+ Year',level:'Intermediate–Advanced',slug:'what-women-consumers-want-from-the-financial-advisor',thumbnail:'https://picsum.photos/seed/what-women-consumers-want-from-the-financial-advisor/800/450',duration:'18m',youtubeId:'sMlczYnSVYo',progress:0},
+  {id:129,title:'Sales Concepts for Business Owner Clients',author:'Anthony Morris',category:'Target Marketing',playlist:'3+ Year',level:'Intermediate–Advanced',slug:'sales-concepts-for-business-owner-clients',thumbnail:'https://picsum.photos/seed/sales-concepts-for-business-owner-clients/800/450',duration:'20m',youtubeId:'sMlczYnSVYo',progress:0},
+  {id:130,title:'How to Sell to Women',author:'Judy Hoberman',category:'Target Marketing',playlist:'3+ Year',level:'Intermediate–Advanced',slug:'how-to-sell-to-women',thumbnail:'https://picsum.photos/seed/how-to-sell-to-women/800/450',duration:'22m',youtubeId:'sMlczYnSVYo',progress:0},
+  {id:131,title:'Creating a Vision-Based Marketing Strategy',author:'Shauna Weatherspoon',category:'Target Marketing',playlist:'3+ Year',level:'Intermediate–Advanced',slug:'creating-a-vision-based-marketing-strategy',thumbnail:'https://picsum.photos/seed/creating-a-vision-based-marketing-strategy/800/450',duration:'8m',youtubeId:'sMlczYnSVYo',progress:0},
+  {id:132,title:'Working in the Medical Market',author:'Rebecca Bast',category:'Target Marketing',playlist:'3+ Year',level:'Intermediate–Advanced',slug:'working-in-the-medical-market',thumbnail:'https://picsum.photos/seed/working-in-the-medical-market/800/450',duration:'9m',youtubeId:'sMlczYnSVYo',progress:0},
+  {id:133,title:'Client Segmentation: Applying the Segmentation Process to Your Book of Business',author:'Tiffany Markarian',category:'Cross-Selling',playlist:'3+ Year',level:'Intermediate–Advanced',slug:'client-segmentation-applying-the-segmentation-process-to-your-book-of-business',thumbnail:'https://picsum.photos/seed/client-segmentation-applying-the-segmentation-process-to-your-book-of-business/800/450',duration:'10m',youtubeId:'sMlczYnSVYo',progress:0},
+  {id:134,title:'Client-Segmentation: Identifying Opportunities in Your Book of Business',author:'Tiffany Markarian',category:'Cross-Selling',playlist:'3+ Year',level:'Intermediate–Advanced',slug:'client-segmentation-identifying-opportunities-in-your-book-of-business',thumbnail:'https://picsum.photos/seed/client-segmentation-identifying-opportunities-in-your-book-of-business/800/450',duration:'11m',youtubeId:'sMlczYnSVYo',progress:0},
+  {id:135,title:'Building Trust with Your Clients: The Power of the Annual Review (Part 1)',author:'Jim Effner',category:'Cross-Selling',playlist:'3+ Year',level:'Intermediate–Advanced',slug:'building-trust-with-your-clients-the-power-of-the-annual-review-part-1',thumbnail:'https://picsum.photos/seed/building-trust-with-your-clients-the-power-of-the-annual-review-part-1/800/450',duration:'12m',youtubeId:'sMlczYnSVYo',progress:0},
+  {id:136,title:'Building Trust with Your Clients: The Power of the Annual Review (Part 2)',author:'Jim Effner',category:'Cross-Selling',playlist:'3+ Year',level:'Intermediate–Advanced',slug:'building-trust-with-your-clients-the-power-of-the-annual-review-part-2',thumbnail:'https://picsum.photos/seed/building-trust-with-your-clients-the-power-of-the-annual-review-part-2/800/450',duration:'13m',youtubeId:'sMlczYnSVYo',progress:0},
+  {id:137,title:'Follow Up: Maximizing the Value of Client Events',author:'Jason Early',category:'Cross-Selling',playlist:'3+ Year',level:'Intermediate–Advanced',slug:'follow-up-maximizing-the-value-of-client-events',thumbnail:'https://picsum.photos/seed/follow-up-maximizing-the-value-of-client-events/800/450',duration:'14m',youtubeId:'sMlczYnSVYo',progress:0},
+  {id:138,title:'Building an Annual Client Engagement Plan that Sets You Apart',author:'Tiffany Markarian',category:'Cross-Selling',playlist:'3+ Year',level:'Intermediate–Advanced',slug:'building-an-annual-client-engagement-plan-that-sets-you-apart',thumbnail:'https://picsum.photos/seed/building-an-annual-client-engagement-plan-that-sets-you-apart/800/450',duration:'15m',youtubeId:'sMlczYnSVYo',progress:0},
+  {id:139,title:'Pre-Planning Client Events',author:'Jason Early',category:'Cross-Selling',playlist:'3+ Year',level:'Intermediate–Advanced',slug:'pre-planning-client-events',thumbnail:'https://picsum.photos/seed/pre-planning-client-events/800/450',duration:'16m',youtubeId:'sMlczYnSVYo',progress:0},
+  {id:140,title:'Field-Tested Research: Client Events that Work',author:'Maribeth Kuzmeski',category:'Cross-Selling',playlist:'3+ Year',level:'Intermediate–Advanced',slug:'field-tested-research-client-events-that-work',thumbnail:'https://picsum.photos/seed/field-tested-research-client-events-that-work/800/450',duration:'17m',youtubeId:'sMlczYnSVYo',progress:0},
+  {id:141,title:'From Humble Beginnings to Affluent Client Event Marketing',author:'Curtis Estes',category:'Cross-Selling',playlist:'3+ Year',level:'Intermediate–Advanced',slug:'from-humble-beginnings-to-affluent-client-event-marketing',thumbnail:'https://picsum.photos/seed/from-humble-beginnings-to-affluent-client-event-marketing/800/450',duration:'18m',youtubeId:'sMlczYnSVYo',progress:0},
+  {id:142,title:'Staff Development: Maximizing Efficiency through the Telephone',author:'Gina Pellegrini',category:'Cross-Selling',playlist:'3+ Year',level:'Intermediate–Advanced',slug:'staff-development-maximizing-efficiency-through-the-telephone',thumbnail:'https://picsum.photos/seed/staff-development-maximizing-efficiency-through-the-telephone/800/450',duration:'20m',youtubeId:'sMlczYnSVYo',progress:0},
+  {id:143,title:'Technology Strategies to Build Your Brand and Get Introductions',author:'Kyle Gleich',category:'Differentiating Your Brand',playlist:'3+ Year',level:'Intermediate–Advanced',slug:'technology-strategies-to-build-your-brand-and-get-introductions',thumbnail:'https://picsum.photos/seed/technology-strategies-to-build-your-brand-and-get-introductions/800/450',duration:'22m',youtubeId:'sMlczYnSVYo',progress:0},
+  {id:144,title:'Standing Out Amongst the Competition',author:'Maribeth Kuzmeski',category:'Differentiating Your Brand',playlist:'3+ Year',level:'Intermediate–Advanced',slug:'standing-out-amongst-the-competition',thumbnail:'https://picsum.photos/seed/standing-out-amongst-the-competition/800/450',duration:'8m',youtubeId:'sMlczYnSVYo',progress:0},
+  {id:145,title:'Building Your Brand: Is It Relatable to Your Clients',author:'Tiffany Markarian',category:'Differentiating Your Brand',playlist:'3+ Year',level:'Intermediate–Advanced',slug:'building-your-brand-is-it-relatable-to-your-clients',thumbnail:'https://picsum.photos/seed/building-your-brand-is-it-relatable-to-your-clients/800/450',duration:'9m',youtubeId:'sMlczYnSVYo',progress:0},
+  {id:146,title:'Creating a Memorable Client Experience',author:'Keith Spengel',category:'Differentiating Your Brand',playlist:'3+ Year',level:'Intermediate–Advanced',slug:'creating-a-memorable-client-experience',thumbnail:'https://picsum.photos/seed/creating-a-memorable-client-experience/800/450',duration:'10m',youtubeId:'sMlczYnSVYo',progress:0},
+  {id:147,title:'Differentiating Your Brand Through Social Media',author:'David Fisher',category:'Differentiating Your Brand',playlist:'3+ Year',level:'Intermediate–Advanced',slug:'differentiating-your-brand-through-social-media',thumbnail:'https://picsum.photos/seed/differentiating-your-brand-through-social-media/800/450',duration:'11m',youtubeId:'sMlczYnSVYo',progress:0},
+  {id:148,title:'Building a Business Around Your Brand',author:'Shauna Weatherspoon',category:'Differentiating Your Brand',playlist:'3+ Year',level:'Intermediate–Advanced',slug:'building-a-business-around-your-brand',thumbnail:'https://picsum.photos/seed/building-a-business-around-your-brand/800/450',duration:'12m',youtubeId:'sMlczYnSVYo',progress:0},
+  {id:149,title:'Amplifying Your Team\'s Brand through Social Media',author:'David Fisher',category:'Differentiating Your Brand',playlist:'3+ Year',level:'Intermediate–Advanced',slug:'amplifying-your-team-s-brand-through-social-media',thumbnail:'https://picsum.photos/seed/amplifying-your-team-s-brand-through-social-media/800/450',duration:'13m',youtubeId:'sMlczYnSVYo',progress:0},
+  {id:150,title:'Standing Out Amongst the Competition',author:'Maribeth Kuzmeski',category:'Differentiating Your Brand',playlist:'3+ Year',level:'Intermediate–Advanced',slug:'standing-out-amongst-the-competition',thumbnail:'https://picsum.photos/seed/standing-out-amongst-the-competition/800/450',duration:'14m',youtubeId:'sMlczYnSVYo',progress:0},
+  {id:151,title:'Social Media Strategies to Build Awareness Around Your Brand',author:'Paul Tokarz',category:'Differentiating Your Brand',playlist:'3+ Year',level:'Intermediate–Advanced',slug:'social-media-strategies-to-build-awareness-around-your-brand',thumbnail:'https://picsum.photos/seed/social-media-strategies-to-build-awareness-around-your-brand/800/450',duration:'15m',youtubeId:'sMlczYnSVYo',progress:0},
+  {id:152,title:'Building Your Brand',author:'Marcus Henderson',category:'Differentiating Your Brand',playlist:'3+ Year',level:'Intermediate–Advanced',slug:'building-your-brand',thumbnail:'https://picsum.photos/seed/building-your-brand/800/450',duration:'16m',youtubeId:'sMlczYnSVYo',progress:0},
+  {id:153,title:'Field-Tested: Three Reasons to Own Life Insurance in Today\'s Market',author:'Tom Hegna',category:'Life Insurance',playlist:'3+ Year',level:'Intermediate–Advanced',slug:'field-tested-three-reasons-to-own-life-insurance-in-today-s-market',thumbnail:'https://picsum.photos/seed/field-tested-three-reasons-to-own-life-insurance-in-today-s-market/800/450',duration:'17m',youtubeId:'sMlczYnSVYo',progress:0},
+  {id:154,title:'The Need vs. Greed Life Sales',author:'Eszylfie Taylor',category:'Life Insurance',playlist:'3+ Year',level:'Intermediate–Advanced',slug:'the-need-vs-greed-life-sales',thumbnail:'https://picsum.photos/seed/the-need-vs-greed-life-sales/800/450',duration:'18m',youtubeId:'sMlczYnSVYo',progress:0},
+  {id:155,title:'Taking a Stand for Life Insurance: Uncovering the Need',author:'Ande Frazier',category:'Life Insurance',playlist:'3+ Year',level:'Intermediate–Advanced',slug:'taking-a-stand-for-life-insurance-uncovering-the-need',thumbnail:'https://picsum.photos/seed/taking-a-stand-for-life-insurance-uncovering-the-need/800/450',duration:'20m',youtubeId:'sMlczYnSVYo',progress:0},
+  {id:156,title:'Explaining Human Life Value',author:'Shaun McDuffie',category:'Life Insurance',playlist:'3+ Year',level:'Intermediate–Advanced',slug:'explaining-human-life-value',thumbnail:'https://picsum.photos/seed/explaining-human-life-value/800/450',duration:'22m',youtubeId:'sMlczYnSVYo',progress:0},
+  {id:157,title:'Life Insurance in Wealth Planning: Taking a Wholistic Approach to Your Advisement',author:'Marcus Henderson',category:'Life Insurance',playlist:'3+ Year',level:'Intermediate–Advanced',slug:'life-insurance-in-wealth-planning-taking-a-wholistic-approach-to-your-advisement',thumbnail:'https://picsum.photos/seed/life-insurance-in-wealth-planning-taking-a-wholistic-approach-to-your-advisement/800/450',duration:'8m',youtubeId:'sMlczYnSVYo',progress:0},
+  {id:158,title:'Positioning Life Insurance as an Asset Class for Wealth Accumulation',author:'David Resseguie',category:'Life Insurance',playlist:'3+ Year',level:'Intermediate–Advanced',slug:'positioning-life-insurance-as-an-asset-class-for-wealth-accumulation',thumbnail:'https://picsum.photos/seed/positioning-life-insurance-as-an-asset-class-for-wealth-accumulation/800/450',duration:'9m',youtubeId:'sMlczYnSVYo',progress:0},
+  {id:159,title:'Finding the Money: Simple Money Saving Strategies for Clients',author:'Eszylfie Taylor',category:'Life Insurance',playlist:'3+ Year',level:'Intermediate–Advanced',slug:'finding-the-money-simple-money-saving-strategies-for-clients',thumbnail:'https://picsum.photos/seed/finding-the-money-simple-money-saving-strategies-for-clients/800/450',duration:'10m',youtubeId:'sMlczYnSVYo',progress:0},
+  {id:160,title:'Language for Placing Rated Cases',author:'Shaun McDuffie',category:'Life Insurance',playlist:'3+ Year',level:'Intermediate–Advanced',slug:'language-for-placing-rated-cases',thumbnail:'https://picsum.photos/seed/language-for-placing-rated-cases/800/450',duration:'11m',youtubeId:'sMlczYnSVYo',progress:0},
+  {id:161,title:'Understanding the Psychology of Grief and Loss',author:'Amy Florian',category:'Life Insurance',playlist:'3+ Year',level:'Intermediate–Advanced',slug:'understanding-the-psychology-of-grief-and-loss',thumbnail:'https://picsum.photos/seed/understanding-the-psychology-of-grief-and-loss/800/450',duration:'12m',youtubeId:'sMlczYnSVYo',progress:0},
+  {id:162,title:'Life Insurance as an Asset',author:'Scott Underwood',category:'Life Insurance',playlist:'3+ Year',level:'Intermediate–Advanced',slug:'life-insurance-as-an-asset',thumbnail:'https://picsum.photos/seed/life-insurance-as-an-asset/800/450',duration:'13m',youtubeId:'sMlczYnSVYo',progress:0},
+  {id:163,title:'Retirement Alpha: How Mortality Credits Improve Retirement Outcomes',author:'Tom Hegna',category:'Retirement Planning',playlist:'3+ Year',level:'Intermediate–Advanced',slug:'retirement-alpha-how-mortality-credits-improve-retirement-outcomes',thumbnail:'https://picsum.photos/seed/retirement-alpha-how-mortality-credits-improve-retirement-outcomes/800/450',duration:'14m',youtubeId:'sMlczYnSVYo',progress:0},
+  {id:164,title:'The Five Fears of Approach Retirement',author:'Curtis Cloke',category:'Retirement Planning',playlist:'3+ Year',level:'Intermediate–Advanced',slug:'the-five-fears-of-approach-retirement',thumbnail:'https://picsum.photos/seed/the-five-fears-of-approach-retirement/800/450',duration:'15m',youtubeId:'sMlczYnSVYo',progress:0},
+  {id:165,title:'Behavior Management vs. Money Management',author:'Shaun McDuffie',category:'Retirement Planning',playlist:'3+ Year',level:'Intermediate–Advanced',slug:'behavior-management-vs-money-management',thumbnail:'https://picsum.photos/seed/behavior-management-vs-money-management/800/450',duration:'16m',youtubeId:'sMlczYnSVYo',progress:0},
+  {id:166,title:'Managing Longevity Risk: It\'s All About the Income',author:'Joe Jordan',category:'Retirement Planning',playlist:'3+ Year',level:'Intermediate–Advanced',slug:'managing-longevity-risk-it-s-all-about-the-income',thumbnail:'https://picsum.photos/seed/managing-longevity-risk-it-s-all-about-the-income/800/450',duration:'17m',youtubeId:'sMlczYnSVYo',progress:0},
+  {id:167,title:'Don\'t Worry, Retire Happy: Seven Steps to Retirement Security',author:'Tom Hegna',category:'Retirement Planning',playlist:'3+ Year',level:'Intermediate–Advanced',slug:'don-t-worry-retire-happy-seven-steps-to-retirement-security',thumbnail:'https://picsum.photos/seed/don-t-worry-retire-happy-seven-steps-to-retirement-security/800/450',duration:'18m',youtubeId:'sMlczYnSVYo',progress:0},
+  {id:168,title:'Overcoming Misconceptions About Social Security Benefits',author:'Brian Doherty',category:'Retirement Planning',playlist:'3+ Year',level:'Intermediate–Advanced',slug:'overcoming-misconceptions-about-social-security-benefits',thumbnail:'https://picsum.photos/seed/overcoming-misconceptions-about-social-security-benefits/800/450',duration:'20m',youtubeId:'sMlczYnSVYo',progress:0},
+  {id:169,title:'Framing The Four L\'s of Retirement',author:'Curtis Cloke',category:'Retirement Planning',playlist:'3+ Year',level:'Intermediate–Advanced',slug:'framing-the-four-l-s-of-retirement',thumbnail:'https://picsum.photos/seed/framing-the-four-l-s-of-retirement/800/450',duration:'22m',youtubeId:'sMlczYnSVYo',progress:0},
+  {id:170,title:'Field-Tested Episode: The 60/40 Portfolio is Dead – Long Live Insurance and Annuities',author:'Tom Hegna',category:'Retirement Planning',playlist:'3+ Year',level:'Intermediate–Advanced',slug:'field-tested-episode-the-60-40-portfolio-is-dead-long-live-insurance-and-annuities',thumbnail:'https://picsum.photos/seed/field-tested-episode-the-60-40-portfolio-is-dead-long-live-insurance-and-annuities/800/450',duration:'8m',youtubeId:'sMlczYnSVYo',progress:0},
+  {id:171,title:'The Basket of Products Approach',author:'Curtis Cloke',category:'Retirement Planning',playlist:'3+ Year',level:'Intermediate–Advanced',slug:'the-basket-of-products-approach',thumbnail:'https://picsum.photos/seed/the-basket-of-products-approach/800/450',duration:'9m',youtubeId:'sMlczYnSVYo',progress:0},
+  {id:172,title:'Go Go, Slow Go and No Go',author:'Tom Hegna',category:'Retirement Planning',playlist:'3+ Year',level:'Intermediate–Advanced',slug:'go-go-slow-go-and-no-go',thumbnail:'https://picsum.photos/seed/go-go-slow-go-and-no-go/800/450',duration:'10m',youtubeId:'sMlczYnSVYo',progress:0},
+  {id:173,title:'The Five Risks Always Apparent in Retirement',author:'Curtis Cloke',category:'Retirement Planning',playlist:'3+ Year',level:'Intermediate–Advanced',slug:'the-five-risks-always-apparent-in-retirement',thumbnail:'https://picsum.photos/seed/the-five-risks-always-apparent-in-retirement/800/450',duration:'11m',youtubeId:'sMlczYnSVYo',progress:0},
+  {id:174,title:'The Game of Teaming: Refining the Teaming Process',author:'Bellaria Jimenez',category:'Team Selling',playlist:'3+ Year',level:'Intermediate–Advanced',slug:'the-game-of-teaming-refining-the-teaming-process',thumbnail:'https://picsum.photos/seed/the-game-of-teaming-refining-the-teaming-process/800/450',duration:'12m',youtubeId:'sMlczYnSVYo',progress:0},
+  {id:175,title:'Millennials and Team Selling',author:'Jim Meehan',category:'Team Selling',playlist:'3+ Year',level:'Intermediate–Advanced',slug:'millennials-and-team-selling',thumbnail:'https://picsum.photos/seed/millennials-and-team-selling/800/450',duration:'13m',youtubeId:'sMlczYnSVYo',progress:0},
+  {id:176,title:'The Top Five Components of Team Selling',author:'John Buscek',category:'Team Selling',playlist:'3+ Year',level:'Intermediate–Advanced',slug:'the-top-five-components-of-team-selling',thumbnail:'https://picsum.photos/seed/the-top-five-components-of-team-selling/800/450',duration:'14m',youtubeId:'sMlczYnSVYo',progress:0},
+  {id:177,title:'Managing Successful Sales Teams',author:'Linda Witham',category:'Team Selling',playlist:'3+ Year',level:'Intermediate–Advanced',slug:'managing-successful-sales-teams',thumbnail:'https://picsum.photos/seed/managing-successful-sales-teams/800/450',duration:'15m',youtubeId:'sMlczYnSVYo',progress:0},
+  {id:178,title:'The Top Five Components of Team Selling: Compensation',author:'John Buscek',category:'Team Selling',playlist:'3+ Year',level:'Intermediate–Advanced',slug:'the-top-five-components-of-team-selling-compensation',thumbnail:'https://picsum.photos/seed/the-top-five-components-of-team-selling-compensation/800/450',duration:'16m',youtubeId:'sMlczYnSVYo',progress:0},
+  {id:179,title:'Marketing and Business Development on Teams',author:'David LaBrocciosa',category:'Team Selling',playlist:'3+ Year',level:'Intermediate–Advanced',slug:'marketing-and-business-development-on-teams',thumbnail:'https://picsum.photos/seed/marketing-and-business-development-on-teams/800/450',duration:'17m',youtubeId:'sMlczYnSVYo',progress:0},
+  {id:180,title:'Key Principles of Teaming',author:'Jason Early',category:'Team Selling',playlist:'3+ Year',level:'Intermediate–Advanced',slug:'key-principles-of-teaming',thumbnail:'https://picsum.photos/seed/key-principles-of-teaming/800/450',duration:'18m',youtubeId:'sMlczYnSVYo',progress:0},
+  {id:181,title:'The Top Five Components of Team Selling: Roles and Responsibilities',author:'John Buscek',category:'Team Selling',playlist:'3+ Year',level:'Intermediate–Advanced',slug:'the-top-five-components-of-team-selling-roles-and-responsibilities',thumbnail:'https://picsum.photos/seed/the-top-five-components-of-team-selling-roles-and-responsibilities/800/450',duration:'20m',youtubeId:'sMlczYnSVYo',progress:0},
+  {id:182,title:'The Top Five Components of Team Selling: The Client Matrix',author:'John Buscek',category:'Team Selling',playlist:'3+ Year',level:'Intermediate–Advanced',slug:'the-top-five-components-of-team-selling-the-client-matrix',thumbnail:'https://picsum.photos/seed/the-top-five-components-of-team-selling-the-client-matrix/800/450',duration:'22m',youtubeId:'sMlczYnSVYo',progress:0},
+  {id:183,title:'Keys to Building High Performing Teams',author:'David LaBrocciosa',category:'Team Selling',playlist:'3+ Year',level:'Intermediate–Advanced',slug:'keys-to-building-high-performing-teams',thumbnail:'https://picsum.photos/seed/keys-to-building-high-performing-teams/800/450',duration:'8m',youtubeId:'sMlczYnSVYo',progress:0},
+  {id:184,title:'Daily Disciplines to Stay Productive and Organized',author:'Vince Silva',category:'Time Management',playlist:'3+ Year',level:'Intermediate–Advanced',slug:'daily-disciplines-to-stay-productive-and-organized',thumbnail:'https://picsum.photos/seed/daily-disciplines-to-stay-productive-and-organized/800/450',duration:'9m',youtubeId:'sMlczYnSVYo',progress:0},
+  {id:185,title:'Five Disciplines of Execution and High Performance',author:'Brian Moran',category:'Time Management',playlist:'3+ Year',level:'Intermediate–Advanced',slug:'five-disciplines-of-execution-and-high-performance',thumbnail:'https://picsum.photos/seed/five-disciplines-of-execution-and-high-performance/800/450',duration:'10m',youtubeId:'sMlczYnSVYo',progress:0},
+  {id:186,title:'The Four D\'s of Time Management',author:'Mickey Rosenzweig',category:'Time Management',playlist:'3+ Year',level:'Intermediate–Advanced',slug:'the-four-d-s-of-time-management',thumbnail:'https://picsum.photos/seed/the-four-d-s-of-time-management/800/450',duration:'11m',youtubeId:'sMlczYnSVYo',progress:0},
+  {id:187,title:'Work Where You Win: Using Your Time Wisely and Being Productive',author:'Ande Frazier',category:'Time Management',playlist:'3+ Year',level:'Intermediate–Advanced',slug:'work-where-you-win-using-your-time-wisely-and-being-productive',thumbnail:'https://picsum.photos/seed/work-where-you-win-using-your-time-wisely-and-being-productive/800/450',duration:'12m',youtubeId:'sMlczYnSVYo',progress:0},
+  {id:188,title:'The Art of High Performance: The TAP Analysis Tool',author:'Jim Ruta',category:'Time Management',playlist:'3+ Year',level:'Intermediate–Advanced',slug:'the-art-of-high-performance-the-tap-analysis-tool',thumbnail:'https://picsum.photos/seed/the-art-of-high-performance-the-tap-analysis-tool/800/450',duration:'13m',youtubeId:'sMlczYnSVYo',progress:0},
+  {id:189,title:'Three Core Principles of Execution',author:'Brian Moran',category:'Time Management',playlist:'3+ Year',level:'Intermediate–Advanced',slug:'three-core-principles-of-execution',thumbnail:'https://picsum.photos/seed/three-core-principles-of-execution/800/450',duration:'14m',youtubeId:'sMlczYnSVYo',progress:0},
+  {id:190,title:'Maximizing Staff Efficiency through Time Management',author:'Gina Pellegrini',category:'Time Management',playlist:'3+ Year',level:'Intermediate–Advanced',slug:'maximizing-staff-efficiency-through-time-management',thumbnail:'https://picsum.photos/seed/maximizing-staff-efficiency-through-time-management/800/450',duration:'15m',youtubeId:'sMlczYnSVYo',progress:0},
+  {id:191,title:'Time Maximization: Determine What Your Time is Worth and Don\'t Waste a Penny of It',author:'Dr. Jason Selk',category:'Time Management',playlist:'3+ Year',level:'Intermediate–Advanced',slug:'time-maximization-determine-what-your-time-is-worth-and-don-t-waste-a-penny-of-it',thumbnail:'https://picsum.photos/seed/time-maximization-determine-what-your-time-is-worth-and-don-t-waste-a-penny-of-it/800/450',duration:'16m',youtubeId:'sMlczYnSVYo',progress:0},
+  {id:192,title:'The Art of High Performance: Organizing Your Year',author:'Jim Ruta',category:'Time Management',playlist:'3+ Year',level:'Intermediate–Advanced',slug:'the-art-of-high-performance-organizing-your-year',thumbnail:'https://picsum.photos/seed/the-art-of-high-performance-organizing-your-year/800/450',duration:'17m',youtubeId:'sMlczYnSVYo',progress:0},
+  {id:193,title:'Practice Management: Delegating and Time Management',author:'Duane Stevens',category:'Time Management',playlist:'3+ Year',level:'Intermediate–Advanced',slug:'practice-management-delegating-and-time-management',thumbnail:'https://picsum.photos/seed/practice-management-delegating-and-time-management/800/450',duration:'18m',youtubeId:'sMlczYnSVYo',progress:0},
+  {id:194,title:'Building Your Business with Intention and Not By Default',author:'Penny Phillips',category:'Staff Development',playlist:'3+ Year',level:'Intermediate–Advanced',slug:'building-your-business-with-intention-and-not-by-default',thumbnail:'https://picsum.photos/seed/building-your-business-with-intention-and-not-by-default/800/450',duration:'20m',youtubeId:'sMlczYnSVYo',progress:0},
+  {id:195,title:'Getting Staff More Involved in Your Practice',author:'Gina Pellegrini',category:'Staff Development',playlist:'3+ Year',level:'Intermediate–Advanced',slug:'getting-staff-more-involved-in-your-practice',thumbnail:'https://picsum.photos/seed/getting-staff-more-involved-in-your-practice/800/450',duration:'22m',youtubeId:'sMlczYnSVYo',progress:0},
+  {id:196,title:'How to Lead a Team and Develop Staff',author:'Andrea Bullard',category:'Staff Development',playlist:'3+ Year',level:'Intermediate–Advanced',slug:'how-to-lead-a-team-and-develop-staff',thumbnail:'https://picsum.photos/seed/how-to-lead-a-team-and-develop-staff/800/450',duration:'8m',youtubeId:'sMlczYnSVYo',progress:0},
+  {id:197,title:'Creating a Memorable Client Experience',author:'Keith Spengel',category:'Staff Development',playlist:'3+ Year',level:'Intermediate–Advanced',slug:'creating-a-memorable-client-experience',thumbnail:'https://picsum.photos/seed/creating-a-memorable-client-experience/800/450',duration:'9m',youtubeId:'sMlczYnSVYo',progress:0},
+  {id:198,title:'Staff Development: Maximizing Efficiency through the Telephone',author:'Gina Pellegrini',category:'Staff Development',playlist:'3+ Year',level:'Intermediate–Advanced',slug:'staff-development-maximizing-efficiency-through-the-telephone',thumbnail:'https://picsum.photos/seed/staff-development-maximizing-efficiency-through-the-telephone/800/450',duration:'10m',youtubeId:'sMlczYnSVYo',progress:0},
+  {id:199,title:'Tips to Hiring Great Staff: A Step By Step System',author:'Andrea Bullard',category:'Staff Development',playlist:'3+ Year',level:'Intermediate–Advanced',slug:'tips-to-hiring-great-staff-a-step-by-step-system',thumbnail:'https://picsum.photos/seed/tips-to-hiring-great-staff-a-step-by-step-system/800/450',duration:'11m',youtubeId:'sMlczYnSVYo',progress:0},
+  {id:200,title:'Telephoning Tips and Language or Staff',author:'Gina Pellegrini',category:'Staff Development',playlist:'3+ Year',level:'Intermediate–Advanced',slug:'telephoning-tips-and-language-or-staff',thumbnail:'https://picsum.photos/seed/telephoning-tips-and-language-or-staff/800/450',duration:'12m',youtubeId:'sMlczYnSVYo',progress:0},
+  {id:201,title:'Success By Design: How to Use the Power of Visualization to Build Your Business',author:'Ellen Rogin',category:'Goal Setting and Business Planning',playlist:'3+ Year',level:'Intermediate–Advanced',slug:'success-by-design-how-to-use-the-power-of-visualization-to-build-your-business',thumbnail:'https://picsum.photos/seed/success-by-design-how-to-use-the-power-of-visualization-to-build-your-business/800/450',duration:'13m',youtubeId:'sMlczYnSVYo',progress:0},
+  {id:202,title:'Harnessing Your Vision to Build a Thriving Practice',author:'Sabine Robinson',category:'Goal Setting and Business Planning',playlist:'3+ Year',level:'Intermediate–Advanced',slug:'harnessing-your-vision-to-build-a-thriving-practice',thumbnail:'https://picsum.photos/seed/harnessing-your-vision-to-build-a-thriving-practice/800/450',duration:'14m',youtubeId:'sMlczYnSVYo',progress:0},
+  {id:203,title:'Goal Setting and Thinking Big',author:'Ben Newman',category:'Goal Setting and Business Planning',playlist:'3+ Year',level:'Intermediate–Advanced',slug:'goal-setting-and-thinking-big',thumbnail:'https://picsum.photos/seed/goal-setting-and-thinking-big/800/450',duration:'15m',youtubeId:'sMlczYnSVYo',progress:0},
+  {id:204,title:'The Art of High Performance: Setting and Achieving Goals',author:'Jim Ruta',category:'Goal Setting and Business Planning',playlist:'3+ Year',level:'Intermediate–Advanced',slug:'the-art-of-high-performance-setting-and-achieving-goals',thumbnail:'https://picsum.photos/seed/the-art-of-high-performance-setting-and-achieving-goals/800/450',duration:'16m',youtubeId:'sMlczYnSVYo',progress:0},
+  {id:205,title:'Goal-Setting Philosophy',author:'Miguel Taveras',category:'Goal Setting and Business Planning',playlist:'3+ Year',level:'Intermediate–Advanced',slug:'goal-setting-philosophy',thumbnail:'https://picsum.photos/seed/goal-setting-philosophy/800/450',duration:'17m',youtubeId:'sMlczYnSVYo',progress:0},
+  {id:206,title:'Five Simple Steps to Goal Achievement',author:'Doug Lennick',category:'Goal Setting and Business Planning',playlist:'3+ Year',level:'Intermediate–Advanced',slug:'five-simple-steps-to-goal-achievement',thumbnail:'https://picsum.photos/seed/five-simple-steps-to-goal-achievement/800/450',duration:'18m',youtubeId:'sMlczYnSVYo',progress:0},
+  {id:207,title:'Developing the Power of a Vision',author:'Machen McDonald',category:'Goal Setting and Business Planning',playlist:'3+ Year',level:'Intermediate–Advanced',slug:'developing-the-power-of-a-vision',thumbnail:'https://picsum.photos/seed/developing-the-power-of-a-vision/800/450',duration:'20m',youtubeId:'sMlczYnSVYo',progress:0},
+  {id:208,title:'Goal Setting and Developing Your Annual Business Plan',author:'Joel Seleskie',category:'Goal Setting and Business Planning',playlist:'3+ Year',level:'Intermediate–Advanced',slug:'goal-setting-and-developing-your-annual-business-plan',thumbnail:'https://picsum.photos/seed/goal-setting-and-developing-your-annual-business-plan/800/450',duration:'22m',youtubeId:'sMlczYnSVYo',progress:0},
+  {id:209,title:'Business Planning: Mission and Vision',author:'Machen McDonald',category:'Goal Setting and Business Planning',playlist:'3+ Year',level:'Intermediate–Advanced',slug:'business-planning-mission-and-vision',thumbnail:'https://picsum.photos/seed/business-planning-mission-and-vision/800/450',duration:'8m',youtubeId:'sMlczYnSVYo',progress:0},
+  {id:210,title:'Contingency Planning: The Five D\'s Business Owners Can Encounter',author:'Julie Keyes',category:'Advanced Planning',playlist:'3+ Year',level:'Intermediate–Advanced',slug:'contingency-planning-the-five-d-s-business-owners-can-encounter',thumbnail:'https://picsum.photos/seed/contingency-planning-the-five-d-s-business-owners-can-encounter/800/450',duration:'9m',youtubeId:'sMlczYnSVYo',progress:0},
+  {id:211,title:'Business Planning Basics',author:'Grant Gier',category:'Advanced Planning',playlist:'3+ Year',level:'Intermediate–Advanced',slug:'business-planning-basics',thumbnail:'https://picsum.photos/seed/business-planning-basics/800/450',duration:'10m',youtubeId:'sMlczYnSVYo',progress:0},
+  {id:212,title:'Sales Ideas: Planning for Non-Citizen Spouses',author:'Joe Maier',category:'Advanced Planning',playlist:'3+ Year',level:'Intermediate–Advanced',slug:'sales-ideas-planning-for-non-citizen-spouses',thumbnail:'https://picsum.photos/seed/sales-ideas-planning-for-non-citizen-spouses/800/450',duration:'11m',youtubeId:'sMlczYnSVYo',progress:0},
+  {id:213,title:'Introduction to the Exit Planning Process',author:'Julie Keyes',category:'Advanced Planning',playlist:'3+ Year',level:'Intermediate–Advanced',slug:'introduction-to-the-exit-planning-process',thumbnail:'https://picsum.photos/seed/introduction-to-the-exit-planning-process/800/450',duration:'12m',youtubeId:'sMlczYnSVYo',progress:0},
+  {id:214,title:'Using Cash Value Life Insurance for Income Tax Planning',author:'Jerry Hesch',category:'Advanced Planning',playlist:'3+ Year',level:'Intermediate–Advanced',slug:'using-cash-value-life-insurance-for-income-tax-planning',thumbnail:'https://picsum.photos/seed/using-cash-value-life-insurance-for-income-tax-planning/800/450',duration:'13m',youtubeId:'sMlczYnSVYo',progress:0},
+  {id:215,title:'The Biggest Obstacle in Exit Planning Advisors will Face',author:'Julie Keyes',category:'Advanced Planning',playlist:'3+ Year',level:'Intermediate–Advanced',slug:'the-biggest-obstacle-in-exit-planning-advisors-will-face',thumbnail:'https://picsum.photos/seed/the-biggest-obstacle-in-exit-planning-advisors-will-face/800/450',duration:'14m',youtubeId:'sMlczYnSVYo',progress:0},
+  {id:216,title:'Disability, Sickness, Old Age, Death – The Real Competition',author:'Ed Deutschlander',category:'Motivation',playlist:'3+ Year',level:'Intermediate–Advanced',slug:'disability-sickness-old-age-death-the-real-competition',thumbnail:'https://picsum.photos/seed/disability-sickness-old-age-death-the-real-competition/800/450',duration:'15m',youtubeId:'sMlczYnSVYo',progress:0},
+  {id:217,title:'How to Stay Balanced and Positive in This Career',author:'David Resseguie',category:'Motivation',playlist:'3+ Year',level:'Intermediate–Advanced',slug:'how-to-stay-balanced-and-positive-in-this-career',thumbnail:'https://picsum.photos/seed/how-to-stay-balanced-and-positive-in-this-career/800/450',duration:'16m',youtubeId:'sMlczYnSVYo',progress:0},
+  {id:218,title:'Field-Tested Episode: Why We Do What We Do',author:'Don Badgley',category:'Motivation',playlist:'3+ Year',level:'Intermediate–Advanced',slug:'field-tested-episode-why-we-do-what-we-do',thumbnail:'https://picsum.photos/seed/field-tested-episode-why-we-do-what-we-do/800/450',duration:'17m',youtubeId:'sMlczYnSVYo',progress:0},
+  {id:219,title:'Developing Courage through Conviction',author:'Alan Nero',category:'Motivation',playlist:'3+ Year',level:'Intermediate–Advanced',slug:'developing-courage-through-conviction',thumbnail:'https://picsum.photos/seed/developing-courage-through-conviction/800/450',duration:'18m',youtubeId:'sMlczYnSVYo',progress:0},
+  {id:220,title:'Mental Toughness: Managing the Ups and Downs of the Business',author:'Sabine Robinson',category:'Motivation',playlist:'3+ Year',level:'Intermediate–Advanced',slug:'mental-toughness-managing-the-ups-and-downs-of-the-business',thumbnail:'https://picsum.photos/seed/mental-toughness-managing-the-ups-and-downs-of-the-business/800/450',duration:'20m',youtubeId:'sMlczYnSVYo',progress:0},
+  {id:221,title:'The Value of Life Insurance',author:'Mike White',category:'Motivation',playlist:'3+ Year',level:'Intermediate–Advanced',slug:'the-value-of-life-insurance',thumbnail:'https://picsum.photos/seed/the-value-of-life-insurance/800/450',duration:'22m',youtubeId:'sMlczYnSVYo',progress:0},
+  {id:222,title:'Expectancy Theory and PCT: Your Thinking and Developing Mental Toughness',author:'Dr. Jason Selk',category:'Motivation',playlist:'3+ Year',level:'Intermediate–Advanced',slug:'expectancy-theory-and-pct-your-thinking-and-developing-mental-toughness',thumbnail:'https://picsum.photos/seed/expectancy-theory-and-pct-your-thinking-and-developing-mental-toughness/800/450',duration:'8m',youtubeId:'sMlczYnSVYo',progress:0},
+  {id:223,title:'Incorporating Mindful Practices to Improve Results and Boost Happiness',author:'Ellen Rogin',category:'Motivation',playlist:'3+ Year',level:'Intermediate–Advanced',slug:'incorporating-mindful-practices-to-improve-results-and-boost-happiness',thumbnail:'https://picsum.photos/seed/incorporating-mindful-practices-to-improve-results-and-boost-happiness/800/450',duration:'9m',youtubeId:'sMlczYnSVYo',progress:0},
+  {id:224,title:'Living a Life of Significance',author:'Joe Jordan',category:'Motivation',playlist:'3+ Year',level:'Intermediate–Advanced',slug:'living-a-life-of-significance',thumbnail:'https://picsum.photos/seed/living-a-life-of-significance/800/450',duration:'10m',youtubeId:'sMlczYnSVYo',progress:0},
+  {id:225,title:'Motivation Tips for Advanced Reps Who Plateau',author:'Andrea Bullard',category:'Motivation',playlist:'3+ Year',level:'Intermediate–Advanced',slug:'motivation-tips-for-advanced-reps-who-plateau',thumbnail:'https://picsum.photos/seed/motivation-tips-for-advanced-reps-who-plateau/800/450',duration:'11m',youtubeId:'sMlczYnSVYo',progress:0}
 ];
 
-/* ── CHAPTER DATA ─────────────────────────────────────────── */
-var CHAPTERS = {
-  1: [ // Life Insurance Fundamentals (progress:35 → ch2 active)
-    {n:'Term vs. Whole Life Explained', d:'32m', done:true,  cur:false},
-    {n:'Policy Components & Riders',    d:'34m', done:false, cur:true},
-    {n:'Underwriting Basics',           d:'30m', done:false, cur:false},
-    {n:'Client Needs Analysis',         d:'28m', done:false, cur:false},
-    {n:'Comparing Products Side-by-Side',d:'31m',done:false, cur:false},
-    {n:'Presenting Your Recommendation',d:'25m', done:false, cur:false}
-  ],
-  2: [ // Prospecting in the Digital Age
-    {n:'The Digital Prospecting Mindset',d:'14m',done:false,cur:false},
-    {n:'LinkedIn & Social Selling',      d:'18m',done:false,cur:false},
-    {n:'Video Prospecting That Converts',d:'15m',done:false,cur:false},
-    {n:'Building Your Pipeline System',  d:'11m',done:false,cur:false}
-  ],
-  3: [ // The Trust Formula (progress:64 → ch4 active)
-    {n:'Emotional Intelligence Fundamentals',d:'14m',done:true, cur:false},
-    {n:'Active Listening Mastery',           d:'15m',done:true, cur:false},
-    {n:'Building Rapport From Day One',      d:'13m',done:true, cur:false},
-    {n:'Managing Client Emotions',           d:'16m',done:false,cur:true},
-    {n:'Long-Term Loyalty Framework',        d:'14m',done:false,cur:false}
-  ],
-  4: [ // Closing Techniques for Complex Sales
-    {n:'The Commitment-Based Close',      d:'14m',done:false,cur:false},
-    {n:'Navigating Multi-Stakeholder Deals',d:'16m',done:false,cur:false},
-    {n:'Handling Objections with Ease',   d:'13m',done:false,cur:false},
-    {n:'The Final Conversation Framework',d:'12m',done:false,cur:false},
-    {n:'Follow-Up That Actually Works',   d:'13m',done:false,cur:false}
-  ],
-  5: [ // Referral Mastery
-    {n:'Why Referrals Fail (and How to Fix It)',d:'11m',done:false,cur:false},
-    {n:'The Ask System',                        d:'12m',done:false,cur:false},
-    {n:'Building a Referral Culture',           d:'11m',done:false,cur:false},
-    {n:'Tracking & Measuring Referrals',        d:'10m',done:false,cur:false}
-  ],
-  6: [ // Time Blocking for Peak Producers
-    {n:'The Peak Producer Schedule',     d:'13m',done:false,cur:false},
-    {n:'Time Blocking in Practice',      d:'14m',done:false,cur:false},
-    {n:'Eliminating Low-Value Activity', d:'12m',done:false,cur:false},
-    {n:'Protecting Your Focus Hours',    d:'13m',done:false,cur:false}
-  ],
-  7: [ // Underwriting Relationships (progress:25 → ch2 active)
-    {n:'How Underwriters Think',           d:'16m',done:true, cur:false},
-    {n:'Submitting Strong Cases',          d:'16m',done:false,cur:true},
-    {n:'Building the Relationship',        d:'16m',done:false,cur:false},
-    {n:'Negotiating Difficult Decisions',  d:'16m',done:false,cur:false}
-  ],
-  8: [ // Long-Term Care Planning Conversations
-    {n:'Understanding LTC Options',       d:'12m',done:false,cur:false},
-    {n:'The Emotional Side of LTC',       d:'13m',done:false,cur:false},
-    {n:'Guiding the Planning Conversation',d:'12m',done:false,cur:false},
-    {n:'Policy Comparisons & Close',      d:'11m',done:false,cur:false}
-  ],
-  9: [ // Mastering High-Stakes Client Conversations
-    {n:'The Psychology of High-Stakes Talks', d:'17m',done:false,cur:false},
-    {n:'Reframing Resistance',               d:'17m',done:false,cur:false},
-    {n:'Controlling the Narrative',          d:'17m',done:false,cur:false},
-    {n:'Closing After Objection',            d:'16m',done:false,cur:false},
-    {n:'Post-Conversation Follow-Through',   d:'17m',done:false,cur:false}
-  ]
-};
 
-var FEATURED   = [1,2,3,4,5,6];
-var CONTINUING = [3,7,1];   /* courses with progress */
-var TRENDING   = [9,6,8];
+var COURSES_PER_PAGE = 20;
+var activeCategory = null;
+var currentPage = 1;
 
-/* ── RENDER CARD ─────────────────────────────────────────── */
-function renderCard(id, mode){
-  var c = COURSES.find(function(x){ return x.id === id; });
-  if(!c) return '';
+/* ── RENDER CARD ─────────────────────────────────────────────────── */
+function renderCard(c) {
+  return '<div class="card" onclick="openCourse(' + c.id + ')">'
+    + '<div class="card-thumb">'
+      + '<img src="' + c.thumbnail + '" alt="' + c.title + '" loading="lazy">'
+      + '<div class="thumb-grad"></div>'
+      + '<div class="badge badge-cat">' + c.category + '</div>'
+      + '<div class="badge badge-dur">' + c.duration + '</div>'
+    + '</div>'
+    + '<div class="card-body">'
+      + '<div class="card-level">' + c.level + '</div>'
+      + '<div class="card-title">' + c.title + '</div>'
+      + '<div class="card-instructor"><span class="instr-name">' + c.author + '</span></div>'
+      + '<div class="card-footer"><button class="btn btn-enroll" onclick="event.stopPropagation();openCourse(' + c.id + ')">Learn More</button></div>'
+    + '</div>'
+  + '</div>';
+}
 
-  var playerUrl = '#';
-  var isContinue = mode === 'continue';
-  var isTrending = mode === 'trending';
+/* ── RENDER GRID ─────────────────────────────────────────────────── */
+function renderGrid() {
+  var filtered = activeCategory
+    ? COURSES.filter(function(c){ return c.category === activeCategory; })
+    : COURSES;
+  var total = filtered.length;
+  var totalPages = Math.ceil(total / COURSES_PER_PAGE) || 1;
+  if (currentPage > totalPages) currentPage = 1;
+  var start = (currentPage - 1) * COURSES_PER_PAGE;
+  var visible = filtered.slice(start, start + COURSES_PER_PAGE);
+  document.getElementById('courseGrid').innerHTML = visible.map(renderCard).join('');
+  document.getElementById('catalogHdr').textContent =
+    activeCategory ? (total + ' courses in ' + activeCategory) : (total + ' courses total');
+  renderPaginator(totalPages);
+}
 
-  /* Badge top-left */
-  var badgeLeft = isTrending
-    ? '<div class="badge badge-popular">🔥 Popular</div>'
-    : '<div class="badge badge-cat">' + c.cat + '</div>';
-
-  var thumbProg = '';
-
-  /* Footer button */
-  var btn = '';
-  if(c.progress === 100){
-    btn = '<button class="btn btn-complete" onclick="event.stopPropagation()">✓ Completed</button>';
-  } else if(c.progress > 0){
-    btn = '<button class="btn btn-resume" onclick="event.stopPropagation();window.location.href=\'' + playerUrl + '\'">Resume →</button>';
+/* ── RENDER PAGINATOR ────────────────────────────────────────────── */
+function renderPaginator(totalPages) {
+  var el = document.getElementById('paginator');
+  if (totalPages <= 1) { el.innerHTML = ''; return; }
+  var html = '';
+  // Prev
+  html += '<button class="page-btn" ' + (currentPage === 1 ? 'disabled' : '') + ' onclick="setPage(' + (currentPage - 1) + ')">&#8592;</button>';
+  // Page numbers with ellipsis
+  var pages = [];
+  if (totalPages <= 7) {
+    for (var i = 1; i <= totalPages; i++) pages.push(i);
   } else {
-    btn = '<button class="btn btn-enroll" onclick="event.stopPropagation();window.location.href=\'' + playerUrl + '\'">Enroll Now</button>';
+    pages.push(1);
+    if (currentPage > 3) pages.push('...');
+    var start2 = Math.max(2, currentPage - 1);
+    var end2 = Math.min(totalPages - 1, currentPage + 1);
+    for (var j = start2; j <= end2; j++) pages.push(j);
+    if (currentPage < totalPages - 2) pages.push('...');
+    pages.push(totalPages);
   }
-
-  /* Progress row (continue shelf) */
-  var progRow = (c.progress > 0 && c.progress < 100 && isContinue)
-    ? '<div class="card-prog-row"><div class="card-prog-bar"><div class="card-prog-fill" style="width:' + c.progress + '%"></div></div><span>' + c.progress + '%</span></div>'
-    : '';
-
-  var stars = '';
-
-  return '<div class="card" onclick="openCourse(' + c.id + ')">' +
-    '<div class="card-thumb">' +
-      '<img src="' + c.thumb + '" alt="' + c.title + '" loading="lazy">' +
-      '<div class="thumb-grad"></div>' +
-      badgeLeft +
-      '<div class="badge badge-dur">' + c.dur + '</div>' +
-      thumbProg +
-    '</div>' +
-    '<div class="card-body">' +
-      '<div class="card-level">' + c.level + '</div>' +
-      '<div class="card-title">' + c.title + '</div>' +
-      '<div class="card-desc">' + c.desc + '</div>' +
-      '<div class="card-instructor">' +
-        '<img class="instr-avatar" src="' + c.instructor.avatar + '" alt="">' +
-        '<span class="instr-name">' + c.instructor.name + '</span>' +
-      '</div>' +
-      progRow +
-      '<div class="card-footer">' +
-        btn +
-      '</div>' +
-    '</div>' +
-  '</div>';
+  pages.forEach(function(p) {
+    if (p === '...') {
+      html += '<span class="page-ellipsis">…</span>';
+    } else {
+      html += '<button class="page-btn' + (p === currentPage ? ' page-active' : '') + '" onclick="setPage(' + p + ')"><span>' + p + '</span></button>';
+    }
+  });
+  // Next
+  html += '<button class="page-btn" ' + (currentPage === totalPages ? 'disabled' : '') + ' onclick="setPage(' + (currentPage + 1) + ')">&#8594;</button>';
+  el.innerHTML = html;
 }
 
-/* ── POPULATE GRIDS ──────────────────────────────────────── */
-function populateGrid(elId, ids, mode){
-  var el = document.getElementById(elId);
-  if(!el) return;
-  el.innerHTML = ids.map(function(id){ return renderCard(id, mode); }).join('');
+/* ── SET PAGE ─────────────────────────────────────────────────────────── */
+function setPage(n) {
+  currentPage = n;
+  renderGrid();
+  var grid = document.getElementById('courseGrid');
+  if (grid) { grid.scrollIntoView({behavior:'smooth', block:'start'}); }
 }
 
-populateGrid('featuredGrid',  FEATURED,   'featured');
-populateGrid('continueGrid',  CONTINUING, 'continue');
-populateGrid('trendingGrid',  TRENDING,   'trending');
+/* ── SET CATEGORY ──────────────────────────────────────────────────── */
+function setCategory(cat) {
+  activeCategory = cat;
+  currentPage = 1;
+  // Update sidebar active states
+  document.getElementById('catAll').classList.toggle('active', cat === null);
+  document.querySelectorAll('.cat-item').forEach(function(el) {
+    el.classList.toggle('active', el.dataset.cat === cat);
+  });
+  renderGrid();
+}
 
-/* ── SEARCH AUTOCOMPLETE ─────────────────────────────────── */
+/* ── RENDER SIDEBAR ───────────────────────────────────────────────── */
+function renderSidebar() {
+  document.getElementById('catAllCount').textContent = COURSES.length;
+  var groups = [
+    {label: '0–3 Year Advisor', playlist: '0-3 Year'},
+    {label: '3+ Year Advisor',  playlist: '3+ Year'}
+  ];
+  var html = '';
+  groups.forEach(function(g) {
+    var groupCourses = COURSES.filter(function(c){ return c.playlist === g.playlist; });
+    // Collect unique categories with counts
+    var catMap = {};
+    groupCourses.forEach(function(c){
+      catMap[c.category] = (catMap[c.category] || 0) + 1;
+    });
+    var cats = Object.keys(catMap).sort();
+    html += '<div class="cat-group" id="grp-' + g.playlist.replace(/[^a-z0-9]/gi,'-') + '">';
+    html += '<div class="cat-group-hdr" onclick="toggleGroup(this.parentElement)">';
+    html +=   '<span>' + g.label + '</span>';
+    html +=   '<i class="cat-chevron">▼</i>';
+    html += '</div>';
+    html += '<div class="cat-items">';
+    cats.forEach(function(cat) {
+      html += '<div class="cat-item" data-cat="' + cat + '" onclick="setCategory(\''+ cat +'\')">';
+      html +=   '<span>' + cat + '</span>';
+      html +=   '<span class="cat-count">' + catMap[cat] + '</span>';
+      html += '</div>';
+    });
+    html += '</div></div>';
+  });
+  document.getElementById('catGroups').innerHTML = html;
+}
+
+function toggleGroup(el) {
+  el.classList.toggle('collapsed');
+}
+
+/* ── OPEN COURSE OVERLAY ───────────────────────────────────────────── */
+function openCourse(id) {
+  var c = COURSES.find(function(x){ return x.id === id; });
+  if (!c) return;
+  document.getElementById('overlay').style.display = 'flex';
+  document.body.style.overflow = 'hidden';
+  document.getElementById('ovImg').src = c.thumbnail;
+  document.getElementById('ov-badge-top').textContent = c.level + ' · ' + c.duration;
+  document.getElementById('ov-title').textContent = c.title;
+  document.getElementById('ov-badges').innerHTML =
+    '<span class="ov-badge ov-badge-teal">' + c.category + '</span>' +
+    '<span class="ov-badge">' + c.level + '</span>' +
+    '<span class="ov-badge">' + c.duration + '</span>' +
+    '<span class="ov-badge">' + c.playlist + '</span>';
+  document.getElementById('ov-desc').textContent = 'Presented by ' + c.author + '. A focused training session from the Hoopis Performance Network ' + c.playlist + ' Advisor curriculum.';
+  var initials = c.author.split(' ').map(function(w){ return w[0] || ''; }).join('').slice(0,2).toUpperCase();
+  document.getElementById('ov-expert').innerHTML =
+    '<div class="exp-initials">' + initials + '</div>' +
+    '<div><div class="exp-name">' + c.author + '</div>' +
+    '<div class="exp-creds">Expert Instructor · Hoopis Performance Network</div></div>';
+  document.getElementById('ov-btns').innerHTML =
+    '<button class="btn-ov-play">▶ Start Learning</button>' +
+    '<button class="btn-ov-save">+ My List</button>';
+  document.getElementById('ov-prog').innerHTML = '';
+  // Generate 3 chapters
+  document.getElementById('ov-chapters').innerHTML = [
+    {n:'Introduction & Overview', d:'3m'},
+    {n: c.title, d: c.duration},
+    {n:'Key Takeaways', d:'2m'}
+  ].map(function(ch, i){
+    return '<div class="chapter-item' + (i===1?' active-row':'') + '">' +
+      '<div class="ch-icon ' + (i===1?'cur':'pending') + '">' + (i+1) + '</div>' +
+      '<div class="ch-body"><div class="ch-name">' + ch.n + '</div></div>' +
+      '<div class="ch-dur-right">' + ch.d + '</div>' +
+    '</div>';
+  }).join('');
+  document.getElementById('overlay').scrollTop = 0;
+}
+
+function closeOverlay(){
+  document.getElementById('overlay').style.display = 'none';
+  document.body.style.overflow = '';
+}
+function handleOvClick(e){ if(e.target.id === 'overlay') closeOverlay(); }
+
+/* ── SEARCH AUTOCOMPLETE ────────────────────────────────────────────── */
 var searchInput    = document.getElementById('searchInput');
 var searchDropdown = document.getElementById('searchDropdown');
 var searchTimer    = null;
 var activeIdx      = -1;
 
-function buildDropdown(query){
+function buildDropdown(query) {
   var items;
   var label;
-  if(!query){
-    items = COURSES.slice(0,5);
+  if (!query) {
+    items = COURSES.slice(0, 5);
     label = 'Popular Courses';
   } else {
     var q = query.toLowerCase();
     items = COURSES.filter(function(c){
-      return c.title.toLowerCase().includes(q) ||
-             c.cat.toLowerCase().includes(q) ||
-             c.desc.toLowerCase().includes(q);
-    });
+      return c.title.toLowerCase().indexOf(q) !== -1 ||
+             c.author.toLowerCase().indexOf(q) !== -1 ||
+             c.category.toLowerCase().indexOf(q) !== -1;
+    }).slice(0, 8);
     label = items.length ? 'Results for "' + query + '"' : null;
   }
 
-  if(!items.length){
-    searchDropdown.innerHTML =
-      '<div class="search-empty">😕 No courses found for "' + query + '"</div>';
+  if (!items.length) {
+    searchDropdown.innerHTML = '<div class="search-empty">No courses found for "' + query + '"</div>';
   } else {
     var html = '<div class="search-label">' + label + '</div>';
-    html += items.map(function(c, i){
-      return '<div class="search-item" data-pid="' + c.pid + '" tabindex="-1">' +
-        '<img class="search-thumb" src="' + c.thumb + '" alt="">' +
+    html += items.map(function(c) {
+      return '<div class="search-item" tabindex="-1" onclick="openCourse(' + c.id + ');searchDropdown.classList.remove(\'open\')">' +
+        '<img class="search-thumb" src="' + c.thumbnail + '" alt="" loading="lazy">' +
         '<div class="search-info">' +
           '<div class="search-title">' + c.title + '</div>' +
-          '<div class="search-cat">' + c.cat + ' · ' + c.level + ' · ' + c.dur + '</div>' +
+          '<div class="search-cat">' + c.category + ' · ' + c.level + ' · ' + c.duration + '</div>' +
         '</div>' +
       '</div>';
     }).join('');
     searchDropdown.innerHTML = html;
   }
-
   activeIdx = -1;
   searchDropdown.classList.add('open');
-
-  searchDropdown.querySelectorAll('.search-item').forEach(function(item){
-    item.addEventListener('click', function(){
-      searchDropdown.classList.remove('open');
-    });
-  });
 }
 
 searchInput.addEventListener('focus', function(){
   buildDropdown(searchInput.value.trim());
 });
-
 searchInput.addEventListener('input', function(){
   clearTimeout(searchTimer);
   searchTimer = setTimeout(function(){
     buildDropdown(searchInput.value.trim());
   }, 250);
 });
-
-/* Keyboard navigation */
 searchInput.addEventListener('keydown', function(e){
   var items = searchDropdown.querySelectorAll('.search-item');
-  if(e.key === 'ArrowDown'){
+  if (e.key === 'ArrowDown') {
     e.preventDefault();
     activeIdx = Math.min(activeIdx + 1, items.length - 1);
-    items.forEach(function(el,i){ el.classList.toggle('active', i === activeIdx); });
-  } else if(e.key === 'ArrowUp'){
+    items.forEach(function(el, i){ el.classList.toggle('active', i === activeIdx); });
+  } else if (e.key === 'ArrowUp') {
     e.preventDefault();
     activeIdx = Math.max(activeIdx - 1, 0);
-    items.forEach(function(el,i){ el.classList.toggle('active', i === activeIdx); });
-  } else if(e.key === 'Enter'){
-    if(activeIdx >= 0 && items[activeIdx]){
-      items[activeIdx].click();
-    }
-  } else if(e.key === 'Escape'){
+    items.forEach(function(el, i){ el.classList.toggle('active', i === activeIdx); });
+  } else if (e.key === 'Enter') {
+    if (activeIdx >= 0 && items[activeIdx]) items[activeIdx].click();
+  } else if (e.key === 'Escape') {
     searchDropdown.classList.remove('open');
     searchInput.blur();
   }
 });
-
-/* Close on outside click */
 document.addEventListener('click', function(e){
-  if(!e.target.closest('.search-wrap')){
-    searchDropdown.classList.remove('open');
-  }
+  if (!e.target.closest('.search-wrap')) searchDropdown.classList.remove('open');
 });
 
-/* ── COURSE OVERLAY ───────────────────────────────────────── */
-function openCourse(id) {
-  var c = COURSES.find(function(x){ return x.id === id; });
-  if (!c) return;
-  document.getElementById('overlay').style.display = 'flex';
-  document.body.style.overflow = 'hidden';
-
-  document.getElementById('ovImg').src = c.thumb;
-  document.getElementById('ov-badge-top').textContent = c.level + ' · ' + c.dur;
-  document.getElementById('ov-title').textContent = c.title;
-
-  document.getElementById('ov-badges').innerHTML =
-    '<span class="ov-badge ov-badge-teal">' + c.cat + '</span>' +
-    '<span class="ov-badge">' + c.level + '</span>' +
-    '<span class="ov-badge">' + c.dur + '</span>';
-
-  document.getElementById('ov-desc').textContent = c.desc;
-
-  document.getElementById('ov-expert').innerHTML =
-    '<img src="' + c.instructor.avatar + '" alt="' + c.instructor.name + '">' +
-    '<div><div class="exp-name">' + c.instructor.name + '</div>' +
-    '<div class="exp-creds">Expert Instructor · Hoopis Performance Network</div></div>';
-
-  var btns = document.getElementById('ov-btns');
-  if (c.progress > 0 && c.progress < 100) {
-    btns.innerHTML =
-      '<button class="btn-ov-play">▶ Resume</button>' +
-      '<button class="btn-ov-resume">↺ Start Over</button>' +
-      '<button class="btn-ov-save">+ My List</button>';
-  } else if (c.progress >= 100) {
-    btns.innerHTML =
-      '<button class="btn-ov-play">↺ Watch Again</button>' +
-      '<button class="btn-ov-save">+ My List</button>';
-  } else {
-    btns.innerHTML =
-      '<button class="btn-ov-play">▶ Start Learning</button>' +
-      '<button class="btn-ov-save">+ My List</button>';
-  }
-
-  var prog = document.getElementById('ov-prog');
-  if (c.progress > 0 && c.progress < 100) {
-    prog.innerHTML =
-      '<div class="ov-prog-section">' +
-        '<div class="ov-prog-label">Your progress</div>' +
-        '<div class="ov-prog-bar-outer"><div class="ov-prog-bar-inner" style="width:' + c.progress + '%"></div></div>' +
-        '<div class="ov-prog-pct">' + c.progress + '% complete</div>' +
-      '</div>';
-  } else { prog.innerHTML = ''; }
-
-  var chapters = CHAPTERS[id] || [];
-  document.getElementById('ov-chapters').innerHTML = chapters.map(function(ch, i){
-    var iconClass = ch.done ? 'done' : ch.cur ? 'cur' : 'pending';
-    var iconContent = ch.done ? '✓' : String(i + 1);
-    return '<div class="chapter-item' + (ch.cur ? ' active-row' : '') + '">' +
-      '<div class="ch-icon ' + iconClass + '">' + iconContent + '</div>' +
-      '<div class="ch-body"><div class="ch-name' + (ch.done ? ' muted-name' : '') + '">' + ch.n + '</div></div>' +
-      '<div class="ch-dur-right">' + ch.d + '</div>' +
-    '</div>';
-  }).join('');
-
-  document.getElementById('overlay').scrollTop = 0;
-}
-function closeOverlay(){
-  document.getElementById('overlay').style.display = 'none';
-  document.body.style.overflow = '';
-}
-function handleOvClick(e){ if(e.target.id === 'overlay') closeOverlay(); }
+/* ── INITIALIZE ──────────────────────────────────────────────────────── */
+renderSidebar();
+renderGrid();
 </script>
 
-<!-- ── COURSE PREVIEW OVERLAY ────────────────────────────── -->
+<!-- ── COURSE PREVIEW OVERLAY ───────────────────────────────────────────────── -->
 <div class="overlay-bg" id="overlay" style="display:none" onclick="handleOvClick(event)">
   <div class="overlay-box">
     <div class="overlay-hero">
