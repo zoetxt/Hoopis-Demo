@@ -188,20 +188,21 @@ html,body{height:100%;background:var(--bg);color:var(--white);font-family:'Inter
 .ci-tag{padding:4px 12px;border-radius:20px;font-size:11px;font-weight:600;background:var(--teal2);color:var(--teal);border:1px solid var(--teal3)}
 
 /* ── LAYOUT: 2-col from the top ── */
-/* left 70% = player │ right 30% = info + lessons */
-/* right col height = 70% × 80vw × 56.25% = 31.5vw (matches video) */
+/* right col is fixed 260px; player gets everything else in 80vw          */
+/* on 1920×1080: container=1536px → player=1276px → height=718px (66vh)  */
 .layout{
   padding-top:68px;
   max-width:80vw;margin:0 auto;
-  display:grid;grid-template-columns:70% 30%;
+  display:grid;grid-template-columns:1fr 260px;
   align-items:start;
 }
 
 /* ── RIGHT COLUMN ── */
+/* height = (80vw - 260px) × 9/16  =  exact video height                 */
 .right-col{
   border-left:1px solid var(--border);
   background:var(--surface);
-  height:31.5vw;          /* = left-col-width (56vw) × 9/16          */
+  height:calc((80vw - 260px) * 0.5625);
   overflow-y:auto;
   scrollbar-width:thin;scrollbar-color:var(--border) transparent;
   display:flex;flex-direction:column;
