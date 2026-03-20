@@ -514,6 +514,63 @@ body{background:var(--navy);color:var(--white);font-family:'Helvetica Neue',Aria
 .chat-send:hover{transform:scale(1.08)}.chat-send:disabled{opacity:0.4;cursor:not-allowed;transform:none}
 @media(max-width:480px){.chat-panel{bottom:0;right:0;left:0;width:100%;border-radius:16px 16px 0 0;height:90vh}}
 /* ── FOOTER ── */
+/* ── HERO BANNER ──────────────────────────────────────────── */
+.hero{
+  position:relative;
+  height:220px;
+  margin:32px 0;
+  border-radius:20px;
+  overflow:hidden;
+  background:linear-gradient(120deg,#060d1f 0%,#0d2040 40%,#001a2e 70%,#060d1f 100%);
+  display:flex;align-items:center;
+  border:1px solid var(--border);
+}
+.hero-grid{
+  position:absolute;inset:0;
+  background-image:
+    linear-gradient(rgba(0,200,212,.06) 1px,transparent 1px),
+    linear-gradient(90deg,rgba(0,200,212,.06) 1px,transparent 1px);
+  background-size:60px 60px;
+}
+.hero-glow{
+  position:absolute;right:-80px;top:-80px;
+  width:480px;height:480px;border-radius:50%;
+  background:radial-gradient(circle,rgba(0,200,212,.18) 0%,transparent 70%);
+  pointer-events:none;
+}
+.hero-content{
+  position:relative;z-index:2;
+  padding:0 60px;
+  display:flex;align-items:center;justify-content:space-between;
+  width:100%;
+}
+.hero-text{}
+.hero-eyebrow{
+  font-size:14px;font-weight:700;letter-spacing:1.5px;
+  text-transform:uppercase;color:var(--teal);margin-bottom:10px;
+}
+.hero-headline{
+  font-size:52px;font-weight:900;line-height:1.05;
+  background:linear-gradient(90deg,#fff 0%,#a0c8ff 100%);
+  -webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text;
+}
+.hero-sub{
+  font-size:22px;color:var(--muted);margin-top:10px;font-weight:400;
+}
+.hero-cta{
+  display:flex;align-items:center;gap:14px;
+  background:#ffffff;
+  color:#060d1f;
+  border:none;border-radius:12px;
+  padding:0 36px;
+  height:60px;
+  font-size:20px;font-weight:800;
+  cursor:pointer;white-space:nowrap;
+  transition:transform .15s,box-shadow .15s;
+  text-decoration:none;flex-shrink:0;
+}
+.hero-cta:hover{transform:scale(1.04);box-shadow:0 8px 32px rgba(255,255,255,.2)}
+
 .page-footer{border-top:1px solid var(--border);padding:24px 0;margin-top:8px}
 .footer-inner{max-width:80vw;margin:0 auto;display:flex;align-items:center;justify-content:space-between}
 .footer-copy{font-size:15px;color:var(--muted)}
@@ -576,6 +633,23 @@ body{background:var(--navy);color:var(--white);font-family:'Helvetica Neue',Aria
   <div class="section-title"><span class="teal-line"></span>Expert Sales Series <span class="see-all">See all →</span></div>
   <div class="rails" id="salesSeries"></div>
 </div>
+<!-- HERO ──────────────────────────────────────────────── -->
+<div class="hero">
+  <div class="hero-grid"></div>
+  <div class="hero-glow"></div>
+  <div class="hero-content">
+    <div class="hero-text">
+      <div class="hero-eyebrow">Hoopis Performance Network</div>
+      <div class="hero-headline">Expand Your Expertise</div>
+      <div class="hero-sub">Insurance &amp; Financial Services Training</div>
+    </div>
+    <a class="hero-cta" href="event-catalog.html">
+      <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><rect x="2" y="3" width="20" height="14" rx="2"/><polyline points="8 21 12 17 16 21"/></svg>
+      Browse All Courses
+    </a>
+  </div>
+</div>
+
 <div class="section">
   <div class="section-title"><span class="teal-line"></span>Browse by Topic <span class="see-all">View all →</span></div>
   <div class="topic-grid">
