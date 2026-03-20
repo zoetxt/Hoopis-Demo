@@ -13,7 +13,7 @@
   --navy:#060d1f;--gold:#f5c518;
 }
 html,body{height:100%;background:var(--bg);color:var(--white);font-family:'Inter','Helvetica Neue',Arial,sans-serif;font-size:16px;overflow-x:hidden}
-.page-wrap{max-width:80vw;margin:0 auto}
+.page-wrap{padding:0 24px}
 
 /* ── TOP BAR ── */
 .topbar{
@@ -188,21 +188,21 @@ html,body{height:100%;background:var(--bg);color:var(--white);font-family:'Inter
 .ci-tag{padding:4px 12px;border-radius:20px;font-size:11px;font-weight:600;background:var(--teal2);color:var(--teal);border:1px solid var(--teal3)}
 
 /* ── LAYOUT: 2-col from the top ── */
-/* right col is fixed 260px; player gets everything else in 80vw          */
-/* on 1920×1080: container=1536px → player=1276px → height=718px (66vh)  */
+/* 24px side padding each side; right col fixed 260px                     */
+/* on 1920×1080: player ≈ 1632px wide → 918px tall (85vh)                */
 .layout{
   padding-top:68px;
-  max-width:80vw;margin:0 auto;
+  padding-left:24px;padding-right:24px;
   display:grid;grid-template-columns:1fr 260px;
   align-items:start;
 }
 
 /* ── RIGHT COLUMN ── */
-/* height = (80vw - 260px) × 9/16  =  exact video height                 */
+/* height = (100vw - 48px - 260px) × 9/16 = exact video height           */
 .right-col{
   border-left:1px solid var(--border);
   background:var(--surface);
-  height:calc((80vw - 260px) * 0.5625);
+  height:calc((100vw - 48px - 260px) * 0.5625);
   overflow-y:auto;
   scrollbar-width:thin;scrollbar-color:var(--border) transparent;
   display:flex;flex-direction:column;
