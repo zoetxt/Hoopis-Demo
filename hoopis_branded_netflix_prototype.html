@@ -312,15 +312,28 @@ body{background:var(--navy);color:var(--white);font-family:'Helvetica Neue',Aria
 .card-exp-tag{background:rgba(255,255,255,0.06);border:1px solid var(--border2);color:#8a9ec0;font-size:12px;padding:3px 9px;border-radius:10px}
 
 .overlay-bg{position:fixed;inset:0;background:rgba(0,0,0,0.88);z-index:100;display:flex;align-items:flex-start;justify-content:center;overflow-y:auto;padding:32px 20px}
-.overlay-box{background:var(--navy2);border-radius:14px;width:100%;max-width:min(80vw,1120px);overflow:hidden;position:relative;margin:auto;border:1px solid var(--border2)}
-.overlay-hero{position:relative;height:340px;overflow:hidden}
+.overlay-box{background:var(--navy2);border-radius:14px;width:100%;max-width:min(92vw,1344px);max-height:88vh;display:flex;flex-direction:column;overflow:hidden;position:relative;margin:auto;border:1px solid var(--border2)}
+.overlay-hero{flex-shrink:0;position:relative;height:340px;overflow:hidden}
 .overlay-hero canvas{width:100%;height:340px;display:block}
 .overlay-hero-grad{position:absolute;inset:0;background:linear-gradient(180deg,transparent 20%,var(--navy2) 100%)}
 .overlay-hero-left{position:absolute;inset:0;background:linear-gradient(90deg,rgba(6,13,31,0.7) 0%,transparent 50%)}
 .overlay-close{position:absolute;top:14px;right:14px;width:34px;height:34px;border-radius:50%;background:rgba(6,13,31,0.8);border:1px solid var(--border2);color:var(--white);font-size:16px;cursor:pointer;display:flex;align-items:center;justify-content:center;z-index:5;transition:border-color 0.2s}
 .overlay-close:hover{border-color:var(--teal)}
 .overlay-hero-badge{position:absolute;top:20px;left:24px;background:rgba(0,200,212,0.15);border:1px solid var(--teal3);color:#fff;font-size:10px;font-weight:700;letter-spacing:1.2px;padding:4px 12px;border-radius:20px;text-transform:uppercase}
-.overlay-content{padding:28px 40px 44px}
+.overlay-content{flex:1;min-height:0;overflow:hidden;padding:28px 40px 32px;display:flex;flex-direction:column}
+/* ── Two-column modal body ── */
+.ov-body{flex:1;min-height:0;display:flex;gap:32px;align-items:stretch}
+.ov-left{flex:0 0 58%;min-width:0;overflow-y:auto;scrollbar-width:thin;scrollbar-color:var(--border) transparent}
+.ov-left::-webkit-scrollbar{width:4px}
+.ov-left::-webkit-scrollbar-track{background:transparent}
+.ov-left::-webkit-scrollbar-thumb{background:var(--border);border-radius:2px}
+.ov-right{flex:1;min-width:0;border-left:1px solid #2A3045;padding-left:28px;display:flex;flex-direction:column;min-height:0}
+.ov-right-hdr{font-size:18px;font-weight:700;color:var(--white);padding-bottom:14px;border-bottom:1px solid var(--border);margin-bottom:4px;flex-shrink:0;display:flex;align-items:center;gap:8px}
+.ov-chapter-scroll{flex:1;overflow-y:auto;min-height:0;scrollbar-width:thin;scrollbar-color:var(--border) transparent;position:relative}
+.ov-chapter-scroll::-webkit-scrollbar{width:4px}
+.ov-chapter-scroll::-webkit-scrollbar-track{background:transparent}
+.ov-chapter-scroll::-webkit-scrollbar-thumb{background:var(--border);border-radius:2px}
+.ov-chapter-scroll::after{content:'';position:sticky;bottom:0;display:block;height:48px;margin-top:-48px;background:linear-gradient(to bottom,transparent,var(--navy2));pointer-events:none}
 .ov-title{font-size:34px;font-weight:800;margin-bottom:12px;line-height:1.12}
 .ov-badges{display:flex;gap:7px;flex-wrap:wrap;margin-bottom:14px;align-items:center}
 .badge{background:rgba(255,255,255,0.06);border:1px solid var(--border2);color:#b0c4de;font-size:11px;padding:3px 10px;border-radius:20px}
@@ -348,10 +361,11 @@ body{background:var(--navy);color:var(--white);font-family:'Helvetica Neue',Aria
 .ov-section-title .teal-dot{width:6px;height:6px;border-radius:50%;background:var(--teal);flex-shrink:0;margin-right:8px}
 
 /* Redesigned chapter list */
-.chapter-list{display:flex;flex-direction:column;margin-bottom:32px}
-.chapter-item{display:flex;align-items:center;gap:16px;padding:15px 0;border-bottom:1px solid var(--border);cursor:pointer;transition:opacity 0.15s;background:transparent}
+.chapter-list{display:flex;flex-direction:column}
+.chapter-item{display:flex;align-items:center;gap:16px;padding:10px 10px;border-bottom:1px solid var(--border);cursor:pointer;transition:opacity 0.15s,background 0.15s;background:transparent;min-height:56px;border-radius:8px}
 .chapter-item:last-child{border-bottom:none}
 .chapter-item:hover{opacity:0.72}
+.chapter-item.active-row{background:#1E2535;border-bottom-color:transparent}
 .ch-icon{width:38px;height:38px;border-radius:50%;display:flex;align-items:center;justify-content:center;flex-shrink:0;font-size:15px;font-weight:700}
 .ch-icon.done{background:var(--green);color:#fff}
 .ch-icon.cur{background:rgba(0,200,212,0.15);border:1.5px solid var(--teal);color:#fff;font-size:13px;font-weight:700}
@@ -623,16 +637,26 @@ body{background:var(--navy);color:var(--white);font-family:'Helvetica Neue',Aria
       <button class="overlay-close" onclick="closeOverlay()">✕</button>
     </div>
     <div class="overlay-content">
-      <div class="ov-title" id="ov-title"></div>
-      <div class="ov-badges" id="ov-badges"></div>
-      <div class="ov-desc" id="ov-desc"></div>
-      <div class="ov-expert" id="ov-expert"></div>
-      <div class="ov-btns" id="ov-btns"></div>
-      <div id="ov-prog"></div>
-      <div class="what-learn" id="ov-learns"></div>
-      <div class="ov-section-title" id="ov-ch-header"><span style="display:flex;align-items:center;gap:8px"><span class="teal-dot"></span>Curriculum</span></div>
-      <div class="chapter-list" id="ov-chapters"></div>
-      <div class="also-interested" id="ov-also"></div>
+      <div class="ov-body">
+        <!-- LEFT COLUMN -->
+        <div class="ov-left">
+          <div class="ov-title" id="ov-title"></div>
+          <div class="ov-badges" id="ov-badges"></div>
+          <div class="ov-desc" id="ov-desc"></div>
+          <div class="ov-expert" id="ov-expert"></div>
+          <div class="ov-btns" id="ov-btns"></div>
+          <div id="ov-prog"></div>
+          <div class="what-learn" id="ov-learns"></div>
+          <div class="also-interested" id="ov-also"></div>
+        </div>
+        <!-- RIGHT COLUMN — Curriculum -->
+        <div class="ov-right">
+          <div class="ov-right-hdr"><span class="teal-dot"></span>Curriculum</div>
+          <div class="ov-chapter-scroll">
+            <div class="chapter-list" id="ov-chapters"></div>
+          </div>
+        </div>
+      </div>
     </div>
   </div>
 </div>
@@ -987,10 +1011,11 @@ function openCourse(id,resume=false){
   // Chapters — redesigned with status circles
   document.getElementById('ov-chapters').innerHTML=c.chapters.map((ch,i)=>{
     let iconClass, iconContent;
+    const isActive = ch.cur;
     if(ch.done){ iconClass='done'; iconContent='✓'; }
     else if(ch.cur){ iconClass='cur'; iconContent=String(i+1); }
     else { iconClass='pending'; iconContent=String(i+1); }
-    return `<div class="chapter-item">
+    return `<div class="chapter-item${isActive?' active-row':''}" onclick="window.location.href='course-player.html?id=${id}&lesson=${i}'">
       <div class="ch-icon ${iconClass}">${iconContent}</div>
       <div class="ch-body"><div class="ch-name${ch.done?' muted-name':''}">${ch.n}</div></div>
       <div class="ch-dur-right">${ch.d}</div>
