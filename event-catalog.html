@@ -443,6 +443,17 @@ body{
 .page-ellipsis{color:var(--muted);padding:0 4px;font-size:15px;line-height:40px}
 /* exp-initials */
 .exp-initials{width:40px;height:40px;border-radius:50%;background:linear-gradient(135deg,var(--teal),#0088cc);display:flex;align-items:center;justify-content:center;font-size:14px;font-weight:800;color:var(--white);flex-shrink:0}
+.also-interested{margin-top:8px;padding-top:24px;border-top:1px solid var(--border)}
+.also-header{display:flex;align-items:center;justify-content:space-between;margin-bottom:16px}
+.also-title{font-size:16px;font-weight:700;color:var(--white)}
+.also-viewall{font-size:14px;color:var(--muted);cursor:pointer}
+.also-grid{display:grid;grid-template-columns:repeat(2,1fr);gap:12px}
+.also-card{cursor:pointer;border-radius:8px;overflow:hidden;background:#0e1829;border:1px solid var(--border);transition:border-color 0.2s,transform 0.18s}
+.also-card:hover{border-color:var(--teal);transform:translateY(-2px)}
+.also-card img{width:100%;aspect-ratio:16/9;object-fit:cover;display:block}
+.also-card-body{padding:12px}
+.also-card-title{font-size:14px;font-weight:600;line-height:1.3;margin-bottom:4px;color:var(--white)}
+.also-card-meta{font-size:12px;color:var(--muted)}
 </style>
 </head>
 <body>
@@ -902,18 +913,52 @@ function openCourse(id) {
     '<button class="btn-ov-play">▶ Start Learning</button>' +
     '<button class="btn-ov-save">+ My List</button>';
   document.getElementById('ov-prog').innerHTML = '';
-  // Generate 3 chapters
-  document.getElementById('ov-chapters').innerHTML = [
-    {n:'Introduction & Overview', d:'3m'},
-    {n: c.title, d: c.duration},
-    {n:'Key Takeaways', d:'2m'}
-  ].map(function(ch, i){
-    return '<div class="chapter-item' + (i===1?' active-row':'') + '">' +
-      '<div class="ch-icon ' + (i===1?'cur':'pending') + '">' + (i+1) + '</div>' +
+  // Generate 7 chapters deterministically from title
+  var chapTemplates = [
+    ['Introduction & Context','Setting the Foundation','Core Principles','Practical Application','Advanced Techniques','Real-World Scenarios','Key Takeaways & Next Steps'],
+    ['Why This Matters','The Framework Overview','Skill 1: Getting Started','Skill 2: Building Momentum','Skill 3: Advanced Moves','Putting It Into Practice','Your Action Plan'],
+    ['Overview','The Core Concept','Strategy 1','Strategy 2','Strategy 3','Case Study & Examples','Summary & Implementation'],
+    ['The Problem Most Advisors Face','A Better Approach','The Foundational Skills','The Intermediate Level','Advanced Mastery','Field-Tested Examples','Your 30-Day Challenge']
+  ];
+  var tmplIdx = c.id % chapTemplates.length;
+  var tmpl = chapTemplates[tmplIdx];
+  var durOptions = ['7m','8m','9m','10m','11m','12m','13m','14m'];
+  var chapters = tmpl.map(function(chapName, i){
+    var d = durOptions[(c.id * 3 + i * 7) % durOptions.length];
+    return {n: chapName, d: d, cur: i === 1};
+  });
+  document.getElementById('ov-chapters').innerHTML = chapters.map(function(ch, i){
+    return '<div class="chapter-item' + (ch.cur ? ' active-row' : '') + '">' +
+      '<div class="ch-icon ' + (ch.cur ? 'cur' : 'pending') + '">' + (i+1) + '</div>' +
       '<div class="ch-body"><div class="ch-name">' + ch.n + '</div></div>' +
       '<div class="ch-dur-right">' + ch.d + '</div>' +
     '</div>';
   }).join('');
+
+  // "You may also be interested in" — 4 random courses from same or nearby categories
+  var alsoPool = COURSES.filter(function(x){ return x.id !== id; });
+  // prefer same category
+  var sameCat = alsoPool.filter(function(x){ return x.category === c.category; });
+  var otherCat = alsoPool.filter(function(x){ return x.category !== c.category; });
+  var shuffled = sameCat.sort(function(){ return Math.random()-0.5; }).slice(0,2)
+    .concat(otherCat.sort(function(){ return Math.random()-0.5; }).slice(0,2));
+  shuffled = shuffled.sort(function(){ return Math.random()-0.5; }).slice(0,4);
+
+  var alsoEl = document.getElementById('ov-also');
+  if(alsoEl){
+    alsoEl.innerHTML = '<div class="also-header">' +
+      '<div class="also-title">You may also be interested in</div>' +
+      '<div class="also-viewall">View All →</div></div>' +
+      '<div class="also-grid">' + shuffled.map(function(ac){
+        return '<div class="also-card" onclick="openCourse(' + ac.id + ')">' +
+          '<img src="' + ac.thumbnail + '" alt="' + ac.title + '" loading="lazy">' +
+          '<div class="also-card-body">' +
+            '<div class="also-card-title">' + ac.title + '</div>' +
+            '<div class="also-card-meta">' + ac.category + ' · ' + ac.duration + '</div>' +
+          '</div></div>';
+      }).join('') + '</div>';
+  }
+
   document.getElementById('overlay').scrollTop = 0;
 }
 
@@ -1018,6 +1063,7 @@ renderGrid();
           <div class="ov-expert" id="ov-expert"></div>
           <div class="ov-btns" id="ov-btns"></div>
           <div id="ov-prog"></div>
+          <div class="also-interested" id="ov-also"></div>
         </div>
         <div class="ov-right">
           <div class="ov-right-hdr"><span class="teal-dot"></span>Curriculum</div>
