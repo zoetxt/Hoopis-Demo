@@ -48,14 +48,8 @@ html,body{height:100%;background:var(--bg);color:var(--white);font-family:'Inter
 .prog-pill-pct{color:var(--green)}
 
 /* ── LAYOUT ── */
-.layout{
-  padding-top:68px;min-height:100vh;
-  max-width:80vw;margin:0 auto;
-}
-
 /* ── PLAYER ── */
-.main-col{min-width:0}
-.player-wrap{position:relative;width:100%;background:#000}
+.player-wrap{width:100%;background:#000;min-width:0}
 .player-container{
   position:relative;padding-bottom:56.25%;background:#000;overflow:hidden;cursor:pointer;
 }
@@ -193,34 +187,39 @@ html,body{height:100%;background:var(--bg);color:var(--white);font-family:'Inter
 .ci-tags{display:flex;gap:7px;flex-wrap:wrap;padding-bottom:20px;border-bottom:1px solid var(--border);margin-bottom:0}
 .ci-tag{padding:4px 12px;border-radius:20px;font-size:11px;font-weight:600;background:var(--teal2);color:var(--teal);border:1px solid var(--teal3)}
 
-/* ── BELOW PLAYER: 2-col grid ── */
-.below-player{
-  display:grid;grid-template-columns:1fr 360px;
+/* ── LAYOUT: 2-col from the top ── */
+/* left 70% = player │ right 30% = info + lessons */
+/* right col height = 70% × 80vw × 56.25% = 31.5vw (matches video) */
+.layout{
+  padding-top:68px;
+  max-width:80vw;margin:0 auto;
+  display:grid;grid-template-columns:70% 30%;
   align-items:start;
 }
 
-/* ── COURSE INFO (left col) ── */
-.course-info{padding:24px 28px 24px 0}
-
-/* ── LESSON SIDEBAR (right col) ── */
-.lesson-sidebar{
+/* ── RIGHT COLUMN ── */
+.right-col{
   border-left:1px solid var(--border);
   background:var(--surface);
-  /* exact video height: container is 80vw, video is 56.25% of that = 45vw */
-  height:45vw;
+  height:31.5vw;          /* = left-col-width (56vw) × 9/16          */
   overflow-y:auto;
   scrollbar-width:thin;scrollbar-color:var(--border) transparent;
   display:flex;flex-direction:column;
 }
-.lesson-sidebar::-webkit-scrollbar{width:4px}
-.lesson-sidebar::-webkit-scrollbar-thumb{background:var(--border);border-radius:2px}
+.right-col::-webkit-scrollbar{width:4px}
+.right-col::-webkit-scrollbar-thumb{background:var(--border);border-radius:2px}
+
+/* ── COURSE INFO inside right col ── */
+.course-info{padding:20px 16px 16px;border-bottom:1px solid var(--border);flex-shrink:0}
+.ci-title{font-size:20px!important}
+
+/* ── LESSON LIST header (inside right col, below info) ── */
 .lesson-sidebar-hdr{
-  padding:16px 16px 12px;border-bottom:1px solid var(--border);flex-shrink:0;
+  padding:14px 16px 10px;border-bottom:1px solid var(--border);flex-shrink:0;
   display:flex;align-items:baseline;justify-content:space-between;
-  position:sticky;top:0;background:var(--surface);z-index:2;
 }
-.lesson-sidebar-title{font-size:16px;font-weight:700}
-.lesson-sidebar-meta{font-size:12px;color:var(--muted)}
+.lesson-sidebar-title{font-size:15px;font-weight:700}
+.lesson-sidebar-meta{font-size:11px;color:var(--muted)}
 .lesson-cards-grid{display:flex;flex-direction:column;padding:8px 10px;gap:8px;flex:1}
 
 /* ── LESSON CARDS ── */
@@ -387,45 +386,39 @@ body{animation:fadeInPage .4s ease both}
       </div><!-- /player-container -->
     </div><!-- /player-wrap -->
 
-    <!-- BELOW PLAYER: course info (left) + lesson sidebar (right) -->
-    <div class="below-player">
+  <!-- RIGHT COLUMN: course info + lesson list (spans full video height) -->
+  <div class="right-col">
 
-      <!-- LEFT: course metadata -->
-      <div class="course-info" id="courseInfo">
-        <div class="ci-row">
-          <div class="ci-main">
-            <div class="ci-title" id="ciTitle"></div>
-            <div class="ci-instructor">
-              <div class="ci-avatar" id="ciAvatar"></div>
-              <div>
-                <div class="ci-expert-name" id="ciExpertName"></div>
-                <div class="ci-expert-role" id="ciExpertRole"></div>
-              </div>
-            </div>
-            <div class="ci-stats">
-              <div class="ci-stat"><span class="ci-stat-val" id="ciLessons"></span> lessons</div>
-            </div>
-            <div class="ci-prog-wrap">
-              <div class="ci-prog-label"><span>Course Progress</span><span id="ciProgPct"></span></div>
-              <div class="ci-prog-track"><div class="ci-prog-fill" id="ciProgFill"></div></div>
-            </div>
-            <div class="ci-desc" id="ciDesc"></div>
-            <button class="ci-desc-toggle" id="ciDescToggle">Show more ↓</button>
-            <div class="ci-tags" id="ciTags"></div>
-          </div>
+    <!-- Course metadata -->
+    <div class="course-info" id="courseInfo">
+      <div class="ci-title" id="ciTitle"></div>
+      <div class="ci-instructor">
+        <div class="ci-avatar" id="ciAvatar"></div>
+        <div>
+          <div class="ci-expert-name" id="ciExpertName"></div>
+          <div class="ci-expert-role" id="ciExpertRole"></div>
         </div>
       </div>
+      <div class="ci-stats">
+        <div class="ci-stat"><span class="ci-stat-val" id="ciLessons"></span> lessons</div>
+      </div>
+      <div class="ci-prog-wrap">
+        <div class="ci-prog-label"><span>Course Progress</span><span id="ciProgPct"></span></div>
+        <div class="ci-prog-track"><div class="ci-prog-fill" id="ciProgFill"></div></div>
+      </div>
+      <div class="ci-desc" id="ciDesc"></div>
+      <button class="ci-desc-toggle" id="ciDescToggle">Show more ↓</button>
+      <div class="ci-tags" id="ciTags"></div>
+    </div>
 
-      <!-- RIGHT: scrollable lesson cards -->
-      <aside class="lesson-sidebar">
-        <div class="lesson-sidebar-hdr">
-          <span class="lesson-sidebar-title">Course Content</span>
-          <span class="lesson-sidebar-meta" id="lessonCardsMeta"></span>
-        </div>
-        <div class="lesson-cards-grid" id="lessonCardsGrid"></div>
-      </aside>
+    <!-- Lesson list -->
+    <div class="lesson-sidebar-hdr">
+      <span class="lesson-sidebar-title">Course Content</span>
+      <span class="lesson-sidebar-meta" id="lessonCardsMeta"></span>
+    </div>
+    <div class="lesson-cards-grid" id="lessonCardsGrid"></div>
 
-    </div><!-- /below-player -->
+  </div><!-- /right-col -->
 
 </div><!-- /layout -->
 
