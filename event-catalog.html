@@ -38,10 +38,8 @@ body{
 }
 
 /* ── CONTAINER (80 vw, centered) ──────────────────────────── */
-.wrap{
-  width:80vw;
-  margin:0 auto;
-}
+.wrap{width:80vw;margin:0 auto}
+.page-wrap{max-width:80vw;margin:0 auto}
 
 /* ── HEADER ───────────────────────────────────────────────── */
 .topbar{
@@ -68,28 +66,10 @@ body{
 
 /* Search bar */
 .search-wrap{position:relative;width:100%}
-.search-input{
-  width:100%;
-  height:56px;
-  background:rgba(255,255,255,.07);
-  border:1.5px solid var(--border2);
-  border-radius:28px;
-  padding:0 24px 0 56px;
-  color:var(--white);
-  font-size:20px;
-  outline:none;
-  transition:border-color .2s,box-shadow .2s,background .2s;
-}
-.search-input::placeholder{color:var(--muted)}
-.search-input:focus{
-  border-color:var(--teal);
-  background:rgba(0,200,212,.05);
-  box-shadow:0 0 0 4px var(--teal-dim);
-}
-.search-icon{
-  position:absolute;left:20px;top:50%;transform:translateY(-50%);
-  width:22px;height:22px;opacity:.5;pointer-events:none;
-}
+.search-wrap::before{content:'';position:absolute;left:20px;top:50%;transform:translateY(-50%);width:22px;height:22px;background:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='%238a9ec0' stroke-width='2' stroke-linecap='round'%3E%3Ccircle cx='11' cy='11' r='8'/%3E%3Cline x1='21' y1='21' x2='16.65' y2='16.65'/%3E%3C/svg%3E") center/contain no-repeat;pointer-events:none;z-index:1;opacity:.5}
+.search-input,.search-bar{width:100%;height:56px;background:rgba(255,255,255,.07);border:1.5px solid var(--border2);border-radius:28px;padding:0 24px 0 56px;color:var(--white);font-size:20px;outline:none;transition:border-color .2s,box-shadow .2s,background .2s}
+.search-input::placeholder,.search-bar::placeholder{color:var(--muted)}
+.search-input:focus,.search-bar:focus{border-color:var(--teal);background:rgba(0,200,212,.05);box-shadow:0 0 0 4px var(--teal-dim)}
 .search-dropdown{
   display:none;
   position:absolute;top:calc(100% + 8px);left:0;right:0;
@@ -121,19 +101,10 @@ body{
 .search-cat{font-size:13px;color:#fff;margin-top:2px}
 .search-empty{padding:28px 20px;text-align:center;color:var(--muted);font-size:17px}
 
-/* User pill */
-.user-pill{
-  display:flex;align-items:center;gap:14px;
-  justify-content:flex-end;flex-shrink:0;
-}
+.topbar-right{display:flex;align-items:center;gap:14px;justify-content:flex-end}
 .user-greet{font-size:18px;color:var(--muted);white-space:nowrap}
 .user-greet strong{color:var(--white);font-size:20px}
-.user-avatar{
-  width:48px;height:48px;border-radius:12px;
-  background:linear-gradient(135deg,var(--teal),#0088cc);
-  display:flex;align-items:center;justify-content:center;
-  font-size:18px;font-weight:800;color:var(--white);flex-shrink:0;
-}
+.avatar{width:36px;height:36px;border-radius:12px;background:linear-gradient(135deg,var(--teal),#0088cc);display:flex;align-items:center;justify-content:center;font-size:14px;font-weight:800;cursor:pointer;color:var(--white);flex-shrink:0}
 
 /* ── HERO BANNER ──────────────────────────────────────────── */
 .hero{
@@ -371,9 +342,7 @@ body{
   padding:24px 0;
   margin-top:8px;
 }
-.footer-inner{
-  display:flex;align-items:center;justify-content:space-between;
-}
+.footer-inner{max-width:80vw;margin:0 auto;display:flex;align-items:center;justify-content:space-between}
 .footer-copy{font-size:15px;color:var(--muted)}
 .footer-logo{height:28px;filter:brightness(0) invert(1);opacity:.4}
 
@@ -446,38 +415,27 @@ body{
 <body>
 
 <!-- ══ HEADER ══════════════════════════════════════════════ -->
-<header class="topbar">
-  <div class="wrap">
-    <div class="topbar-inner">
-
-      <div class="topbar-left">
-        <a class="logo-link" href="index.html">
-          <img class="logo-img" src="hoopis-logo.svg" alt="Hoopis Performance Network">
-        </a>
-        <nav class="topbar-nav">
-          <a href="event-catalog.html" class="active">Discover</a>
-          <span>My Paths</span>
-          <span>My Lists</span>
-        </nav>
-      </div>
-
-      <div class="search-wrap">
-        <svg class="search-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-          <circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/>
-        </svg>
-        <input id="searchInput" class="search-input" type="text"
-               placeholder="Search courses..." autocomplete="off">
-        <div id="searchDropdown" class="search-dropdown"></div>
-      </div>
-
-      <div class="user-pill">
-        <div class="user-greet">Welcome back, <strong>James</strong></div>
-        <div class="user-avatar">JW</div>
-      </div>
-
-    </div>
+<div class="topbar">
+<div class="page-wrap"><div class="topbar-inner">
+  <div class="topbar-left">
+    <a class="logo-link" href="index.html">
+      <img class="logo-svg" src="hoopis-logo.svg" alt="Hoopis Performance Network">
+    </a>
+    <nav class="topbar-nav">
+      <a href="event-catalog.html" class="active">Discover</a>
+      <span>My Paths</span>
+      <span>My Lists</span>
+    </nav>
   </div>
-</header>
+  <div class="search-wrap">
+    <input id="searchInput" class="search-bar" type="text" placeholder="Search courses..." autocomplete="off" spellcheck="false">
+    <div id="searchDropdown" class="search-dropdown"></div>
+  </div>
+  <div class="topbar-right">
+    <span class="user-greet">Welcome back, <strong>James</strong></span>
+    <div class="avatar">JW</div>
+  </div>
+</div></div></div>
 
 <!-- ══ PAGE BODY ════════════════════════════════════════════ -->
 <main>
@@ -538,15 +496,12 @@ body{
 
 </div><!-- /wrap -->
 
-<!-- FOOTER -->
-<div class="wrap">
-  <footer class="page-footer">
-    <div class="footer-inner">
-      <img class="footer-logo" src="hoopis-logo.svg" alt="Hoopis">
-      <span class="footer-copy">&copy; 2025 Hoopis Performance Network. All rights reserved.</span>
-    </div>
-  </footer>
-</div>
+<footer class="page-footer">
+  <div class="footer-inner">
+    <img class="footer-logo" src="hoopis-logo.svg" alt="Hoopis Performance Network">
+    <span class="footer-copy">&copy; 2025 Hoopis Performance Network. All rights reserved.</span>
+  </div>
+</footer>
 
 </main>
 
