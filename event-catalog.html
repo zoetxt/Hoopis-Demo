@@ -8,9 +8,13 @@
 /* ── TOKENS ───────────────────────────────────────────────── */
 :root{
   --bg:        #0c0f1a;
+  --navy:      #060d1f;
+  --navy2:     #0a1628;
+  --navy3:     #0e1f3a;
   --surface:   #141828;
   --surface2:  #1c2236;
   --teal:      #00c8d4;
+  --teal3:     #007a88;
   --teal-dim:  rgba(0,200,212,.14);
   --teal-glow: rgba(0,200,212,.22);
   --white:     #ffffff;
@@ -377,6 +381,66 @@ body{
 ::-webkit-scrollbar{width:6px;height:6px}
 ::-webkit-scrollbar-track{background:transparent}
 ::-webkit-scrollbar-thumb{background:var(--border2);border-radius:3px}
+
+/* ── COURSE PREVIEW OVERLAY ──────────────────────────────── */
+.overlay-bg{position:fixed;inset:0;background:rgba(0,0,0,0.88);z-index:100;display:flex;align-items:flex-start;justify-content:center;overflow-y:auto;padding:32px 20px}
+.overlay-box{background:var(--navy2);border-radius:14px;width:100%;max-width:min(92vw,1344px);max-height:88vh;display:flex;flex-direction:column;overflow:hidden;position:relative;margin:auto;border:1px solid var(--border2)}
+.overlay-hero{flex-shrink:0;position:relative;height:340px;overflow:hidden}
+.overlay-hero img{width:100%;height:340px;object-fit:cover;display:block}
+.overlay-hero-grad{position:absolute;inset:0;background:linear-gradient(180deg,transparent 20%,var(--navy2) 100%)}
+.overlay-hero-left{position:absolute;inset:0;background:linear-gradient(90deg,rgba(6,13,31,0.7) 0%,transparent 50%)}
+.overlay-close{position:absolute;top:14px;right:14px;width:34px;height:34px;border-radius:50%;background:rgba(6,13,31,0.8);border:1px solid var(--border2);color:var(--white);font-size:16px;cursor:pointer;display:flex;align-items:center;justify-content:center;z-index:5;transition:border-color 0.2s}
+.overlay-close:hover{border-color:var(--teal)}
+.overlay-hero-badge{position:absolute;top:20px;left:24px;background:rgba(0,200,212,0.15);border:1px solid var(--teal3);color:#fff;font-size:10px;font-weight:700;letter-spacing:1.2px;padding:4px 12px;border-radius:20px;text-transform:uppercase}
+.overlay-content{flex:1;min-height:0;overflow:hidden;padding:28px 40px 32px;display:flex;flex-direction:column}
+.ov-body{flex:1;min-height:0;display:flex;gap:32px;align-items:stretch}
+.ov-left{flex:0 0 58%;min-width:0;overflow-y:auto;scrollbar-width:thin;scrollbar-color:var(--border) transparent}
+.ov-left::-webkit-scrollbar{width:4px}
+.ov-left::-webkit-scrollbar-track{background:transparent}
+.ov-left::-webkit-scrollbar-thumb{background:var(--border);border-radius:2px}
+.ov-right{flex:1;min-width:0;border-left:1px solid #2A3045;padding-left:28px;display:flex;flex-direction:column;min-height:0}
+.ov-right-hdr{font-size:18px;font-weight:700;color:var(--white);padding-bottom:14px;border-bottom:1px solid var(--border);margin-bottom:4px;flex-shrink:0;display:flex;align-items:center;gap:8px}
+.teal-dot{width:6px;height:6px;border-radius:50%;background:var(--teal);flex-shrink:0}
+.ov-chapter-scroll{flex:1;overflow-y:auto;min-height:0;scrollbar-width:thin;scrollbar-color:var(--border) transparent;position:relative}
+.ov-chapter-scroll::-webkit-scrollbar{width:4px}
+.ov-chapter-scroll::-webkit-scrollbar-track{background:transparent}
+.ov-chapter-scroll::-webkit-scrollbar-thumb{background:var(--border);border-radius:2px}
+.ov-chapter-scroll::after{content:'';position:sticky;bottom:0;display:block;height:48px;margin-top:-48px;background:linear-gradient(to bottom,transparent,var(--navy2));pointer-events:none}
+.ov-title{font-size:34px;font-weight:800;margin-bottom:12px;line-height:1.12;color:var(--white)}
+.ov-badges{display:flex;gap:7px;flex-wrap:wrap;margin-bottom:14px;align-items:center}
+.ov-badge{background:rgba(255,255,255,0.06);border:1px solid var(--border2);color:#b0c4de;font-size:11px;padding:3px 10px;border-radius:20px}
+.ov-badge-teal{border-color:var(--teal3);color:#fff;background:rgba(0,200,212,0.08)}
+.ov-desc{font-size:17px;color:#b0c4de;line-height:1.65;margin-bottom:24px}
+.ov-expert{display:flex;align-items:center;gap:14px;background:rgba(255,255,255,0.04);border:1px solid var(--border);border-radius:8px;padding:14px 18px;margin-bottom:22px}
+.ov-expert img{width:50px;height:50px;border-radius:50%;object-fit:cover;flex-shrink:0}
+.exp-name{font-size:15px;font-weight:700;margin-bottom:2px;color:var(--white)}
+.exp-creds{font-size:12px;color:var(--muted)}
+.ov-btns{display:flex;gap:10px;margin-bottom:28px;flex-wrap:wrap}
+.btn-ov-play{background:#ffffff;color:var(--navy);border:none;border-radius:6px;padding:12px 28px;font-size:14px;font-weight:700;cursor:pointer;display:flex;align-items:center;gap:8px;transition:background 0.2s}
+.btn-ov-play:hover{background:rgba(255,255,255,0.88)}
+.btn-ov-resume{background:transparent;color:var(--white);border:1px solid var(--border2);border-radius:6px;padding:12px 24px;font-size:14px;font-weight:600;cursor:pointer;transition:border-color 0.2s}
+.btn-ov-resume:hover{border-color:var(--white)}
+.btn-ov-save{background:transparent;color:var(--white);border:1px solid var(--border2);border-radius:6px;padding:12px 20px;font-size:14px;font-weight:600;cursor:pointer;transition:border-color 0.2s}
+.btn-ov-save:hover{border-color:var(--white)}
+.ov-prog-section{background:rgba(0,200,212,0.05);border:1px solid var(--teal3);border-radius:8px;padding:16px 18px;margin-bottom:26px}
+.ov-prog-label{font-size:10px;color:#fff;font-weight:700;letter-spacing:1px;text-transform:uppercase;margin-bottom:5px}
+.ov-prog-chapter{font-size:13px;font-weight:600;margin-bottom:8px;color:var(--white)}
+.ov-prog-bar-outer{background:rgba(255,255,255,0.08);border-radius:4px;height:5px;margin-bottom:6px}
+.ov-prog-bar-inner{background:var(--green);border-radius:4px;height:5px}
+.ov-prog-pct{font-size:11px;color:var(--muted)}
+.chapter-list{display:flex;flex-direction:column}
+.chapter-item{display:flex;align-items:center;gap:16px;padding:10px;border-bottom:1px solid var(--border);transition:opacity 0.15s,background 0.15s;background:transparent;min-height:56px;border-radius:8px}
+.chapter-item:last-child{border-bottom:none}
+.chapter-item:hover{opacity:0.72}
+.chapter-item.active-row{background:#1E2535;border-bottom-color:transparent}
+.ch-icon{width:38px;height:38px;border-radius:50%;display:flex;align-items:center;justify-content:center;flex-shrink:0;font-size:15px;font-weight:700;position:relative;transition:background 0.18s,border-color 0.18s}
+.ch-icon.done{background:var(--green);color:#fff}
+.ch-icon.cur{background:rgba(0,200,212,0.15);border:1.5px solid var(--teal);color:#fff;font-size:13px;font-weight:700}
+.ch-icon.pending{background:rgba(255,255,255,0.05);border:1px solid var(--border2);color:var(--muted);font-size:13px}
+.ch-body{flex:1}
+.ch-name{font-size:15px;font-weight:600;color:var(--white);line-height:1.35}
+.ch-name.muted-name{color:var(--muted);font-weight:400}
+.ch-dur-right{font-size:13px;color:var(--muted);flex-shrink:0;padding-left:12px}
 </style>
 </head>
 <body>
@@ -581,6 +645,69 @@ var COURSES = [
   }
 ];
 
+/* ── CHAPTER DATA ─────────────────────────────────────────── */
+var CHAPTERS = {
+  1: [ // Life Insurance Fundamentals (progress:35 → ch2 active)
+    {n:'Term vs. Whole Life Explained', d:'32m', done:true,  cur:false},
+    {n:'Policy Components & Riders',    d:'34m', done:false, cur:true},
+    {n:'Underwriting Basics',           d:'30m', done:false, cur:false},
+    {n:'Client Needs Analysis',         d:'28m', done:false, cur:false},
+    {n:'Comparing Products Side-by-Side',d:'31m',done:false, cur:false},
+    {n:'Presenting Your Recommendation',d:'25m', done:false, cur:false}
+  ],
+  2: [ // Prospecting in the Digital Age
+    {n:'The Digital Prospecting Mindset',d:'14m',done:false,cur:false},
+    {n:'LinkedIn & Social Selling',      d:'18m',done:false,cur:false},
+    {n:'Video Prospecting That Converts',d:'15m',done:false,cur:false},
+    {n:'Building Your Pipeline System',  d:'11m',done:false,cur:false}
+  ],
+  3: [ // The Trust Formula (progress:64 → ch4 active)
+    {n:'Emotional Intelligence Fundamentals',d:'14m',done:true, cur:false},
+    {n:'Active Listening Mastery',           d:'15m',done:true, cur:false},
+    {n:'Building Rapport From Day One',      d:'13m',done:true, cur:false},
+    {n:'Managing Client Emotions',           d:'16m',done:false,cur:true},
+    {n:'Long-Term Loyalty Framework',        d:'14m',done:false,cur:false}
+  ],
+  4: [ // Closing Techniques for Complex Sales
+    {n:'The Commitment-Based Close',      d:'14m',done:false,cur:false},
+    {n:'Navigating Multi-Stakeholder Deals',d:'16m',done:false,cur:false},
+    {n:'Handling Objections with Ease',   d:'13m',done:false,cur:false},
+    {n:'The Final Conversation Framework',d:'12m',done:false,cur:false},
+    {n:'Follow-Up That Actually Works',   d:'13m',done:false,cur:false}
+  ],
+  5: [ // Referral Mastery
+    {n:'Why Referrals Fail (and How to Fix It)',d:'11m',done:false,cur:false},
+    {n:'The Ask System',                        d:'12m',done:false,cur:false},
+    {n:'Building a Referral Culture',           d:'11m',done:false,cur:false},
+    {n:'Tracking & Measuring Referrals',        d:'10m',done:false,cur:false}
+  ],
+  6: [ // Time Blocking for Peak Producers
+    {n:'The Peak Producer Schedule',     d:'13m',done:false,cur:false},
+    {n:'Time Blocking in Practice',      d:'14m',done:false,cur:false},
+    {n:'Eliminating Low-Value Activity', d:'12m',done:false,cur:false},
+    {n:'Protecting Your Focus Hours',    d:'13m',done:false,cur:false}
+  ],
+  7: [ // Underwriting Relationships (progress:25 → ch2 active)
+    {n:'How Underwriters Think',           d:'16m',done:true, cur:false},
+    {n:'Submitting Strong Cases',          d:'16m',done:false,cur:true},
+    {n:'Building the Relationship',        d:'16m',done:false,cur:false},
+    {n:'Negotiating Difficult Decisions',  d:'16m',done:false,cur:false}
+  ],
+  8: [ // Long-Term Care Planning Conversations
+    {n:'Understanding LTC Options',       d:'12m',done:false,cur:false},
+    {n:'The Emotional Side of LTC',       d:'13m',done:false,cur:false},
+    {n:'Guiding the Planning Conversation',d:'12m',done:false,cur:false},
+    {n:'Policy Comparisons & Close',      d:'11m',done:false,cur:false}
+  ],
+  9: [ // Mastering High-Stakes Client Conversations
+    {n:'The Psychology of High-Stakes Talks', d:'17m',done:false,cur:false},
+    {n:'Reframing Resistance',               d:'17m',done:false,cur:false},
+    {n:'Controlling the Narrative',          d:'17m',done:false,cur:false},
+    {n:'Closing After Objection',            d:'16m',done:false,cur:false},
+    {n:'Post-Conversation Follow-Through',   d:'17m',done:false,cur:false}
+  ]
+};
+
 var FEATURED   = [1,2,3,4,5,6];
 var CONTINUING = [3,7,1];   /* courses with progress */
 var TRENDING   = [9,6,8];
@@ -618,7 +745,7 @@ function renderCard(id, mode){
 
   var stars = '';
 
-  return '<div class="card" onclick="window.location.href=\'' + playerUrl + '\'">' +
+  return '<div class="card" onclick="openCourse(' + c.id + ')">' +
     '<div class="card-thumb">' +
       '<img src="' + c.thumb + '" alt="' + c.title + '" loading="lazy">' +
       '<div class="thumb-grad"></div>' +
@@ -740,7 +867,106 @@ document.addEventListener('click', function(e){
     searchDropdown.classList.remove('open');
   }
 });
+
+/* ── COURSE OVERLAY ───────────────────────────────────────── */
+function openCourse(id) {
+  var c = COURSES.find(function(x){ return x.id === id; });
+  if (!c) return;
+  document.getElementById('overlay').style.display = 'flex';
+  document.body.style.overflow = 'hidden';
+
+  document.getElementById('ovImg').src = c.thumb;
+  document.getElementById('ov-badge-top').textContent = c.level + ' · ' + c.dur;
+  document.getElementById('ov-title').textContent = c.title;
+
+  document.getElementById('ov-badges').innerHTML =
+    '<span class="ov-badge ov-badge-teal">' + c.cat + '</span>' +
+    '<span class="ov-badge">' + c.level + '</span>' +
+    '<span class="ov-badge">' + c.dur + '</span>';
+
+  document.getElementById('ov-desc').textContent = c.desc;
+
+  document.getElementById('ov-expert').innerHTML =
+    '<img src="' + c.instructor.avatar + '" alt="' + c.instructor.name + '">' +
+    '<div><div class="exp-name">' + c.instructor.name + '</div>' +
+    '<div class="exp-creds">Expert Instructor · Hoopis Performance Network</div></div>';
+
+  var btns = document.getElementById('ov-btns');
+  if (c.progress > 0 && c.progress < 100) {
+    btns.innerHTML =
+      '<button class="btn-ov-play">▶ Resume</button>' +
+      '<button class="btn-ov-resume">↺ Start Over</button>' +
+      '<button class="btn-ov-save">+ My List</button>';
+  } else if (c.progress >= 100) {
+    btns.innerHTML =
+      '<button class="btn-ov-play">↺ Watch Again</button>' +
+      '<button class="btn-ov-save">+ My List</button>';
+  } else {
+    btns.innerHTML =
+      '<button class="btn-ov-play">▶ Start Learning</button>' +
+      '<button class="btn-ov-save">+ My List</button>';
+  }
+
+  var prog = document.getElementById('ov-prog');
+  if (c.progress > 0 && c.progress < 100) {
+    prog.innerHTML =
+      '<div class="ov-prog-section">' +
+        '<div class="ov-prog-label">Your progress</div>' +
+        '<div class="ov-prog-bar-outer"><div class="ov-prog-bar-inner" style="width:' + c.progress + '%"></div></div>' +
+        '<div class="ov-prog-pct">' + c.progress + '% complete</div>' +
+      '</div>';
+  } else { prog.innerHTML = ''; }
+
+  var chapters = CHAPTERS[id] || [];
+  document.getElementById('ov-chapters').innerHTML = chapters.map(function(ch, i){
+    var iconClass = ch.done ? 'done' : ch.cur ? 'cur' : 'pending';
+    var iconContent = ch.done ? '✓' : String(i + 1);
+    return '<div class="chapter-item' + (ch.cur ? ' active-row' : '') + '">' +
+      '<div class="ch-icon ' + iconClass + '">' + iconContent + '</div>' +
+      '<div class="ch-body"><div class="ch-name' + (ch.done ? ' muted-name' : '') + '">' + ch.n + '</div></div>' +
+      '<div class="ch-dur-right">' + ch.d + '</div>' +
+    '</div>';
+  }).join('');
+
+  document.getElementById('overlay').scrollTop = 0;
+}
+function closeOverlay(){
+  document.getElementById('overlay').style.display = 'none';
+  document.body.style.overflow = '';
+}
+function handleOvClick(e){ if(e.target.id === 'overlay') closeOverlay(); }
 </script>
+
+<!-- ── COURSE PREVIEW OVERLAY ────────────────────────────── -->
+<div class="overlay-bg" id="overlay" style="display:none" onclick="handleOvClick(event)">
+  <div class="overlay-box">
+    <div class="overlay-hero">
+      <img id="ovImg" src="" alt="" style="width:100%;height:340px;object-fit:cover;display:block;">
+      <div class="overlay-hero-grad"></div>
+      <div class="overlay-hero-left"></div>
+      <div class="overlay-hero-badge" id="ov-badge-top"></div>
+      <button class="overlay-close" onclick="closeOverlay()">✕</button>
+    </div>
+    <div class="overlay-content">
+      <div class="ov-body">
+        <div class="ov-left">
+          <div class="ov-title" id="ov-title"></div>
+          <div class="ov-badges" id="ov-badges"></div>
+          <div class="ov-desc" id="ov-desc"></div>
+          <div class="ov-expert" id="ov-expert"></div>
+          <div class="ov-btns" id="ov-btns"></div>
+          <div id="ov-prog"></div>
+        </div>
+        <div class="ov-right">
+          <div class="ov-right-hdr"><span class="teal-dot"></span>Curriculum</div>
+          <div class="ov-chapter-scroll">
+            <div class="chapter-list" id="ov-chapters"></div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
 
 </body>
 </html>
