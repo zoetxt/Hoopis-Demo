@@ -71,10 +71,11 @@ html,body{height:100%;background:var(--bg);color:var(--white);font-family:'Inter
 
 /* Controls overlay */
 .controls-overlay{
-  position:absolute;inset:0;z-index:10;display:flex;flex-direction:column;justify-content:flex-end;
+  position:absolute;inset:0;z-index:3;display:flex;flex-direction:column;justify-content:flex-end;
   opacity:0;transition:opacity .25s;pointer-events:none;
 }
-.controls-overlay.visible{opacity:1;pointer-events:all}
+.controls-overlay.visible{opacity:1;pointer-events:none}
+.ctrl-content{pointer-events:auto}
 .ctrl-grad{
   position:absolute;bottom:0;left:0;right:0;height:160px;pointer-events:none;
   background:linear-gradient(transparent,rgba(6,13,31,.92));
@@ -149,20 +150,6 @@ html,body{height:100%;background:var(--bg);color:var(--white);font-family:'Inter
 .spinner-wrap{animation:spin-rot 1.4s linear infinite}
 @keyframes spin-rot{to{transform:rotate(360deg)}}
 
-/* Big play overlay (initial state) */
-.big-play{
-  position:absolute;inset:0;z-index:9;display:flex;align-items:center;justify-content:center;
-  background:rgba(6,13,31,.4);cursor:pointer;transition:background .2s;
-}
-.big-play:hover{background:rgba(6,13,31,.2)}
-.big-play-circle{
-  width:72px;height:72px;border-radius:50%;background:rgba(0,200,212,.2);
-  border:2px solid var(--teal);display:flex;align-items:center;justify-content:center;
-  transition:transform .2s,background .2s;
-}
-.big-play:hover .big-play-circle{transform:scale(1.1);background:rgba(0,200,212,.35)}
-.big-play svg{width:28px;height:28px;fill:var(--white);margin-left:4px}
-.big-play.hidden{display:none}
 
 /* Up Next card */
 .upnext-card{
@@ -320,13 +307,6 @@ body{animation:fadeInPage .4s ease both}
           <g class="spinner-wrap"><circle cx="26" cy="26" r="22"/></g>
         </svg>
 
-        <!-- Big play (pre-play state) -->
-        <div class="big-play" id="bigPlay">
-          <div class="big-play-circle">
-            <svg viewBox="0 0 24 24"><polygon points="5 3 19 12 5 21 5 3"/></svg>
-          </div>
-        </div>
-
         <!-- Controls overlay -->
         <div class="controls-overlay" id="controlsOverlay">
           <div class="ctrl-grad"></div>
@@ -483,13 +463,13 @@ var COURSES = [
    desc:'Award-winning negotiation expert Brian Ahearn reveals the psychological frameworks top financial advisors use to turn difficult conversations into closed deals. Real case studies from $1M+ client engagements.',
    progress:0,
    lessons:[
-     {id:1,title:'The psychology of persuasion in finance',dur:'11:00',ytId:'dQw4w9WgXcQ',done:false},
-     {id:2,title:'Reading client resistance signals',dur:'9:00',ytId:'dQw4w9WgXcQ',done:false},
-     {id:3,title:'Reframing objections in real-time',dur:'13:00',ytId:'dQw4w9WgXcQ',done:false},
-     {id:4,title:'The commitment & consistency principle',dur:'10:00',ytId:'dQw4w9WgXcQ',done:false},
-     {id:5,title:'Closing without pressure',dur:'14:00',ytId:'dQw4w9WgXcQ',done:false},
-     {id:6,title:'Handling "I need to think about it"',dur:'16:00',ytId:'dQw4w9WgXcQ',done:false},
-     {id:7,title:'Post-meeting follow-up mastery',dur:'11:00',ytId:'dQw4w9WgXcQ',done:false},
+     {id:1,title:'The psychology of persuasion in finance',dur:'11:00',ytId:'sMlczYnSVYo',done:false},
+     {id:2,title:'Reading client resistance signals',dur:'9:00',ytId:'sMlczYnSVYo',done:false},
+     {id:3,title:'Reframing objections in real-time',dur:'13:00',ytId:'sMlczYnSVYo',done:false},
+     {id:4,title:'The commitment & consistency principle',dur:'10:00',ytId:'sMlczYnSVYo',done:false},
+     {id:5,title:'Closing without pressure',dur:'14:00',ytId:'sMlczYnSVYo',done:false},
+     {id:6,title:'Handling "I need to think about it"',dur:'16:00',ytId:'sMlczYnSVYo',done:false},
+     {id:7,title:'Post-meeting follow-up mastery',dur:'11:00',ytId:'sMlczYnSVYo',done:false},
    ]},
   {id:1,title:'Prospecting in the Digital Age',
    expert:'Jeb Blount',xrole:'CEO · Sales Gravy · Author of Fanatical Prospecting',xinit:'JB',xcol:'#3a2000',
@@ -497,12 +477,12 @@ var COURSES = [
    desc:'Jeb Blount breaks down how modern sales professionals blend traditional outreach with LinkedIn, email, and video to build a consistent pipeline of qualified prospects.',
    progress:0,
    lessons:[
-     {id:1,title:'Why most prospecting fails before it starts',dur:'8:00',ytId:'dQw4w9WgXcQ',done:false},
-     {id:2,title:'Building your ideal client profile',dur:'11:00',ytId:'dQw4w9WgXcQ',done:false},
-     {id:3,title:'LinkedIn as a research and outreach tool',dur:'10:00',ytId:'dQw4w9WgXcQ',done:false},
-     {id:4,title:'The 3-touch email sequence that works',dur:'9:00',ytId:'dQw4w9WgXcQ',done:false},
-     {id:5,title:'Video prospecting — standing out in the inbox',dur:'12:00',ytId:'dQw4w9WgXcQ',done:false},
-     {id:6,title:'Building prospecting habits that stick',dur:'8:00',ytId:'dQw4w9WgXcQ',done:false},
+     {id:1,title:'Why most prospecting fails before it starts',dur:'8:00',ytId:'sMlczYnSVYo',done:false},
+     {id:2,title:'Building your ideal client profile',dur:'11:00',ytId:'sMlczYnSVYo',done:false},
+     {id:3,title:'LinkedIn as a research and outreach tool',dur:'10:00',ytId:'sMlczYnSVYo',done:false},
+     {id:4,title:'The 3-touch email sequence that works',dur:'9:00',ytId:'sMlczYnSVYo',done:false},
+     {id:5,title:'Video prospecting — standing out in the inbox',dur:'12:00',ytId:'sMlczYnSVYo',done:false},
+     {id:6,title:'Building prospecting habits that stick',dur:'8:00',ytId:'sMlczYnSVYo',done:false},
    ]},
   {id:2,title:'The Trust Formula: Building Client Relationships That Last',
    expert:'Colleen Stanley',xrole:'President · SalesLeadership Inc.',xinit:'CS',xcol:'#003a20',
@@ -510,13 +490,13 @@ var COURSES = [
    desc:'Emotional intelligence pioneer Colleen Stanley shows how top performers build the kind of trust that makes clients loyal for decades. Covers EQ frameworks, body language, and the neuroscience of rapport.',
    progress:64,
    lessons:[
-     {id:1,title:'Why logic alone never closes a deal',dur:'9:00',ytId:'dQw4w9WgXcQ',done:true},
-     {id:2,title:'The EQ framework for sales professionals',dur:'11:00',ytId:'dQw4w9WgXcQ',done:true},
-     {id:3,title:'Active listening — the lost skill',dur:'10:00',ytId:'dQw4w9WgXcQ',done:true},
-     {id:4,title:'Reading the room — body language signals',dur:'12:00',ytId:'dQw4w9WgXcQ',done:false},
-     {id:5,title:'Building trust through vulnerability',dur:'9:00',ytId:'dQw4w9WgXcQ',done:false},
-     {id:6,title:'Maintaining trust through difficult periods',dur:'11:00',ytId:'dQw4w9WgXcQ',done:false},
-     {id:7,title:'Turning clients into advocates',dur:'10:00',ytId:'dQw4w9WgXcQ',done:false},
+     {id:1,title:'Why logic alone never closes a deal',dur:'9:00',ytId:'sMlczYnSVYo',done:true},
+     {id:2,title:'The EQ framework for sales professionals',dur:'11:00',ytId:'sMlczYnSVYo',done:true},
+     {id:3,title:'Active listening — the lost skill',dur:'10:00',ytId:'sMlczYnSVYo',done:true},
+     {id:4,title:'Reading the room — body language signals',dur:'12:00',ytId:'sMlczYnSVYo',done:false},
+     {id:5,title:'Building trust through vulnerability',dur:'9:00',ytId:'sMlczYnSVYo',done:false},
+     {id:6,title:'Maintaining trust through difficult periods',dur:'11:00',ytId:'sMlczYnSVYo',done:false},
+     {id:7,title:'Turning clients into advocates',dur:'10:00',ytId:'sMlczYnSVYo',done:false},
    ]},
   {id:3,title:'Closing Techniques for Complex Sales',
    expert:'Anthony Iannarino',xrole:'Author · The Lost Art of Closing',xinit:'AI',xcol:'#200030',
@@ -524,12 +504,12 @@ var COURSES = [
    desc:'Anthony Iannarino dismantles outdated closing tactics and replaces them with a commitment-based framework that works in complex, multi-stakeholder financial and insurance sales.',
    progress:0,
    lessons:[
-     {id:1,title:'Why traditional closing is dead',dur:'10:00',ytId:'dQw4w9WgXcQ',done:false},
-     {id:2,title:'The nine commitments that lead to a close',dur:'13:00',ytId:'dQw4w9WgXcQ',done:false},
-     {id:3,title:'Multi-stakeholder navigation',dur:'11:00',ytId:'dQw4w9WgXcQ',done:false},
-     {id:4,title:'Handling procurement gatekeepers',dur:'9:00',ytId:'dQw4w9WgXcQ',done:false},
-     {id:5,title:'The final commitment conversation',dur:'14:00',ytId:'dQw4w9WgXcQ',done:false},
-     {id:6,title:'Post-close relationship acceleration',dur:'11:00',ytId:'dQw4w9WgXcQ',done:false},
+     {id:1,title:'Why traditional closing is dead',dur:'10:00',ytId:'sMlczYnSVYo',done:false},
+     {id:2,title:'The nine commitments that lead to a close',dur:'13:00',ytId:'sMlczYnSVYo',done:false},
+     {id:3,title:'Multi-stakeholder navigation',dur:'11:00',ytId:'sMlczYnSVYo',done:false},
+     {id:4,title:'Handling procurement gatekeepers',dur:'9:00',ytId:'sMlczYnSVYo',done:false},
+     {id:5,title:'The final commitment conversation',dur:'14:00',ytId:'sMlczYnSVYo',done:false},
+     {id:6,title:'Post-close relationship acceleration',dur:'11:00',ytId:'sMlczYnSVYo',done:false},
    ]},
   {id:4,title:'Referral Mastery: The Systematic Approach',
    expert:'Michael Goldberg',xrole:'Networking Expert · Author of Knock-Out Networking',xinit:'MG',xcol:'#002040',
@@ -537,11 +517,11 @@ var COURSES = [
    desc:'Michael Goldberg lays out a repeatable, low-pressure system for generating a steady stream of warm referrals from your existing client base.',
    progress:0,
    lessons:[
-     {id:1,title:'The referral mindset shift',dur:'7:00',ytId:'dQw4w9WgXcQ',done:false},
-     {id:2,title:'When and how to ask for referrals',dur:'10:00',ytId:'dQw4w9WgXcQ',done:false},
-     {id:3,title:'Creating a referral network by design',dur:'9:00',ytId:'dQw4w9WgXcQ',done:false},
-     {id:4,title:'The referral conversation script',dur:'10:00',ytId:'dQw4w9WgXcQ',done:false},
-     {id:5,title:'Tracking and nurturing your referral sources',dur:'8:00',ytId:'dQw4w9WgXcQ',done:false},
+     {id:1,title:'The referral mindset shift',dur:'7:00',ytId:'sMlczYnSVYo',done:false},
+     {id:2,title:'When and how to ask for referrals',dur:'10:00',ytId:'sMlczYnSVYo',done:false},
+     {id:3,title:'Creating a referral network by design',dur:'9:00',ytId:'sMlczYnSVYo',done:false},
+     {id:4,title:'The referral conversation script',dur:'10:00',ytId:'sMlczYnSVYo',done:false},
+     {id:5,title:'Tracking and nurturing your referral sources',dur:'8:00',ytId:'sMlczYnSVYo',done:false},
    ]},
   {id:5,title:'Time Blocking for Peak Producers',
    expert:'Darren Hardy',xrole:'Publisher · SUCCESS Magazine',xinit:'DH',xcol:'#1a1000',
@@ -549,11 +529,11 @@ var COURSES = [
    desc:'Darren Hardy shares the exact time-blocking and habit systems that separate the top 1% of financial and insurance producers from everyone else.',
    progress:0,
    lessons:[
-     {id:1,title:'The compound effect applied to your calendar',dur:'9:00',ytId:'dQw4w9WgXcQ',done:false},
-     {id:2,title:'Designing your ideal week',dur:'12:00',ytId:'dQw4w9WgXcQ',done:false},
-     {id:3,title:'Protecting your prime selling time',dur:'11:00',ytId:'dQw4w9WgXcQ',done:false},
-     {id:4,title:'Eliminating the time thieves',dur:'10:00',ytId:'dQw4w9WgXcQ',done:false},
-     {id:5,title:'Accountability systems that actually work',dur:'10:00',ytId:'dQw4w9WgXcQ',done:false},
+     {id:1,title:'The compound effect applied to your calendar',dur:'9:00',ytId:'sMlczYnSVYo',done:false},
+     {id:2,title:'Designing your ideal week',dur:'12:00',ytId:'sMlczYnSVYo',done:false},
+     {id:3,title:'Protecting your prime selling time',dur:'11:00',ytId:'sMlczYnSVYo',done:false},
+     {id:4,title:'Eliminating the time thieves',dur:'10:00',ytId:'sMlczYnSVYo',done:false},
+     {id:5,title:'Accountability systems that actually work',dur:'10:00',ytId:'sMlczYnSVYo',done:false},
    ]},
   {id:6,title:'Underwriting Relationships: Working With Carriers',
    expert:'Elizabeth Scheithe',xrole:'VP Underwriting · 28 years experience',xinit:'ES',xcol:'#00202a',
@@ -561,12 +541,12 @@ var COURSES = [
    desc:'Veteran underwriter Elizabeth Scheithe gives agents a rare behind-the-scenes view of how underwriting decisions are made — and how to position cases for the best possible outcomes.',
    progress:0,
    lessons:[
-     {id:1,title:'How underwriters think — the inside view',dur:'11:00',ytId:'dQw4w9WgXcQ',done:false},
-     {id:2,title:'Submitting cases that get prioritised',dur:'10:00',ytId:'dQw4w9WgXcQ',done:false},
-     {id:3,title:'Navigating complex medical histories',dur:'13:00',ytId:'dQw4w9WgXcQ',done:false},
-     {id:4,title:'Building strong carrier relationships',dur:'9:00',ytId:'dQw4w9WgXcQ',done:false},
-     {id:5,title:'When to escalate and how to do it',dur:'11:00',ytId:'dQw4w9WgXcQ',done:false},
-     {id:6,title:'Rating disputes — the professional approach',dur:'10:00',ytId:'dQw4w9WgXcQ',done:false},
+     {id:1,title:'How underwriters think — the inside view',dur:'11:00',ytId:'sMlczYnSVYo',done:false},
+     {id:2,title:'Submitting cases that get prioritised',dur:'10:00',ytId:'sMlczYnSVYo',done:false},
+     {id:3,title:'Navigating complex medical histories',dur:'13:00',ytId:'sMlczYnSVYo',done:false},
+     {id:4,title:'Building strong carrier relationships',dur:'9:00',ytId:'sMlczYnSVYo',done:false},
+     {id:5,title:'When to escalate and how to do it',dur:'11:00',ytId:'sMlczYnSVYo',done:false},
+     {id:6,title:'Rating disputes — the professional approach',dur:'10:00',ytId:'sMlczYnSVYo',done:false},
    ]},
   {id:7,title:'Long-Term Care Planning Conversations',
    expert:'Harley Gordon',xrole:'Author · How to Protect Your Family\'s Assets',xinit:'HG',xcol:'#1a0010',
@@ -574,11 +554,11 @@ var COURSES = [
    desc:'Harley Gordon walks through the sensitive conversations around long-term care planning, giving agents the language and frameworks to guide clients through one of the most emotional financial decisions of their lives.',
    progress:0,
    lessons:[
-     {id:1,title:'Why LTC conversations are different',dur:'9:00',ytId:'dQw4w9WgXcQ',done:false},
-     {id:2,title:'Introducing the topic without fear',dur:'11:00',ytId:'dQw4w9WgXcQ',done:false},
-     {id:3,title:'Understanding client risk profiles',dur:'10:00',ytId:'dQw4w9WgXcQ',done:false},
-     {id:4,title:'Policy options and how to present them',dur:'12:00',ytId:'dQw4w9WgXcQ',done:false},
-     {id:5,title:'Handling objections in LTC sales',dur:'6:00',ytId:'dQw4w9WgXcQ',done:false},
+     {id:1,title:'Why LTC conversations are different',dur:'9:00',ytId:'sMlczYnSVYo',done:false},
+     {id:2,title:'Introducing the topic without fear',dur:'11:00',ytId:'sMlczYnSVYo',done:false},
+     {id:3,title:'Understanding client risk profiles',dur:'10:00',ytId:'sMlczYnSVYo',done:false},
+     {id:4,title:'Policy options and how to present them',dur:'12:00',ytId:'sMlczYnSVYo',done:false},
+     {id:5,title:'Handling objections in LTC sales',dur:'6:00',ytId:'sMlczYnSVYo',done:false},
    ]},
 ];
 
@@ -715,7 +695,7 @@ function onYouTubeIframeAPIReady(){
   ytPlayer = new YT.Player('yt-iframe', {
     videoId: lesson.ytId,
     playerVars:{
-      controls:0, enablejsapi:1, modestbranding:1,
+      controls:1, enablejsapi:1, modestbranding:1,
       rel:0, iv_load_policy:3, playsinline:1,
       origin: location.origin
     },
@@ -846,9 +826,6 @@ window.addEventListener('message', function(e){
 document.getElementById('btnPlay').addEventListener('click', function(e){
   e.stopPropagation(); togglePlay();
 });
-document.getElementById('bigPlay').addEventListener('click', function(e){
-  e.stopPropagation(); togglePlay();
-});
 function togglePlay(){
   if(!isPlaying && !playerReady){ pendingPlay = true; }
   ytCmd(isPlaying ? 'pauseVideo' : 'playVideo');
@@ -858,7 +835,7 @@ function updatePlayIcon(playing){
     ? '<rect x="6" y="4" width="4" height="16"/><rect x="14" y="4" width="4" height="16"/>'
     : '<polygon points="5 3 19 12 5 21 5 3"/>';
 }
-function hideBigPlay(){ document.getElementById('bigPlay').classList.add('hidden'); }
+function hideBigPlay(){ /* removed */ }
 function showSpinner(show){ document.getElementById('spinner').classList.toggle('show', show); }
 
 /* ── SKIP ── */
