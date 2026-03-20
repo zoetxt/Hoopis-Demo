@@ -49,11 +49,36 @@ body{background:var(--navy);color:var(--white);font-family:'Helvetica Neue',Aria
 .topbar-nav span:hover{color:var(--white)}
 .topbar-nav span.active{color:var(--white);font-weight:600}
 .topbar-right{display:flex;align-items:center;gap:16px}
-.search-bar{background:rgba(255,255,255,0.07);border:1.5px solid var(--border2);border-radius:8px;padding:10px 18px 10px 40px;color:var(--white);font-size:14px;width:360px;outline:none;transition:border-color 0.2s,background 0.2s,box-shadow 0.2s;box-shadow:0 2px 12px rgba(0,0,0,0.25)}
+.search-bar{background:rgba(255,255,255,0.07);border:1.5px solid var(--border2);border-radius:999px;padding:10px 18px 10px 42px;color:var(--white);font-size:14px;width:360px;height:44px;outline:none;transition:border-color 0.2s,background 0.2s,box-shadow 0.2s,width 0.25s;box-shadow:0 2px 12px rgba(0,0,0,0.25)}
 .search-bar::placeholder{color:var(--muted)}
-.search-bar:focus{border-color:var(--teal);background:rgba(0,200,212,0.05);box-shadow:0 0 0 3px rgba(0,200,212,0.12)}
+.search-bar:focus{border-color:var(--teal);background:rgba(0,200,212,0.05);box-shadow:0 0 0 3px rgba(0,200,212,0.12);width:400px}
 .search-wrap{position:relative;display:flex;align-items:center}
-.search-wrap::before{content:'🔍';position:absolute;left:13px;font-size:13px;pointer-events:none;opacity:0.5;z-index:1}
+.search-wrap::before{content:'';position:absolute;left:14px;width:16px;height:16px;background:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='%238a9ec0' stroke-width='2' stroke-linecap='round'%3E%3Ccircle cx='11' cy='11' r='8'/%3E%3Cline x1='21' y1='21' x2='16.65' y2='16.65'/%3E%3C/svg%3E") center/contain no-repeat;pointer-events:none;z-index:1;opacity:0.7}
+/* ── Search Dropdown ── */
+.search-dropdown{
+  position:absolute;top:calc(100% + 8px);left:0;right:0;
+  background:#0e1829;border:1px solid var(--border);border-radius:16px;
+  box-shadow:0 24px 64px rgba(0,0,0,0.55);
+  max-height:420px;overflow-y:auto;z-index:500;
+  opacity:0;transform:translateY(-6px);pointer-events:none;
+  transition:opacity 0.18s,transform 0.18s;
+  scrollbar-width:thin;scrollbar-color:var(--border) transparent;
+}
+.search-dropdown::-webkit-scrollbar{width:4px}
+.search-dropdown::-webkit-scrollbar-thumb{background:var(--border);border-radius:2px}
+.search-dropdown.open{opacity:1;transform:translateY(0);pointer-events:all}
+.search-section-hdr{padding:10px 16px 4px;font-size:10px;font-weight:700;text-transform:uppercase;letter-spacing:1px;color:var(--muted)}
+.search-item{display:flex;align-items:center;gap:12px;padding:10px 16px;cursor:pointer;min-height:72px;transition:background 0.12s;border-radius:0}
+.search-item:first-of-type{margin-top:2px}
+.search-item:last-of-type{margin-bottom:6px;border-radius:0 0 16px 16px}
+.search-item:hover,.search-item.s-active{background:rgba(0,200,212,0.07)}
+.search-item-thumb{width:48px;height:48px;border-radius:8px;object-fit:cover;flex-shrink:0;background:var(--border)}
+.search-item-body{flex:1;min-width:0}
+.search-item-title{font-size:13px;font-weight:700;color:var(--white);white-space:nowrap;overflow:hidden;text-overflow:ellipsis;margin-bottom:2px}
+.search-item-desc{font-size:11.5px;color:var(--muted);display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical;overflow:hidden;line-height:1.4;margin-bottom:4px}
+.search-item-badge{display:inline-block;padding:2px 8px;border-radius:4px;font-size:10px;font-weight:700;background:rgba(0,200,212,0.1);color:var(--teal);border:1px solid rgba(0,200,212,0.22)}
+.search-empty{padding:36px 16px;text-align:center;color:var(--muted);font-size:13px;line-height:1.6}
+.search-empty-icon{font-size:28px;margin-bottom:8px;opacity:0.5}
 .avatar{width:34px;height:34px;border-radius:6px;background:linear-gradient(135deg,var(--teal3),var(--teal));display:flex;align-items:center;justify-content:center;font-size:12px;font-weight:700;cursor:pointer;border:1px solid var(--teal3)}
 
 /* ============ HERO CAROUSEL ============ */
@@ -501,7 +526,8 @@ body{background:var(--navy);color:var(--white);font-family:'Helvetica Neue',Aria
   </div>
   <div class="topbar-right">
     <div class="search-wrap">
-      <input class="search-bar" id="chatTrigger" placeholder="What would you like to learn today?" readonly style="cursor:pointer" />
+      <input class="search-bar" id="courseSearch" placeholder="Search courses..." autocomplete="off" spellcheck="false" />
+      <div class="search-dropdown" id="searchDropdown"></div>
     </div>
     <div class="avatar">JW</div>
   </div>
@@ -1272,7 +1298,7 @@ renderRail('insuranceSeries',[6,7,2,4]);
   var msgs     = document.getElementById('chatMsgs');
   var form     = document.getElementById('chatForm');
   var inp      = document.getElementById('chatInp');
-  var trigger  = document.getElementById('chatTrigger');
+  /* chatbot is opened via FAB only */
   var closeBtn = document.getElementById('chatClose');
   var resetBtn = document.getElementById('chatReset');
   var fab      = document.getElementById('chatFab');
@@ -1301,8 +1327,6 @@ renderRail('insuranceSeries',[6,7,2,4]);
     else openChat();
   });
 
-  trigger.addEventListener('click', openChat);
-  trigger.addEventListener('focus', openChat);
   closeBtn.addEventListener('click', closeChat);
 
   /* Show badge after 3 s on load to invite the user */
@@ -1463,6 +1487,141 @@ renderRail('insuranceSeries',[6,7,2,4]);
     handleUserInput(t);
   });
 
+})();
+
+/* ═══════════════════════════════════════════════
+   COURSE SEARCH BAR  — live autocomplete
+═══════════════════════════════════════════════ */
+(function(){
+  var inp      = document.getElementById('courseSearch');
+  var dropdown = document.getElementById('searchDropdown');
+  if(!inp || !dropdown) return;
+
+  var debounceTimer;
+  var activeIdx = -1;
+  var currentItems = [];
+  var POPULAR_IDS  = [0, 1, 2, 3];
+
+  /* ── helpers ── */
+  function openDrop(){ dropdown.classList.add('open'); }
+  function closeDrop(){ dropdown.classList.remove('open'); activeIdx = -1; clearActive(); }
+
+  function clearActive(){
+    dropdown.querySelectorAll('.search-item').forEach(function(el){ el.classList.remove('s-active'); });
+  }
+
+  function goToCourse(id){
+    var c = C[id];
+    var lessonIdx = c.chapters ? 0 : 0;
+    window.location.href = 'course-player.html?id='+id+'&lesson=0';
+  }
+
+  function filterCourses(q){
+    q = q.toLowerCase();
+    return C.filter(function(c){
+      return c.title.toLowerCase().includes(q)
+          || c.expert.toLowerCase().includes(q)
+          || c.tags.some(function(t){ return t.toLowerCase().includes(q); })
+          || c.desc.toLowerCase().includes(q);
+    }).slice(0, 6);
+  }
+
+  function renderItems(courses, header, query){
+    currentItems = courses;
+    activeIdx = -1;
+    if(!courses.length){
+      dropdown.innerHTML =
+        '<div class="search-empty">' +
+          '<div class="search-empty-icon">🔍</div>' +
+          'No courses found for &ldquo;<strong>'+query+'</strong>&rdquo;' +
+        '</div>';
+      return;
+    }
+    var html = '<div class="search-section-hdr">'+header+'</div>';
+    courses.forEach(function(c){
+      html +=
+        '<div class="search-item" data-id="'+c.id+'">' +
+          '<img class="search-item-thumb" src="'+imgUrl(c.id,96,96)+'" alt="'+c.title+'" loading="lazy">' +
+          '<div class="search-item-body">' +
+            '<div class="search-item-title">'+c.title+'</div>' +
+            '<div class="search-item-desc">'+c.desc+'</div>' +
+            '<span class="search-item-badge">'+c.tags[0]+'</span>' +
+          '</div>' +
+        '</div>';
+    });
+    dropdown.innerHTML = html;
+    dropdown.querySelectorAll('.search-item').forEach(function(item){
+      item.addEventListener('mousedown', function(e){
+        e.preventDefault(); // prevent blur before click
+        goToCourse(parseInt(item.dataset.id));
+      });
+      item.addEventListener('mouseenter', function(){
+        clearActive();
+        activeIdx = parseInt(item.dataset.id === undefined ? -1 : Array.from(dropdown.querySelectorAll('.search-item')).indexOf(item));
+        item.classList.add('s-active');
+      });
+    });
+  }
+
+  function showPopular(){
+    renderItems(POPULAR_IDS.map(function(i){ return C[i]; }), 'Popular Courses', '');
+  }
+
+  /* ── events ── */
+  inp.addEventListener('focus', function(){
+    if(!inp.value.trim()) showPopular();
+    openDrop();
+  });
+
+  inp.addEventListener('blur', function(){
+    setTimeout(closeDrop, 150);
+  });
+
+  inp.addEventListener('input', function(){
+    var q = inp.value.trim();
+    clearTimeout(debounceTimer);
+    if(!q){ showPopular(); openDrop(); return; }
+    debounceTimer = setTimeout(function(){
+      var results = filterCourses(q);
+      var label = results.length
+        ? results.length+' result'+(results.length!==1?'s':'')+' for \u201c'+q+'\u201d'
+        : '';
+      renderItems(results, label, q);
+      openDrop();
+    }, 300);
+  });
+
+  inp.addEventListener('keydown', function(e){
+    var items = dropdown.querySelectorAll('.search-item');
+    if(!items.length) return;
+    if(e.key === 'ArrowDown'){
+      e.preventDefault();
+      activeIdx = Math.min(activeIdx+1, items.length-1);
+    } else if(e.key === 'ArrowUp'){
+      e.preventDefault();
+      activeIdx = Math.max(activeIdx-1, 0);
+    } else if(e.key === 'Enter'){
+      e.preventDefault();
+      if(activeIdx >= 0 && items[activeIdx]){
+        goToCourse(parseInt(items[activeIdx].dataset.id));
+      } else if(inp.value.trim()){
+        var r = filterCourses(inp.value.trim());
+        if(r.length) goToCourse(r[0].id);
+      }
+      return;
+    } else if(e.key === 'Escape'){
+      closeDrop(); inp.blur(); return;
+    } else { return; }
+    clearActive();
+    if(items[activeIdx]){
+      items[activeIdx].classList.add('s-active');
+      items[activeIdx].scrollIntoView({block:'nearest'});
+    }
+  });
+
+  document.addEventListener('click', function(e){
+    if(!e.target.closest('.search-wrap')) closeDrop();
+  });
 })();
 </script>
 </body>
