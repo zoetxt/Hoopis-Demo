@@ -12,35 +12,36 @@
   --green:#22c55e;--white:#fff;--muted:#8a9ec0;--border:#1a2d4a;
   --navy:#060d1f;--gold:#f5c518;
 }
-html,body{height:100%;background:var(--bg);color:var(--white);font-family:'Inter','Helvetica Neue',Arial,sans-serif;font-size:14px;overflow-x:hidden}
+html,body{height:100%;background:var(--bg);color:var(--white);font-family:'Inter','Helvetica Neue',Arial,sans-serif;font-size:16px;overflow-x:hidden}
+.page-wrap{max-width:80vw;margin:0 auto}
 
 /* ── TOP BAR ── */
 .topbar{
-  position:fixed;top:0;left:0;right:0;height:60px;z-index:200;
-  display:flex;align-items:center;justify-content:space-between;padding:0 20px;
+  position:fixed;top:0;left:0;right:0;height:68px;z-index:200;
   background:linear-gradient(180deg,rgba(6,13,31,.98) 0%,rgba(6,13,31,.7) 100%);
   backdrop-filter:blur(12px);border-bottom:1px solid var(--border);
   transition:background .3s;
 }
+.topbar-inner{display:flex;align-items:center;justify-content:space-between;height:68px}
 .topbar.solid{background:var(--navy)}
 .back-btn{
   display:flex;align-items:center;gap:10px;text-decoration:none;color:var(--white);
-  font-weight:600;font-size:13px;flex-shrink:0;
+  font-weight:600;font-size:16px;flex-shrink:0;
   opacity:.85;transition:opacity .2s;
 }
 .back-btn:hover{opacity:1}
-.back-btn svg{width:18px;height:18px;stroke:var(--white);fill:none;stroke-width:2.5;flex-shrink:0}
-.back-logo{height:22px;width:auto}
+.back-btn svg{width:20px;height:20px;stroke:var(--white);fill:none;stroke-width:2.5;flex-shrink:0}
+.back-logo{height:28px;width:auto}
 .topbar-title{
   position:absolute;left:50%;transform:translateX(-50%);
-  font-size:13px;font-weight:600;color:var(--white);opacity:.9;
-  max-width:400px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;
+  font-size:16px;font-weight:600;color:var(--white);opacity:.9;
+  max-width:500px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;
   pointer-events:none;
 }
 .topbar-right{display:flex;align-items:center;gap:14px;flex-shrink:0}
 .prog-pill{
   display:flex;align-items:center;gap:8px;background:var(--surface2);
-  border:1px solid var(--border);border-radius:20px;padding:5px 12px;font-size:12px;font-weight:600;
+  border:1px solid var(--border);border-radius:20px;padding:6px 14px;font-size:15px;font-weight:600;
 }
 .prog-pill-bar{width:72px;height:4px;background:rgba(255,255,255,.12);border-radius:2px;overflow:hidden}
 .prog-pill-fill{height:4px;background:var(--green);border-radius:2px;transition:width .4s}
@@ -48,8 +49,9 @@ html,body{height:100%;background:var(--bg);color:var(--white);font-family:'Inter
 
 /* ── LAYOUT ── */
 .layout{
-  display:grid;grid-template-columns:1fr 320px;
-  padding-top:60px;min-height:100vh;
+  display:grid;grid-template-columns:1fr 360px;
+  padding-top:68px;min-height:100vh;
+  max-width:80vw;margin:0 auto;
 }
 @media(max-width:900px){
   .layout{grid-template-columns:1fr;grid-template-rows:auto auto}
@@ -191,11 +193,11 @@ html,body{height:100%;background:var(--bg);color:var(--white);font-family:'Inter
 .course-info{padding:24px 24px 0}
 .ci-row{display:flex;align-items:flex-start;gap:16px;margin-bottom:16px}
 .ci-main{flex:1;min-width:0}
-.ci-title{font-size:20px;font-weight:800;line-height:1.25;margin-bottom:6px}
+.ci-title{font-size:26px;font-weight:800;line-height:1.25;margin-bottom:8px}
 .ci-instructor{display:flex;align-items:center;gap:10px;margin-bottom:12px}
 .ci-avatar{width:36px;height:36px;border-radius:50%;object-fit:cover;background:var(--surface2);flex-shrink:0;display:flex;align-items:center;justify-content:center;font-weight:700;font-size:14px;color:var(--white)}
-.ci-expert-name{font-size:13px;font-weight:600}
-.ci-expert-role{font-size:11px;color:var(--muted);margin-top:1px}
+.ci-expert-name{font-size:16px;font-weight:600}
+.ci-expert-role{font-size:14px;color:var(--muted);margin-top:1px}
 .ci-stats{display:flex;align-items:center;gap:16px;margin-bottom:12px}
 .ci-stat{font-size:12px;color:var(--muted);display:flex;align-items:center;gap:4px}
 .ci-stat-val{color:var(--white);font-weight:600}
@@ -204,8 +206,8 @@ html,body{height:100%;background:var(--bg);color:var(--white);font-family:'Inter
 .ci-prog-label span:last-child{color:var(--green);font-weight:700}
 .ci-prog-track{height:5px;background:rgba(255,255,255,.1);border-radius:3px;overflow:hidden}
 .ci-prog-fill{height:100%;background:var(--green);border-radius:3px;transition:width .6s cubic-bezier(.4,0,.2,1)}
-.ci-desc{font-size:13px;color:var(--muted);line-height:1.6;margin-bottom:12px}
-.ci-desc-toggle{background:none;border:none;color:var(--teal);font-size:12px;font-weight:600;cursor:pointer;padding:0;margin-bottom:14px}
+.ci-desc{font-size:16px;color:var(--muted);line-height:1.6;margin-bottom:14px}
+.ci-desc-toggle{background:none;border:none;color:var(--teal);font-size:15px;font-weight:600;cursor:pointer;padding:0;margin-bottom:16px}
 .ci-tags{display:flex;gap:7px;flex-wrap:wrap;padding-bottom:20px;border-bottom:1px solid var(--border);margin-bottom:0}
 .ci-tag{padding:4px 12px;border-radius:20px;font-size:11px;font-weight:600;background:var(--teal2);color:var(--teal);border:1px solid var(--teal3)}
 
@@ -241,8 +243,8 @@ html,body{height:100%;background:var(--bg);color:var(--white);font-family:'Inter
   padding:16px 18px;border-bottom:1px solid var(--border);flex-shrink:0;
   display:flex;align-items:center;justify-content:space-between;
 }
-.sidebar-hdr-title{font-size:13px;font-weight:700}
-.sidebar-hdr-meta{font-size:11px;color:var(--muted);margin-top:1px}
+.sidebar-hdr-title{font-size:17px;font-weight:700}
+.sidebar-hdr-meta{font-size:14px;color:var(--muted);margin-top:2px}
 .lesson-list{flex:1;overflow-y:auto;scrollbar-width:thin;scrollbar-color:var(--border) transparent}
 .lesson-list::-webkit-scrollbar{width:4px}
 .lesson-list::-webkit-scrollbar-thumb{background:var(--border);border-radius:2px}
@@ -262,7 +264,7 @@ html,body{height:100%;background:var(--bg);color:var(--white);font-family:'Inter
 .lesson-check{width:28px;height:28px;flex-shrink:0;display:flex;align-items:center;justify-content:center}
 .lesson-check svg{width:18px;height:18px;fill:var(--green)}
 .lesson-body{flex:1;min-width:0}
-.lesson-title{font-size:12.5px;font-weight:600;line-height:1.35;margin-bottom:2px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.lesson-title{font-size:15px;font-weight:600;line-height:1.35;margin-bottom:2px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
 .lesson-item.active .lesson-title{color:var(--white)}
 .lesson-title:not(.lesson-item.active .lesson-title){color:rgba(255,255,255,.75)}
 .lesson-dur{font-size:11px;color:var(--muted)}
@@ -285,6 +287,7 @@ body{animation:fadeInPage .4s ease both}
 
 <!-- TOP BAR -->
 <header class="topbar" id="topbar">
+<div class="page-wrap"><div class="topbar-inner">
   <a class="back-btn" id="backBtn" href="index.html">
     <svg viewBox="0 0 24 24"><polyline points="15 18 9 12 15 6"/></svg>
     <img class="back-logo" src="hoopis-logo.svg" alt="Hoopis Performance Network">
@@ -296,6 +299,7 @@ body{animation:fadeInPage .4s ease both}
       <span class="prog-pill-pct" id="progPillPct">0%</span>
     </div>
   </div>
+</div></div>
 </header>
 
 <!-- MAIN LAYOUT -->
