@@ -411,7 +411,7 @@ body{
 .ch-dur-right{font-size:13px;color:var(--muted);flex-shrink:0;padding-left:12px}
 
 /* ── CATALOG LAYOUT ────────────────────────────────────────────────────────────────── */
-.catalog-layout{display:grid;grid-template-columns:240px 1fr;gap:32px;align-items:start;margin-bottom:32px}
+.catalog-layout{display:grid;grid-template-columns:240px 1fr;gap:32px;align-items:start;margin-top:32px;margin-bottom:32px}
 .cat-sidebar{position:sticky;top:96px;max-height:calc(100vh - 120px);overflow-y:auto;scrollbar-width:thin;scrollbar-color:var(--border) transparent;padding-right:4px;position:relative}
 .cat-sidebar::-webkit-scrollbar{width:4px}
 .cat-sidebar::-webkit-scrollbar-thumb{background:var(--border);border-radius:4px}
@@ -433,7 +433,7 @@ body{
 .cat-sidebar-fade{position:sticky;bottom:0;height:48px;background:linear-gradient(to bottom,transparent,var(--navy));pointer-events:none;margin-top:-48px}
 /* Grid */
 .cat-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:20px}
-.catalog-results-hdr{font-size:15px;color:var(--muted);margin-bottom:16px;min-height:20px;margin-top:32px}
+.catalog-results-hdr{font-size:15px;color:var(--muted);margin-bottom:16px;min-height:20px}
 /* Paginator */
 .paginator{display:flex;align-items:center;justify-content:center;gap:8px;padding:32px 0 8px}
 .page-btn{min-width:40px;height:40px;padding:0 8px;display:flex;align-items:center;justify-content:center;border-radius:8px;cursor:pointer;font-size:15px;font-weight:600;border:1px solid var(--border);background:transparent;color:var(--white);transition:background .15s,border-color .15s;font-family:inherit}
@@ -503,7 +503,6 @@ body{
   </div>
 
   <!-- CATALOG LAYOUT -->
-  <div class="catalog-results-hdr" id="catalogHdr"></div>
   <div class="catalog-layout">
     <aside class="cat-sidebar" id="catSidebar">
       <div class="cat-sidebar-hdr">Browse by Category</div>
@@ -515,6 +514,7 @@ body{
       <div class="cat-sidebar-fade"></div>
     </aside>
     <div class="catalog-main">
+      <div class="catalog-results-hdr" id="catalogHdr"></div>
       <div class="course-grid cat-grid" id="courseGrid"></div>
       <div class="paginator" id="paginator"></div>
     </div>
