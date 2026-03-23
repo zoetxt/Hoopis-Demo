@@ -503,7 +503,7 @@ body{
   </div>
 
   <!-- CATALOG LAYOUT -->
-  <div class="catalog-layout">
+  <div class="catalog-layout" id="catalogLayout">
     <aside class="cat-sidebar" id="catSidebar">
       <div class="cat-sidebar-hdr">Browse by Category</div>
       <div class="cat-all-pill active" id="catAll" onclick="setCategory(null)">
@@ -836,8 +836,11 @@ function renderPaginator(totalPages) {
 function setPage(n) {
   currentPage = n;
   renderGrid();
-  var grid = document.getElementById('courseGrid');
-  if (grid) { grid.scrollIntoView({behavior:'smooth', block:'start'}); }
+  var target = document.getElementById('catalogLayout');
+  if (target) {
+    var top = target.getBoundingClientRect().top + window.scrollY - 96;
+    window.scrollTo({top: top, behavior: 'smooth'});
+  }
 }
 
 /* ── SET CATEGORY ──────────────────────────────────────────────────── */
